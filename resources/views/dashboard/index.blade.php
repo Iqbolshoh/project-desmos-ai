@@ -30,6 +30,23 @@
         </div>
     </div>
 
+    {{-- Student gamification widgets --}}
+    @if ($studentProfile)
+    <div>
+        <h3 class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">SAT tayyorgarligi</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            @include('dashboard.partials.xp-widget')
+            @include('dashboard.partials.streak-widget')
+            @include('dashboard.partials.goal-widget')
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+            @include('dashboard.partials.recent-activity')
+            @include('dashboard.partials.weak-strong-topics')
+        </div>
+    </div>
+    @endif
+
     {{-- Platform stats --}}
     @canany(['users.view', 'roles.view'])
     <div>

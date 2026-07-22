@@ -147,6 +147,12 @@
             text-transform: uppercase;
         }
 
+        .badge-accent {
+            background: var(--accent-soft);
+            color: var(--accent-hover);
+            border: 1px solid var(--accent-border);
+        }
+
         /* Animations */
         @keyframes page-enter {
             from {

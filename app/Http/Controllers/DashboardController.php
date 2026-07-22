@@ -9,7 +9,16 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $studentProfile = $user->studentProfile;
 
-        return view('dashboard.index', compact('user'));
+        $recentAttempts = $studentProfile
+            ? $user->questionAttempts()->with('question.topic')->latest()->limit(5)->get()
+            : collect();
+
+        $latestDiagnostic = $studentProfile
+            ? $user->diagnosticResults()->latest('completed_at')->first()
+            : null;
+
+        return view('dashboard.index', compact('user', 'studentProfile', 'recentAttempts', 'latestDiagnostic'));
     }
 }

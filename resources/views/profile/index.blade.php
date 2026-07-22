@@ -14,9 +14,13 @@
     {{-- Avatar kartasi --}}
     <div class="card p-6">
         <div class="flex items-center gap-5">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center font-extrabold text-2xl flex-shrink-0 {{ $avatarColor }}">
-                {{ strtoupper(substr($user->name, 0, 1)) }}
-            </div>
+            @if ($studentProfile?->avatar_path)
+                <img src="{{ \Illuminate\Support\Facades\Storage::url($studentProfile->avatar_path) }}" alt="{{ $user->name }}" class="w-16 h-16 rounded-2xl object-cover flex-shrink-0 border border-[var(--border-strong)]">
+            @else
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center font-extrabold text-2xl flex-shrink-0 {{ $avatarColor }}">
+                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                </div>
+            @endif
             <div>
                 <h2 class="text-xl font-extrabold text-white">{{ $user->name }}</h2>
                 <p class="text-sm text-[var(--text-muted)] mt-0.5">{{ $user->email }}</p>
@@ -34,7 +38,7 @@
     {{-- Profil ma'lumotlari --}}
     <div class="card p-6">
         <h3 class="text-sm font-bold uppercase tracking-widest text-[var(--text-muted)] mb-5">Profil ma'lumotlari</h3>
-        <form action="{{ route('profile.update') }}" method="POST" class="space-y-4">
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             @method('PUT')
 
@@ -49,6 +53,14 @@
                 <input name="email" type="email" value="{{ old('email', $user->email) }}" class="input @error('email') border-red-500/60 @enderror" required>
                 @error('email')<p class="text-xs text-red-400 mt-1">{{ $message }}</p>@enderror
             </div>
+
+            @if ($studentProfile)
+            <div>
+                <label class="block text-xs font-semibold text-[var(--text-muted)] mb-1.5 uppercase tracking-wide">Avatar</label>
+                <input name="avatar" type="file" accept="image/*" class="input @error('avatar') border-red-500/60 @enderror">
+                @error('avatar')<p class="text-xs text-red-400 mt-1">{{ $message }}</p>@enderror
+            </div>
+            @endif
 
             <div class="pt-2">
                 <button type="submit" class="btn-primary">

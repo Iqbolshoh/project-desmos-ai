@@ -13,16 +13,15 @@ $faqs = [
         <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Ko'p so'raladigan savollar</h2>
     </div>
 
-    <div class="mt-12 space-y-3" x-data="{ open: 0 }">
-        @foreach ($faqs as $index => $faq)
-        <div class="card overflow-hidden">
-            <button type="button" @click="open = (open === {{ $index }} ? null : {{ $index }})"
+    <div class="mt-12 space-y-3">
+        @foreach ($faqs as $faq)
+        <div class="card overflow-hidden" x-data="{ open: false }">
+            <button type="button" @click="open = !open"
                 class="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer">
                 <span class="font-semibold text-[var(--text-primary)]">{{ $faq['q'] }}</span>
-                <x-lucide-chevron-down class="w-4 h-4 shrink-0 text-[var(--gold)] transition-transform duration-300"
-                    :class="open === {{ $index }} ? 'rotate-180' : ''" />
+                <x-lucide-chevron-down class="w-4 h-4 shrink-0 text-[var(--gold)] transition-transform duration-300" x-bind:class="open && 'rotate-180'" />
             </button>
-            <div x-show="open === {{ $index }}" x-collapse>
+            <div x-show="open" x-collapse>
                 <p class="px-5 pb-5 text-sm text-[var(--text-secondary)] leading-relaxed">{{ $faq['a'] }}</p>
             </div>
         </div>
