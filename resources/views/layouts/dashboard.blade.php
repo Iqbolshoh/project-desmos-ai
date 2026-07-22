@@ -11,7 +11,7 @@
     {{-- Apply saved theme ASAP to prevent flash of wrong theme --}}
     <script>
         (function() {
-            if (localStorage.getItem('sat_exam_theme') === 'light') {
+            if (localStorage.getItem('desmos_ai_theme') === 'light') {
                 document.documentElement.classList.add('light');
                 document.addEventListener('DOMContentLoaded', function() {
                     var m = document.getElementById('theme-color-meta');
@@ -21,7 +21,7 @@
         })();
     </script>
 
-    <title>@yield('title', 'Dashboard') · SAT-EXAM</title>
+    <title>@yield('title', 'Dashboard') · Desmos AI</title>
 
     {{-- Font: Inter — clean professional UI font for education platforms --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -639,10 +639,10 @@
             logoutModalOpen: false,
             notificationsOpen: false,
             profileOpen: false,
-            sidebarOpen: localStorage.getItem('sat_exam_sidebar') !== 'closed',
+            sidebarOpen: localStorage.getItem('desmos_ai_sidebar') !== 'closed',
             toggleSidebar() {
                 this.sidebarOpen = !this.sidebarOpen;
-                localStorage.setItem('sat_exam_sidebar', this.sidebarOpen ? 'open' : 'closed');
+                localStorage.setItem('desmos_ai_sidebar', this.sidebarOpen ? 'open' : 'closed');
             }
         }"
         class="flex h-dvh w-full relative"
@@ -714,10 +714,10 @@
             <div class="sidebar-logo-container h-[var(--header-h)] flex items-center px-5 border-b border-[var(--border-subtle)] flex-shrink-0 transition-all duration-300">
                 <a href="{{ route('dashboard.index') }}" class="sidebar-logo-link flex items-center gap-3 group min-w-0 cursor-pointer transition-all duration-300">
                     <div class="w-9 h-9 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 overflow-hidden flex-shrink-0 border border-[var(--border-strong)] rounded-xl bg-white/5 p-0.5 shadow-sm">
-                        <img src="{{ asset('/images/logo.png') }}" alt="SAT-EXAM Logo" class="w-full h-full object-contain">
+                        <img src="{{ asset('/images/logo.png') }}" alt="Desmos AI Logo" class="w-full h-full object-contain">
                     </div>
                     <span class="sidebar-logo-text font-extrabold text-lg tracking-tight truncate" style="background: linear-gradient(135deg, var(--accent-hover), var(--accent-alt)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
-                        SAT-EXAM
+                        Desmos AI
                     </span>
                 </a>
                 <button @click="mobileMenuOpen = false" class="md:hidden ml-auto text-[var(--text-muted)] hover:text-white p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer" aria-label="Close menu">
@@ -1031,7 +1031,7 @@
 
                 <footer class="px-4 sm:px-8 pb-6 pt-2">
                     <div class="max-w-[100rem] mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[var(--text-muted)] border-t border-[var(--border-subtle)] pt-4 cursor-default">
-                        <p>© {{ date('Y') }} SAT-EXAM — Barcha huquqlar himoyalangan.</p>
+                        <p>© {{ date('Y') }} Desmos AI — Barcha huquqlar himoyalangan.</p>
                         <p class="font-mono">v1.0</p>
                     </div>
                 </footer>
@@ -1044,7 +1044,7 @@
         function toggleTheme() {
             var html = document.documentElement;
             var isLight = html.classList.toggle('light');
-            localStorage.setItem('sat_exam_theme', isLight ? 'light' : 'dark');
+            localStorage.setItem('desmos_ai_theme', isLight ? 'light' : 'dark');
             var meta = document.getElementById('theme-color-meta');
             if (meta) meta.content = isLight ? '#f0f2f7' : '#0b0d12';
         }

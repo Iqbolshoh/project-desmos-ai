@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('has_nav', 'yes')
-@section('title', 'Kirish · SAT-EXAM')
+@section('title', 'Kirish · Desmos AI')
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-hidden bg-[var(--bg-base)]">
@@ -15,14 +15,14 @@
 
         <div class="text-center flex flex-col items-center">
             <a href="{{ route('home') }}" class="w-14 h-14 flex items-center justify-center rounded-2xl bg-white/5 border border-[var(--border-strong)] shadow-sm transition-transform duration-300 hover:scale-105 overflow-hidden">
-                <img src="{{ asset('/images/logo.png') }}" alt="SAT-EXAM Logo" class="w-full h-full object-contain p-1.5">
+                <img src="{{ asset('/images/logo.png') }}" alt="Desmos AI Logo" class="w-full h-full object-contain p-1.5">
             </a>
 
             <h2 class="mt-5 text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
                 Qaytib keldingiz
             </h2>
             <p class="mt-2 text-sm text-[var(--text-secondary)]">
-                SAT-EXAM hisobingizga kiring
+                Desmos AI hisobingizga kiring
             </p>
         </div>
 

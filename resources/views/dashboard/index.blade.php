@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Boshqaruv paneli')
-@section('breadcrumb', 'SAT-EXAM')
+@section('breadcrumb', 'Desmos AI')
 @section('header_title', 'Boshqaruv paneli')
 
 @section('content')
@@ -73,11 +73,11 @@
             <div class="card p-5">
                 <div class="flex items-start justify-between">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">SAT-EXAM</p>
+                        <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Desmos AI</p>
                         <p class="mt-2 text-lg font-extrabold text-white">v1.0</p>
                     </div>
                     <div class="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden border border-[var(--border-strong)] bg-white/5 p-1">
-                        <img src="{{ asset('/images/logo.png') }}" alt="SAT-EXAM" class="w-full h-full object-contain">
+                        <img src="{{ asset('/images/logo.png') }}" alt="Desmos AI" class="w-full h-full object-contain">
                     </div>
                 </div>
                 <p class="mt-4 text-xs text-[var(--text-muted)]">Laravel {{ app()->version() }}</p>

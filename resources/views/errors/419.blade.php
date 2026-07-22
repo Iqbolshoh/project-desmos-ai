@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '419 · SAT-EXAM')
+@section('title', '419 · Desmos AI')
 
 @section('content')
 <div class="min-h-screen w-full flex items-center justify-center relative overflow-hidden" style="background: var(--bg-base);">

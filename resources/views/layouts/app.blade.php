@@ -11,7 +11,7 @@
     {{-- Apply saved theme immediately to prevent FOUC --}}
     <script>
         (function() {
-            if (localStorage.getItem('sat_exam_theme') === 'light') {
+            if (localStorage.getItem('desmos_ai_theme') === 'light') {
                 document.documentElement.classList.add('light');
                 document.addEventListener('DOMContentLoaded', function() {
                     var m = document.getElementById('theme-color-meta');
