@@ -34,6 +34,15 @@
     --warning: #f59e0b;
     --info:    #06b6d4;
 
+    /* Gold — premium aksent (landing page va gamifikatsiya uchun) */
+    --gold:        #d4af37;
+    --gold-hover:  #e5c158;
+    --gold-deep:   #b8932c;
+    --gold-alt:    #f0c869;
+    --gold-soft:   rgba(212, 175, 55, 0.10);
+    --gold-border: rgba(212, 175, 55, 0.24);
+    --gold-glow:   rgba(212, 175, 55, 0.28);
+
     /* Dimensions */
     --radius-sm: 0.375rem;
     --radius-md: 0.625rem;
@@ -70,4 +79,13 @@ html.light {
     --accent-soft:   rgba(37, 99, 235, 0.08);
     --accent-border: rgba(37, 99, 235, 0.20);
     --accent-glow:   rgba(37, 99, 235, 0.22);
+
+    /* Gold — yorug' fon uchun biroz to'qroq */
+    --gold:        #b8860b;
+    --gold-hover:  #d4af37;
+    --gold-deep:   #9a6f08;
+    --gold-alt:    #c9a227;
+    --gold-soft:   rgba(184, 134, 11, 0.08);
+    --gold-border: rgba(184, 134, 11, 0.20);
+    --gold-glow:   rgba(184, 134, 11, 0.22);
 }

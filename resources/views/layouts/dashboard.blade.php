@@ -201,6 +201,23 @@
             transform: translateY(0) scale(0.98);
         }
 
+        .btn-gold {
+            color: #1a1206;
+            background: linear-gradient(135deg, var(--gold), var(--gold-alt));
+            box-shadow: 0 4px 16px -4px var(--gold-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            font-weight: 700;
+        }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, var(--gold-hover), var(--gold-alt));
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px -4px var(--gold-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-gold:active {
+            transform: translateY(0) scale(0.98);
+        }
+
         .btn-secondary {
             color: var(--text-primary);
             background: var(--bg-overlay);
@@ -240,6 +257,12 @@
             background: rgba(52, 211, 153, 0.1);
             color: var(--success);
             border: 1px solid rgba(52, 211, 153, 0.25);
+        }
+
+        .badge-gold {
+            background: var(--gold-soft);
+            color: var(--gold-hover);
+            border: 1px solid var(--gold-border);
         }
 
         .input {

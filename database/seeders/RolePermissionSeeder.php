@@ -14,6 +14,9 @@ final class RolePermissionSeeder extends Seeder
         'dashboard'  => ['view'],
         'roles'         => ['view', 'create', 'edit', 'delete', 'assign'],
         'users'         => ['view', 'create', 'edit', 'delete'],
+        'questions'     => ['view', 'create', 'edit', 'delete'],
+        'reports'       => ['view'],
+        'analytics'     => ['view'],
     ];
 
     // ── Manager: full access except delete ────────────────────────────────────
@@ -36,6 +39,9 @@ final class RolePermissionSeeder extends Seeder
         $manager = Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
         $manager->syncPermissions($managerNames);
 
+        // ── 4. Student (default sign-up role, no admin permissions) ────────────
+        Role::firstOrCreate(['name' => 'student', 'guard_name' => 'web']);
+
         // ── 7. Default SuperAdmin user ────────────────────────────────────────
         $adminUser = User::withoutGlobalScopes()->firstOrCreate(
             ['email' => 'admin@vexa.uz'],
@@ -46,10 +52,25 @@ final class RolePermissionSeeder extends Seeder
         );
         $adminUser->syncRoles(['superadmin']);
 
+        // ── 8. Demo student user ────────────────────────────────────────────────
+        $studentUser = User::withoutGlobalScopes()->firstOrCreate(
+            ['email' => 'student@desmosai.test'],
+            [
+                'name'     => 'Demo Student',
+                'password' => bcrypt('B7654321'),
+            ]
+        );
+        $studentUser->syncRoles(['student']);
+        $studentUser->studentProfile()->firstOrCreate([], [
+            'sat_goal_score'    => 800,
+            'sat_current_score' => 420,
+        ]);
+
         $this->command?->info('✓ Permissions and roles seeded.');
         $this->command?->info('  superadmin  → ' . count($platformNames) . ' permissions');
         $this->command?->info('  manager     → ' . count($managerNames) . ' permissions');
         $this->command?->info('  Login: admin@vexa.uz / B7654321');
+        $this->command?->info('  Student login: student@desmosai.test / B7654321');
     }
 
     private function createPermissions(array $config): array
