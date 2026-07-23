@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\Diagnostic\DiagnosticService;
 use App\Services\Roadmap\RoadmapService;
 use App\Services\Gamification\GamificationService;
+use App\Services\Gamification\AchievementService;
 use App\Models\DiagnosticResult;
 
 class DiagnosticController extends Controller
@@ -13,15 +14,18 @@ class DiagnosticController extends Controller
     protected DiagnosticService $diagnosticService;
     protected RoadmapService $roadmapService;
     protected GamificationService $gamificationService;
+    protected AchievementService $achievementService;
 
     public function __construct(
         DiagnosticService $diagnosticService,
         RoadmapService $roadmapService,
-        GamificationService $gamificationService
+        GamificationService $gamificationService,
+        AchievementService $achievementService
     ) {
         $this->diagnosticService = $diagnosticService;
         $this->roadmapService = $roadmapService;
         $this->gamificationService = $gamificationService;
+        $this->achievementService = $achievementService;
     }
 
     public function start()
@@ -51,6 +55,8 @@ class DiagnosticController extends Controller
 
         // Generate Roadmap based on results
         $this->roadmapService->generateForUser(auth()->user());
+
+        $this->achievementService->checkAndAward(auth()->user());
 
         return redirect()->route('diagnostic.results', $result->id);
     }

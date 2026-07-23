@@ -30,29 +30,35 @@ class GamificationService
     public function updateStreak(User $user)
     {
         $profile = $user->studentProfile;
-        if (!$profile) return;
+        if (!$profile) return 0;
 
         $today = Carbon::today();
-        $lastActive = $profile->last_active_at ? Carbon::parse($profile->last_active_at)->startOfDay() : null;
+        $lastActive = $profile->last_activity_date ? Carbon::parse($profile->last_activity_date)->startOfDay() : null;
+
+        $wasFirstActivityToday = !$lastActive || !$lastActive->isToday();
 
         if (!$lastActive) {
-            $profile->streak = 1;
+            $profile->streak_current = 1;
         } elseif ($lastActive->isYesterday()) {
-            $profile->streak += 1;
+            $profile->streak_current += 1;
         } elseif (!$lastActive->isToday()) {
-            $profile->streak = 1; // Streak lost
+            $profile->streak_current = 1; // Streak lost
         }
 
-        $profile->last_active_at = now();
+        if ($profile->streak_current > $profile->streak_longest) {
+            $profile->streak_longest = $profile->streak_current;
+        }
+
+        $profile->last_activity_date = $today;
         $profile->save();
-        
+
         // Return streak bonus if they practiced today for the first time
-        if (!$lastActive || !$lastActive->isToday()) {
-            $bonus = min($profile->streak * config('gamification.xp.streak_bonus'), config('gamification.xp.streak_bonus_cap'));
+        if ($wasFirstActivityToday) {
+            $bonus = min($profile->streak_current * config('gamification.xp.streak_bonus'), config('gamification.xp.streak_bonus_cap'));
             $this->addXp($user, $bonus, 'Streak bonus');
             return $bonus;
         }
-        
+
         return 0;
     }
 }

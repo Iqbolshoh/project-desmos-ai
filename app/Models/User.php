@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(DiagnosticResult::class);
     }
+
+    public function userAchievements(): HasMany
+    {
+        return $this->hasMany(UserAchievement::class);
+    }
 }

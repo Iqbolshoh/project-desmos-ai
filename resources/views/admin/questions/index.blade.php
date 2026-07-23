@@ -53,6 +53,9 @@
                         <div class="line-clamp-2" title="{{ $q->prompt }}">{{ $q->prompt }}</div>
                     </td>
                     <td class="px-6 py-4 flex gap-2">
+                        <a href="{{ route('admin.questions.edit', $q->id) }}" class="text-[var(--accent-hover)] hover:text-[var(--accent-alt)] transition-colors p-2 rounded hover:bg-[var(--accent-soft)]" title="Tahrirlash">
+                            <x-lucide-pencil class="w-4 h-4" />
+                        </a>
                         <form action="{{ route('admin.questions.destroy', $q->id) }}" method="POST" onsubmit="return confirm('Rostdan ham o\'chirmoqchimisiz?');">
                             @csrf
                             @method('DELETE')

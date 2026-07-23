@@ -35,6 +35,53 @@
         </div>
     </div>
 
+    {{-- Statistika --}}
+    @if ($studentProfile)
+    <div class="card p-6">
+        <h3 class="text-sm font-bold uppercase tracking-widest text-[var(--text-muted)] mb-5">Statistika</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+                <div class="text-xs text-[var(--text-muted)]">XP</div>
+                <div class="text-xl font-extrabold text-white mt-1">{{ $studentProfile->xp }}</div>
+            </div>
+            <div>
+                <div class="text-xs text-[var(--text-muted)]">Daraja</div>
+                <div class="text-xl font-extrabold text-white mt-1">{{ $studentProfile->level }}</div>
+            </div>
+            <div>
+                <div class="text-xs text-[var(--text-muted)]">Streak</div>
+                <div class="text-xl font-extrabold text-white mt-1">{{ $studentProfile->streak_current }} kun</div>
+            </div>
+            <div>
+                <div class="text-xs text-[var(--text-muted)]">SAT ball</div>
+                <div class="text-xl font-extrabold text-white mt-1">
+                    {{ $studentProfile->sat_current_score ?? '—' }} / {{ $studentProfile->sat_goal_score ?? '—' }}
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    {{-- Yutuqlar --}}
+    <div class="card p-6">
+        <h3 class="text-sm font-bold uppercase tracking-widest text-[var(--text-muted)] mb-5">Yutuqlar</h3>
+        @if ($earnedAchievements->isEmpty())
+        <p class="text-sm text-[var(--text-muted)]">Hozircha yutuqlaringiz yo'q. Diagnostika va mashqlarni bajarib, birinchi yutug'ingizni qo'lga kiriting.</p>
+        @else
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            @foreach ($earnedAchievements as $userAchievement)
+            <div class="flex flex-col items-center text-center gap-2 p-4 rounded-xl border border-[var(--border-strong)] bg-[var(--bg-overlay)]">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--accent-soft); border: 1px solid var(--accent-border);">
+                    <x-dynamic-component :component="'lucide-' . $userAchievement->achievement->icon" class="w-5 h-5" style="color: var(--accent-hover);" />
+                </div>
+                <div class="text-xs font-bold text-white">{{ $userAchievement->achievement->name }}</div>
+                <div class="text-[10px] text-[var(--text-muted)]">{{ $userAchievement->earned_at->format('d.m.Y') }}</div>
+            </div>
+            @endforeach
+        </div>
+        @endif
+    </div>
+
     {{-- Profil ma'lumotlari --}}
     <div class="card p-6">
         <h3 class="text-sm font-bold uppercase tracking-widest text-[var(--text-muted)] mb-5">Profil ma'lumotlari</h3>

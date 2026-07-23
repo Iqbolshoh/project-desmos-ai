@@ -78,7 +78,8 @@ class DiagnosticService
         // Update Student Profile
         $profile = $user->studentProfile;
         if ($profile) {
-            $profile->target_score = max($profile->target_score, min(800, $scoreEstimate + 100));
+            $profile->sat_current_score = $scoreEstimate;
+            $profile->sat_goal_score = max($profile->sat_goal_score ?? 0, min(800, $scoreEstimate + 100));
             $profile->save();
         }
 

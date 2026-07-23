@@ -19,6 +19,10 @@ class DashboardController extends Controller
             ? $user->diagnosticResults()->latest('completed_at')->first()
             : null;
 
-        return view('dashboard.index', compact('user', 'studentProfile', 'recentAttempts', 'latestDiagnostic'));
+        $earnedAchievements = $studentProfile
+            ? $user->userAchievements()->with('achievement')->latest('earned_at')->limit(4)->get()
+            : collect();
+
+        return view('dashboard.index', compact('user', 'studentProfile', 'recentAttempts', 'latestDiagnostic', 'earnedAchievements'));
     }
 }

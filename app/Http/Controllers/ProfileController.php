@@ -13,9 +13,15 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
+        $earnedAchievements = $user->userAchievements()
+            ->with('achievement')
+            ->latest('earned_at')
+            ->get();
+
         return view('profile.index', [
-            'user'           => $user,
-            'studentProfile' => $user->studentProfile,
+            'user'               => $user,
+            'studentProfile'     => $user->studentProfile,
+            'earnedAchievements' => $earnedAchievements,
         ]);
     }
 

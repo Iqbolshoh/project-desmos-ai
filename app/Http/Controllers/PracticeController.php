@@ -7,14 +7,17 @@ use App\Models\Topic;
 use App\Models\Question;
 use App\Models\QuestionAttempt;
 use App\Services\Gamification\GamificationService;
+use App\Services\Gamification\AchievementService;
 
 class PracticeController extends Controller
 {
     protected GamificationService $gamification;
+    protected AchievementService $achievements;
 
-    public function __construct(GamificationService $gamification)
+    public function __construct(GamificationService $gamification, AchievementService $achievements)
     {
         $this->gamification = $gamification;
+        $this->achievements = $achievements;
     }
 
     public function index()
@@ -65,19 +68,22 @@ class PracticeController extends Controller
 
         $userAnswer = $request->input('answer');
         $isCorrect = strtolower(trim($userAnswer)) === strtolower(trim($question->correct_answer));
+        $xpAmount = $isCorrect ? config("gamification.xp.practice_correct_{$question->difficulty}", 10) : 0;
 
         QuestionAttempt::create([
             'user_id' => auth()->id(),
             'question_id' => $question->id,
-            'user_answer' => $userAnswer,
+            'context' => 'practice',
+            'selected_answer' => $userAnswer,
             'is_correct' => $isCorrect,
             'time_spent_seconds' => $request->input('time_spent', 0),
+            'xp_earned' => $xpAmount,
         ]);
 
         if ($isCorrect) {
-            $xpAmount = config("gamification.xp.practice_correct_{$question->difficulty}", 10);
             $this->gamification->addXp(auth()->user(), $xpAmount, 'Correct Answer');
             $this->gamification->updateStreak(auth()->user());
+            $this->achievements->checkAndAward(auth()->user());
         }
 
         return response()->json([

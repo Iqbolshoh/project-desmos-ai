@@ -14,7 +14,7 @@ class LeaderboardController extends Controller
         $topUsers = User::whereHas('studentProfile')
             ->join('student_profiles', 'users.id', '=', 'student_profiles.user_id')
             ->orderBy('student_profiles.xp', 'desc')
-            ->select('users.*', 'student_profiles.xp', 'student_profiles.level', 'student_profiles.streak')
+            ->select('users.*', 'student_profiles.xp', 'student_profiles.level', 'student_profiles.streak_current as streak')
             ->limit(10)
             ->get();
 

@@ -850,6 +850,12 @@
                             <x-lucide-activity class="nav-icon" />
                             <span class="sidebar-label">Analitika</span>
                         </a>
+                        <a href="{{ route('admin.system-status.index') }}"
+                            title="Tizim holati"
+                            class="nav-link {{ request()->routeIs('admin.system-status.*') ? 'active' : '' }}">
+                            <x-lucide-server-cog class="nav-icon" />
+                            <span class="sidebar-label">Tizim holati</span>
+                        </a>
                         <a href="{{ route('users.index') }}"
                             title="Foydalanuvchilar"
                             class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">

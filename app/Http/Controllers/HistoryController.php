@@ -21,15 +21,6 @@ class HistoryController extends Controller
         return view('history.index', compact('sessions', 'savedGraphs'));
     }
 
-    public function showSession(AiTutorSession $session)
-    {
-        if ($session->user_id !== auth()->id()) {
-            abort(403);
-        }
-
-        return view('tutor.show', compact('session'));
-    }
-    
     public function saveGraph(Request $request)
     {
         $request->validate([

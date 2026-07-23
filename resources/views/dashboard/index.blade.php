@@ -44,6 +44,10 @@
             @include('dashboard.partials.recent-activity')
             @include('dashboard.partials.weak-strong-topics')
         </div>
+
+        <div class="mt-4">
+            @include('dashboard.partials.achievements-widget')
+        </div>
     </div>
     @endif
 

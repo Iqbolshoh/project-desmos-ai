@@ -11,7 +11,8 @@ class RoadmapController extends Controller
     public function show()
     {
         $roadmap = Roadmap::where('user_id', auth()->id())
-            ->where('is_active', true)
+            ->where('status', 'active')
+            ->latest('generated_at')
             ->first();
 
         return view('roadmap.show', compact('roadmap'));
@@ -22,40 +23,39 @@ class RoadmapController extends Controller
         $roadmapService->generateForUser(auth()->user());
         return redirect()->route('roadmap.show')->with('success', 'Yangi reja tuzildi!');
     }
-    
+
     public function toggleTask(Request $request, Roadmap $roadmap)
     {
         if ($roadmap->user_id !== auth()->id()) {
             abort(403);
         }
-        
+
         $taskId = $request->input('task_id');
-        $stages = $roadmap->stages;
-        
-        // Very basic toggle logic
-        foreach ($stages as &$stage) {
-            foreach ($stage['tasks'] as &$task) {
+        $weeks = $roadmap->weekly_plan;
+
+        foreach ($weeks as &$week) {
+            foreach ($week['tasks'] as &$task) {
                 if ($task['id'] === $taskId) {
                     $task['completed'] = !$task['completed'];
                 }
             }
         }
-        
-        $roadmap->stages = $stages;
-        
+
+        $roadmap->weekly_plan = $weeks;
+
         // Recalculate progress
         $total = 0;
         $completed = 0;
-        foreach ($stages as $stage) {
-            foreach ($stage['tasks'] as $task) {
+        foreach ($weeks as $week) {
+            foreach ($week['tasks'] as $task) {
                 $total++;
                 if ($task['completed']) $completed++;
             }
         }
-        
-        $roadmap->progress_percent = $total > 0 ? round(($completed / $total) * 100) : 0;
+
+        $roadmap->completion_percent = $total > 0 ? (int) round(($completed / $total) * 100) : 0;
         $roadmap->save();
-        
+
         return back();
     }
 }

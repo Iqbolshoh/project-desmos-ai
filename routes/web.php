@@ -85,10 +85,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/questions', [\App\Http\Controllers\Admin\QuestionController::class, 'index'])->name('questions.index');
         Route::get('/questions/create', [\App\Http\Controllers\Admin\QuestionController::class, 'create'])->name('questions.create');
         Route::post('/questions', [\App\Http\Controllers\Admin\QuestionController::class, 'store'])->name('questions.store');
+        Route::get('/questions/{question}/edit', [\App\Http\Controllers\Admin\QuestionController::class, 'edit'])->name('questions.edit');
+        Route::put('/questions/{question}', [\App\Http\Controllers\Admin\QuestionController::class, 'update'])->name('questions.update');
         Route::delete('/questions/{question}', [\App\Http\Controllers\Admin\QuestionController::class, 'destroy'])->name('questions.destroy');
-        
-        // Mock views for reports and analytics
-        Route::view('/reports', 'admin.reports.index')->name('reports.index');
-        Route::view('/analytics', 'admin.analytics.index')->name('analytics.index');
+
+        Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+        Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics.index');
+        Route::get('/system-status', [\App\Http\Controllers\Admin\SystemStatusController::class, 'index'])->name('system-status.index');
     });
 });

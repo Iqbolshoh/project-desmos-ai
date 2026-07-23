@@ -110,14 +110,13 @@
                     Tushunmadingizmi?
                 </h3>
                 <div class="space-y-2">
-                    <button class="w-full text-left p-3 rounded bg-black/20 border border-[var(--border-subtle)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] text-sm text-[var(--text-secondary)] hover:text-white transition-colors">
-                        "Nega bunday bo'lganini tushuntirib bering"
-                    </button>
-                    <button class="w-full text-left p-3 rounded bg-black/20 border border-[var(--border-subtle)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] text-sm text-[var(--text-secondary)] hover:text-white transition-colors">
-                        "Xuddi shunga o'xshash bitta masala bering"
-                    </button>
+                    <a href="{{ route('chat.index') }}" class="block w-full text-left p-3 rounded bg-black/20 border border-[var(--border-subtle)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] text-sm text-[var(--text-secondary)] hover:text-white transition-colors">
+                        "Nega bunday bo'lganini tushuntirib bering" — AI Tutor bilan suhbatlashish
+                    </a>
+                    <a href="{{ route('chat.index') }}" class="block w-full text-left p-3 rounded bg-black/20 border border-[var(--border-subtle)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] text-sm text-[var(--text-secondary)] hover:text-white transition-colors">
+                        "Xuddi shunga o'xshash bitta masala bering" — AI Tutor bilan suhbatlashish
+                    </a>
                 </div>
-                <p class="text-xs text-[var(--text-muted)] mt-4 italic text-center">Chat funksiyasi Phase 4 da qo'shiladi</p>
             </div>
             
         </div>
