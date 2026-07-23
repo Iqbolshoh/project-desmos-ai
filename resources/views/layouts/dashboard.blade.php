@@ -763,25 +763,106 @@
                     </div>
                 </div>
 
+                {{-- O'quvchi bo'limi (AI Tutor & Tarix) --}}
+                <div>
+                    <h3 class="nav-heading">O'quvchi</h3>
+                    <div class="space-y-1">
+                        <a href="{{ route('tutor.index') }}"
+                            title="AI Tutor"
+                            class="nav-link {{ request()->routeIs('tutor.*') ? 'active' : '' }}">
+                            <x-lucide-bot class="nav-icon" />
+                            <span class="sidebar-label">AI Tutor</span>
+                        </a>
+                        <a href="{{ route('history.index') }}"
+                            title="Tarix"
+                            class="nav-link {{ request()->routeIs('history.*') ? 'active' : '' }}">
+                            <x-lucide-history class="nav-icon" />
+                            <span class="sidebar-label">Tarix</span>
+                        </a>
+                        <a href="{{ route('diagnostic.start') }}"
+                            title="Diagnostika"
+                            class="nav-link {{ request()->routeIs('diagnostic.*') ? 'active' : '' }}">
+                            <x-lucide-target class="nav-icon" />
+                            <span class="sidebar-label">Diagnostika</span>
+                        </a>
+                        <a href="{{ route('roadmap.show') }}"
+                            title="Roadmap"
+                            class="nav-link {{ request()->routeIs('roadmap.*') ? 'active' : '' }}">
+                            <x-lucide-map class="nav-icon" />
+                            <span class="sidebar-label">Roadmap</span>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Amaliyot (Practice & Chat) --}}
+                <div>
+                    <h3 class="nav-heading">Amaliyot</h3>
+                    <div class="space-y-1">
+                        <a href="{{ route('practice.index') }}"
+                            title="Mashg'ulotlar"
+                            class="nav-link {{ request()->routeIs('practice.*') ? 'active' : '' }}">
+                            <x-lucide-dumbbell class="nav-icon" />
+                            <span class="sidebar-label">Mashg'ulot</span>
+                        </a>
+                        <a href="{{ route('chat.index') }}"
+                            title="Chat Tutor"
+                            class="nav-link {{ request()->routeIs('chat.*') ? 'active' : '' }}">
+                            <x-lucide-messages-square class="nav-icon" />
+                            <span class="sidebar-label">Chat Tutor</span>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Reyting (Leaderboard) --}}
+                <div>
+                    <h3 class="nav-heading">Musobaqa</h3>
+                    <div class="space-y-1">
+                        <a href="{{ route('leaderboard.index') }}"
+                            title="Peshqadamlar"
+                            class="nav-link {{ request()->routeIs('leaderboard.*') ? 'active' : '' }}">
+                            <x-lucide-trophy class="nav-icon" />
+                            <span class="sidebar-label">Peshqadamlar</span>
+                        </a>
+                    </div>
+                </div>
+
                 {{-- Administration --}}
                 @canany(['roles.view', 'users.view'])
                 <div>
                     <h3 class="nav-heading">Boshqaruv</h3>
                     <div class="space-y-1">
+                        @can('users.view')
+                        <a href="{{ route('admin.questions.index') }}"
+                            title="Savollar bazasi"
+                            class="nav-link {{ request()->routeIs('admin.questions.*') ? 'active' : '' }}">
+                            <x-lucide-database class="nav-icon" />
+                            <span class="sidebar-label">Savollar</span>
+                        </a>
+                        <a href="{{ route('admin.reports.index') }}"
+                            title="Hisobotlar"
+                            class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                            <x-lucide-file-bar-chart class="nav-icon" />
+                            <span class="sidebar-label">Hisobotlar</span>
+                        </a>
+                        <a href="{{ route('admin.analytics.index') }}"
+                            title="Analitika"
+                            class="nav-link {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}">
+                            <x-lucide-activity class="nav-icon" />
+                            <span class="sidebar-label">Analitika</span>
+                        </a>
+                        <a href="{{ route('users.index') }}"
+                            title="Foydalanuvchilar"
+                            class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                            <x-lucide-user-cog class="nav-icon" />
+                            <span class="sidebar-label">Foydalanuvchilar</span>
+                        </a>
+                        @endcan
                         @can('roles.view')
                         <a href="{{ route('roles.index') }}"
                             title="Rollar"
                             class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                             <x-lucide-shield-check class="nav-icon" />
                             <span class="sidebar-label">Rollar</span>
-                        </a>
-                        @endcan
-                        @can('users.view')
-                        <a href="{{ route('users.index') }}"
-                            title="Foydalanuvchilar"
-                            class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
-                            <x-lucide-user-cog class="nav-icon" />
-                            <span class="sidebar-label">Foydalanuvchilar</span>
                         </a>
                         @endcan
                     </div>

@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'ai_tutor' => [
+        'driver' => env('AI_TUTOR_DRIVER', 'mock'),
+        'desmos_api_key' => env('DESMOS_API_KEY'),
+        'openai_api_key' => env('OPENAI_API_KEY'),
+    ],
+
 ];

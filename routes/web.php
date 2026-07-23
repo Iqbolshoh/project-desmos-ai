@@ -43,7 +43,52 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
+    // Tutor
+    Route::get('/tutor', [\App\Http\Controllers\TutorController::class, 'index'])->name('tutor.index');
+    Route::post('/tutor/solve', [\App\Http\Controllers\TutorController::class, 'solve'])->name('tutor.solve');
+    Route::get('/tutor/{session}', [\App\Http\Controllers\TutorController::class, 'show'])->name('tutor.show');
+
+    // History
+    Route::get('/history', [\App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');
+    Route::post('/history/save-graph', [\App\Http\Controllers\HistoryController::class, 'saveGraph'])->name('history.save-graph');
+    
+    // Diagnostic
+    Route::get('/diagnostic', [\App\Http\Controllers\DiagnosticController::class, 'start'])->name('diagnostic.start');
+    Route::get('/diagnostic/show', [\App\Http\Controllers\DiagnosticController::class, 'show'])->name('diagnostic.show');
+    Route::post('/diagnostic/submit', [\App\Http\Controllers\DiagnosticController::class, 'submit'])->name('diagnostic.submit');
+    Route::get('/diagnostic/results/{result}', [\App\Http\Controllers\DiagnosticController::class, 'results'])->name('diagnostic.results');
+
+    // Roadmap
+    Route::get('/roadmap', [\App\Http\Controllers\RoadmapController::class, 'show'])->name('roadmap.show');
+    Route::post('/roadmap/generate', [\App\Http\Controllers\RoadmapController::class, 'generate'])->name('roadmap.generate');
+    Route::post('/roadmap/{roadmap}/toggle', [\App\Http\Controllers\RoadmapController::class, 'toggleTask'])->name('roadmap.toggle');
+
+    // Practice
+    Route::get('/practice', [\App\Http\Controllers\PracticeController::class, 'index'])->name('practice.index');
+    Route::get('/practice/{topic:slug}', [\App\Http\Controllers\PracticeController::class, 'topic'])->name('practice.topic');
+    Route::get('/practice/{topic:slug}/quiz', [\App\Http\Controllers\PracticeController::class, 'quiz'])->name('practice.quiz');
+    Route::post('/practice/{question}/submit', [\App\Http\Controllers\PracticeController::class, 'submit'])->name('practice.submit');
+
+    // Chat
+    Route::get('/chat', [\App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/{thread}/send', [\App\Http\Controllers\ChatController::class, 'send'])->name('chat.send');
+
+    // Leaderboard
+    Route::get('/leaderboard', [\App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard.index');
+
     // Platform: Roles & Users
     Route::resource('roles', RoleController::class)->except(['show']);
     Route::resource('users', UserController::class)->except(['show']);
+    
+    // Admin Extensions
+    Route::prefix('admin')->name('admin.')->middleware(['can:roles.view'])->group(function() {
+        Route::get('/questions', [\App\Http\Controllers\Admin\QuestionController::class, 'index'])->name('questions.index');
+        Route::get('/questions/create', [\App\Http\Controllers\Admin\QuestionController::class, 'create'])->name('questions.create');
+        Route::post('/questions', [\App\Http\Controllers\Admin\QuestionController::class, 'store'])->name('questions.store');
+        Route::delete('/questions/{question}', [\App\Http\Controllers\Admin\QuestionController::class, 'destroy'])->name('questions.destroy');
+        
+        // Mock views for reports and analytics
+        Route::view('/reports', 'admin.reports.index')->name('reports.index');
+        Route::view('/analytics', 'admin.analytics.index')->name('analytics.index');
+    });
 });
