@@ -54,7 +54,7 @@ final class RolePermissionSeeder extends Seeder
 
         // ── 8. Demo student user ────────────────────────────────────────────────
         $studentUser = User::withoutGlobalScopes()->firstOrCreate(
-            ['email' => 'student@desmosai.test'],
+            ['email' => 'student@vexa.uz'],
             [
                 'name'     => 'Demo Student',
                 'password' => bcrypt('B7654321'),
@@ -70,7 +70,7 @@ final class RolePermissionSeeder extends Seeder
         $this->command?->info('  superadmin  → ' . count($platformNames) . ' permissions');
         $this->command?->info('  manager     → ' . count($managerNames) . ' permissions');
         $this->command?->info('  Login: admin@vexa.uz / B7654321');
-        $this->command?->info('  Student login: student@desmosai.test / B7654321');
+        $this->command?->info('  Student login: student@vexa.uz / B7654321');
     }
 
     private function createPermissions(array $config): array

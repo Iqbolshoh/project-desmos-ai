@@ -22,7 +22,7 @@ Batafsil texnik reja: `C:\Users\Iqbolshoh\.claude\plans\serene-munching-aho.md`
 - 12 ta yangi migratsiya (`database/migrations/2026_07_22_*`): `topics`, `student_profiles`, `questions`, `diagnostic_results`, `question_attempts`, `ai_tutor_sessions`, `saved_graphs`, `chat_threads`, `chat_messages`, `roadmaps`, `achievements`, `user_achievements`
 - Mos Eloquent modellar (`app/Models/`): `Topic`, `StudentProfile`, `Question`, `DiagnosticResult`, `QuestionAttempt`, `AiTutorSession`, `SavedGraph`, `ChatThread`, `ChatMessage`, `Roadmap`, `Achievement`, `UserAchievement`
 - `User.php` ga `studentProfile()`, `questionAttempts()`, `diagnosticResults()` relatsiyalari qo'shildi
-- `database/seeders/RolePermissionSeeder.php`: `student` roli, yangi ruxsatlar (`questions.*`, `reports.view`, `analytics.view`), demo talaba (`student@desmosai.test` / `B7654321`, 420→800 ball)
+- `database/seeders/RolePermissionSeeder.php`: `student` roli, yangi ruxsatlar (`questions.*`, `reports.view`, `analytics.view`), demo talaba (`student@vexa.uz` / `B7654321`, 420→800 ball)
 - `database/seeders/TopicSeeder.php` (yangi): 7 ta SAT mavzusi (Heart of Algebra, Advanced Math, Problem Solving, Geometry, Trigonometry, Functions, Statistics)
 
 ### Gold tema

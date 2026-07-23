@@ -31,7 +31,7 @@ class HistoryController extends Controller
         SavedGraph::create([
             'user_id' => auth()->id(),
             'title' => $request->title,
-            'state_data' => ['expression' => $request->expression],
+            'desmos_state' => ['expression' => $request->expression],
         ]);
         
         return redirect()->back()->with('success', 'Grafik saqlandi!');

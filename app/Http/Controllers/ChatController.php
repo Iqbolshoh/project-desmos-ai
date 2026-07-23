@@ -21,7 +21,7 @@ class ChatController extends Controller
     {
         // Get or create the latest thread for the user
         $thread = ChatThread::firstOrCreate(
-            ['user_id' => auth()->id(), 'status' => 'active'],
+            ['user_id' => auth()->id()],
             ['title' => 'Yangi suhbat']
         );
 
@@ -45,13 +45,13 @@ class ChatController extends Controller
         // Save User Message
         ChatMessage::create([
             'chat_thread_id' => $thread->id,
-            'sender' => 'user',
-            'content' => $userMessageText
+            'role' => 'user',
+            'message' => $userMessageText
         ]);
 
         // Get history for context
         $history = $thread->messages()->orderBy('created_at')->limit(10)->get()->map(function($msg) {
-            return ['role' => $msg->sender, 'content' => $msg->content];
+            return ['role' => $msg->role, 'content' => $msg->message];
         })->toArray();
 
         // Get AI Reply
@@ -60,14 +60,14 @@ class ChatController extends Controller
         // Save AI Message
         $aiMsg = ChatMessage::create([
             'chat_thread_id' => $thread->id,
-            'sender' => 'ai',
-            'content' => $replyText
+            'role' => 'assistant',
+            'message' => $replyText
         ]);
 
         if ($request->wantsJson()) {
             return response()->json([
                 'status' => 'success',
-                'reply' => $aiMsg->content
+                'reply' => $aiMsg->message
             ]);
         }
 

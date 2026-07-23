@@ -36,12 +36,12 @@ class TutorController extends Controller
         $dto = new SolveRequestDTO($request->input('query'), $imagePath);
         $response = $this->tutorService->solve($dto);
 
-        // Create a session to store the conversation/result
         $session = AiTutorSession::create([
             'user_id' => auth()->id(),
-            'question_text' => $request->input('query'),
-            'image_path' => $imagePath,
-            'response_data' => [
+            'input_type' => $request->hasFile('image') ? 'image' : 'text',
+            'input_text' => $request->input('query'),
+            'input_image_path' => $imagePath,
+            'ai_response' => [
                 'finalAnswer' => $response->finalAnswer,
                 'explanation' => $response->explanation,
                 'steps' => array_map(fn($step) => [
@@ -50,9 +50,9 @@ class TutorController extends Controller
                     'explanation' => $step->explanation,
                     'mathExpression' => $step->mathExpression
                 ], $response->steps),
-                'graphExpression' => $response->graphExpression
             ],
-            'status' => 'completed',
+            'desmos_state' => ['expression' => $response->graphExpression],
+            'driver' => config('services.ai_tutor.driver', 'mock'),
         ]);
 
         return redirect()->route('tutor.show', $session->id);
