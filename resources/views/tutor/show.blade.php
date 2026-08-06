@@ -1,53 +1,69 @@
 @extends('layouts.dashboard')
 
-@section('title', "Ye'chim")
+@section('title', "Yechim Xulosasi — Desmos AI")
 
 @section('content')
 <div class="max-w-5xl mx-auto space-y-6">
-    <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-white flex items-center gap-2">
-            <x-lucide-sparkles class="w-7 h-7 text-[var(--gold)]" />
-            Ye'chim xulosasi
-        </h1>
-        <a href="{{ route('tutor.index') }}" class="btn-secondary text-sm">
-            <x-lucide-arrow-left class="w-4 h-4" /> Orqaga
-        </a>
+
+    {{-- Top Action Bar --}}
+    <div class="flex items-center justify-between flex-wrap gap-4">
+        <div>
+            <h1 class="text-2xl font-extrabold text-white flex items-center gap-2.5">
+                <x-lucide-sparkles class="w-7 h-7 text-[var(--gold)]" />
+                Desmos AI Yechim Xulosasi
+            </h1>
+            <p class="text-xs text-[var(--text-secondary)] font-mono mt-0.5">SAT Math step-by-step resolution</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('tutor.index') }}" class="btn-secondary text-sm flex items-center gap-2">
+                <x-lucide-plus-circle class="w-4 h-4 text-[var(--teal)]" /> Yangi masala
+            </a>
+            <a href="{{ route('history.index') }}" class="btn-ghost text-sm flex items-center gap-2">
+                <x-lucide-history class="w-4 h-4" /> Tarix
+            </a>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
-        {{-- Left: Steps & Answer --}}
+        {{-- Left Column: Problem, Steps, Final Answer --}}
         <div class="lg:col-span-3 space-y-6">
 
-            {{-- Original Question --}}
-            <div class="card p-5 border-l-4 border-l-[var(--accent)] bg-gradient-to-r from-[var(--accent-soft)] to-transparent rounded-2xl">
-                <p class="text-sm text-[var(--accent-hover)] font-bold mb-1 uppercase tracking-wide">Sizning savolingiz</p>
-                <p class="text-white font-medium text-lg">{{ $session->input_text }}</p>
+            {{-- Original Problem Card --}}
+            <div class="card p-6 border-l-4 border-l-[var(--teal)] bg-gradient-to-r from-black/40 via-[var(--panel)] to-transparent rounded-2xl shadow-lg">
+                <p class="text-xs text-[var(--teal)] font-mono font-bold uppercase tracking-wider mb-2">Aniqlangan Masala Sharti</p>
+                <p class="text-white font-medium text-lg leading-relaxed">{{ $session->input_text }}</p>
 
                 @if($session->input_image_path)
-                    <div class="mt-4">
-                        <img src="{{ asset('storage/' . $session->input_image_path) }}" alt="Yuklangan rasm" class="max-h-48 rounded-lg border border-[var(--border-strong)]">
+                    <div class="mt-4 pt-3 border-t border-[var(--border-subtle)] flex items-center gap-3">
+                        <img src="{{ asset('storage/' . $session->input_image_path) }}" alt="Yuklangan rasm" class="max-h-40 rounded-xl border border-[var(--border-strong)] object-contain shadow-md">
+                        <span class="text-xs text-[var(--text-muted)] font-mono">📷 Masala rasmi</span>
                     </div>
                 @endif
             </div>
 
-            {{-- Steps --}}
-            <div class="card p-6 border border-[var(--border-strong)] space-y-5 rounded-2xl">
-                <h2 class="text-xl font-bold text-white">Qadam-baqadam yechim</h2>
+            {{-- Steps List --}}
+            <div class="card p-6 border border-[var(--border-strong)] space-y-6 rounded-2xl bg-[var(--panel)] shadow-xl">
+                <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+                    <x-lucide-list-ordered class="w-5 h-5 text-[var(--gold)]" /> Qadam-baqadam yechim
+                </h2>
 
                 @if(isset($session->ai_response['steps']) && count($session->ai_response['steps']) > 0)
-                    <div class="relative pl-8 space-y-6 before:absolute before:left-3 before:top-0 before:bottom-0 before:w-0.5 before:bg-gradient-to-b before:from-[var(--accent)] before:to-transparent">
+                    <div class="relative pl-8 space-y-6 before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-[var(--gold)] via-[var(--teal)] before:to-transparent">
                         @foreach($session->ai_response['steps'] as $step)
                             <div class="relative flex gap-4">
-                                <div class="absolute -left-8 w-6 h-6 rounded-full bg-[var(--accent-soft)] text-[var(--accent-hover)] flex items-center justify-center font-bold text-xs border border-[var(--accent-border)] z-10">
+                                <div class="absolute -left-8 w-7 h-7 rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-hover)] text-black flex items-center justify-center font-extrabold text-xs shadow-md z-10">
                                     {{ $step['stepNumber'] }}
                                 </div>
-                                <div>
-                                    <h3 class="text-white font-bold">{{ $step['title'] }}</h3>
-                                    <p class="text-[var(--text-secondary)] mt-1 text-sm leading-relaxed">{{ $step['explanation'] }}</p>
+                                <div class="bg-black/30 p-4 rounded-xl border border-[var(--border-subtle)] w-full space-y-2">
+                                    <h3 class="text-white font-bold text-base">{{ $step['title'] }}</h3>
+                                    <p class="text-[var(--text-secondary)] text-sm leading-relaxed">{{ $step['explanation'] }}</p>
                                     @if(!empty($step['mathExpression']))
-                                        <div class="mt-2 p-3 bg-black/40 rounded-xl border border-[var(--border-subtle)] font-mono text-[var(--accent-hover)] text-sm">
-                                            {{ $step['mathExpression'] }}
+                                        <div class="p-3 bg-black/60 rounded-lg border border-[var(--border-strong)] font-mono text-[var(--teal)] text-sm flex items-center justify-between">
+                                            <span>{{ $step['mathExpression'] }}</span>
+                                            <button type="button" class="copy-step-btn text-xs text-[var(--text-muted)] hover:text-white px-2 py-1 rounded bg-black/40 border border-[var(--border-subtle)]" onclick="navigator.clipboard.writeText('{{ addslashes($step['mathExpression']) }}'); this.textContent = 'Nusxalandi ✓'; setTimeout(() => this.textContent = 'Nusxalash', 1500);">
+                                                Nusxalash
+                                            </button>
                                         </div>
                                     @endif
                                 </div>
@@ -59,61 +75,92 @@
                 @endif
             </div>
 
-            {{-- Final Answer --}}
-            <div class="card p-6 border border-[var(--gold-border)] bg-gradient-to-b from-[var(--gold-soft)] to-transparent relative overflow-hidden rounded-2xl">
-                <div class="absolute top-0 right-0 p-4 opacity-10">
-                    <x-lucide-check-circle class="w-24 h-24 text-[var(--gold)]" />
+            {{-- Final Answer Box --}}
+            <div class="card p-6 border border-[var(--gold-border)] bg-gradient-to-br from-[var(--gold-soft)] via-black/40 to-transparent relative overflow-hidden rounded-2xl shadow-xl">
+                <div class="absolute -top-4 -right-4 p-4 opacity-10 pointer-events-none">
+                    <x-lucide-check-circle class="w-32 h-32 text-[var(--gold)]" />
                 </div>
-                <h2 class="text-lg font-bold text-[var(--gold)] mb-3 relative z-10">Yakuniy javob</h2>
-                <div class="text-2xl text-white font-bold font-mono bg-black/40 p-4 rounded-xl border border-[var(--gold-border)] relative z-10 inline-block shadow-lg">
+                <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-[var(--gold)] mb-2">Yakuniy Javob</h2>
+                <div class="text-2xl text-white font-extrabold font-mono bg-black/60 px-5 py-3 rounded-xl border border-[var(--gold-border)] inline-block shadow-inner mb-4">
                     {{ $session->ai_response['finalAnswer'] ?? 'Topilmadi' }}
                 </div>
-                <p class="mt-4 text-[var(--text-secondary)] relative z-10 leading-relaxed">
-                    {{ $session->ai_response['explanation'] ?? '' }}
-                </p>
+                @if(!empty($session->ai_response['explanation']))
+                    <div class="text-sm text-[var(--text-secondary)] leading-relaxed space-y-1 bg-black/30 p-4 rounded-xl border border-[var(--border-subtle)]">
+                        {!! nl2br(e($session->ai_response['explanation'])) !!}
+                    </div>
+                @endif
             </div>
+
         </div>
 
-        {{-- Right: Graph & Actions --}}
+        {{-- Right Column: Desmos Interactive Graph & Actions --}}
         <div class="lg:col-span-2 space-y-6">
 
             @php $graphExpr = $session->desmos_state['expression'] ?? null; @endphp
-            @if($graphExpr)
-            <div class="card p-1 border border-[var(--border-strong)] bg-black shadow-xl rounded-2xl">
-                <div class="p-3 pb-2 flex justify-between items-center border-b border-[var(--border-subtle)] bg-[var(--bg-raised)] rounded-t-xl">
+            
+            {{-- Desmos Calculator Card --}}
+            <div class="card p-4 border border-[var(--border-strong)] bg-[var(--panel)] shadow-xl rounded-2xl space-y-3">
+                <div class="flex justify-between items-center pb-2 border-b border-[var(--border-subtle)]">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <x-lucide-line-chart class="w-4 h-4 text-[var(--accent-hover)]" /> Grafik
+                        <x-lucide-line-chart class="w-4 h-4 text-[var(--teal)]" /> Interaktiv Desmos Grafigi
                     </h3>
+                    @if($graphExpr)
                     <form action="{{ route('history.save-graph') }}" method="POST">
                         @csrf
                         <input type="hidden" name="title" value="{{ Str::limit($session->input_text, 50) }}">
                         <input type="hidden" name="expression" value="{{ $graphExpr }}">
-                        <button type="submit" class="text-xs btn-ghost py-1 px-2 rounded hover:bg-[var(--accent-soft)] hover:text-[var(--accent-hover)]" title="Grafikni tarixga saqlash">
-                            <x-lucide-save class="w-4 h-4" />
+                        <button type="submit" class="text-xs font-medium text-[var(--teal)] hover:text-white flex items-center gap-1 bg-black/40 px-2.5 py-1 rounded-lg border border-[var(--border-subtle)] hover:border-[var(--teal)] transition-all" title="Grafikni saqlash">
+                            <x-lucide-bookmark class="w-3.5 h-3.5" /> Saqlash
                         </button>
                     </form>
+                    @endif
                 </div>
-                <x-desmos-calculator id="tutor-graph" height="300px" :expression="$graphExpr" />
-            </div>
-            @endif
 
-            {{-- Quick Help --}}
-            <div class="card p-5 border border-[var(--border-subtle)] bg-[var(--bg-overlay)] rounded-2xl">
-                <h3 class="font-bold text-white mb-3 flex items-center gap-2 text-sm">
-                    <x-lucide-message-circle-question class="w-4 h-4 text-[var(--accent)]" />
-                    Tushunmadingizmi?
+                @if($graphExpr)
+                    <x-desmos-calculator id="tutor-graph" height="340px" :expression="$graphExpr" />
+                    
+                    <div class="bg-black/40 p-3 rounded-xl border border-[var(--border-subtle)] space-y-1.5">
+                        <span class="text-xs font-mono text-[var(--text-muted)] block">Desmos ifodasi:</span>
+                        <div class="flex items-center justify-between font-mono text-sm text-[var(--gold)]">
+                            <code>{{ $graphExpr }}</code>
+                            <button type="button" class="text-xs text-[var(--text-secondary)] hover:text-white bg-black/60 px-2 py-1 rounded border border-[var(--border-subtle)]" onclick="navigator.clipboard.writeText('{{ addslashes($graphExpr) }}'); this.textContent = 'Nusxalandi ✓'; setTimeout(() => this.textContent = 'Nusxalash', 1500);">
+                                Nusxalash
+                            </button>
+                        </div>
+                    </div>
+                @else
+                    <div class="p-8 text-center text-sm text-[var(--text-muted)] bg-black/20 rounded-xl border border-[var(--border-subtle)]">
+                        <x-lucide-info class="w-8 h-8 text-[var(--text-muted)] mx-auto mb-2 opacity-50" />
+                        Ushbu masala uchun alohida grafik talab etilmadi.
+                    </div>
+                @endif
+                
+                <a href="https://www.desmos.com/calculator" target="_blank" rel="noopener" class="text-xs text-[var(--teal)] hover:underline flex items-center gap-1 pt-1 font-semibold">
+                    Desmos.com saytida ochish ↗
+                </a>
+            </div>
+
+            {{-- AI Follow-up Assistance --}}
+            <div class="card p-5 border border-[var(--border-subtle)] bg-gradient-to-br from-[var(--bg-overlay)] to-black/40 rounded-2xl shadow-lg space-y-3">
+                <h3 class="font-bold text-white flex items-center gap-2 text-sm">
+                    <x-lucide-message-square-plus class="w-4 h-4 text-[var(--gold)]" />
+                    Savolingiz bormi?
                 </h3>
-                <div class="space-y-2">
-                    <a href="{{ route('chat.index') }}" class="flex items-center gap-3 p-3 rounded-xl bg-black/20 border border-[var(--border-subtle)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] text-sm text-[var(--text-secondary)] hover:text-white transition-all duration-200">
-                        <x-lucide-message-circle class="w-4 h-4 text-[var(--accent)] flex-shrink-0" />
-                        "Nega bunday bo'lganini tushuntirib bering"
+                <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+                    Yechim bo'yicha qo'shimcha tushuntirish kerak bo'lsa, AI Chat bilan bevosita muloqot qilishingiz mumkin.
+                </p>
+                <div class="space-y-2 pt-1">
+                    <a href="{{ route('chat.index') }}" class="flex items-center justify-between p-3 rounded-xl bg-black/30 border border-[var(--border-subtle)] hover:border-[var(--teal)] text-xs text-[var(--text-secondary)] hover:text-white transition-all">
+                        <span>"Nega ushbu usul ishlatildi?"</span>
+                        <x-lucide-arrow-right class="w-4 h-4 text-[var(--teal)]" />
                     </a>
-                    <a href="{{ route('chat.index') }}" class="flex items-center gap-3 p-3 rounded-xl bg-black/20 border border-[var(--border-subtle)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] text-sm text-[var(--text-secondary)] hover:text-white transition-all duration-200">
-                        <x-lucide-sparkles class="w-4 h-4 text-[var(--gold)] flex-shrink-0" />
-                        "Xuddi shunga o'xshash masala bering"
+                    <a href="{{ route('chat.index') }}" class="flex items-center justify-between p-3 rounded-xl bg-black/30 border border-[var(--border-subtle)] hover:border-[var(--teal)] text-xs text-[var(--text-secondary)] hover:text-white transition-all">
+                        <span>"Bunga o'xshash mashq ber"</span>
+                        <x-lucide-arrow-right class="w-4 h-4 text-[var(--gold)]" />
                     </a>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

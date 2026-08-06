@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class SystemStatusController extends Controller
 {
-    public function index()
+    /**
+     * Display system status health checks and runtime information.
+     */
+    public function index(): View
     {
         $checks = [
             'database' => $this->checkDatabase(),
@@ -21,7 +25,7 @@ class SystemStatusController extends Controller
             'php_version' => PHP_VERSION,
             'laravel_version' => app()->version(),
             'environment' => app()->environment(),
-            'debug_mode' => config('app.debug') ? 'Yoqilgan' : "O'chirilgan",
+            'debug_mode' => config('app.debug') ? 'Enabled' : 'Disabled',
         ];
 
         return view('admin.system-status.index', compact('checks', 'info'));
@@ -32,7 +36,7 @@ class SystemStatusController extends Controller
         try {
             DB::connection()->getPdo();
 
-            return ['ok' => true, 'detail' => config('database.default')];
+            return ['ok' => true, 'detail' => (string) config('database.default')];
         } catch (\Throwable $e) {
             return ['ok' => false, 'detail' => $e->getMessage()];
         }
@@ -43,7 +47,7 @@ class SystemStatusController extends Controller
         try {
             Cache::put('system-status-check', true, 5);
 
-            return ['ok' => Cache::get('system-status-check') === true, 'detail' => config('cache.default')];
+            return ['ok' => Cache::get('system-status-check') === true, 'detail' => (string) config('cache.default')];
         } catch (\Throwable $e) {
             return ['ok' => false, 'detail' => $e->getMessage()];
         }
@@ -56,11 +60,11 @@ class SystemStatusController extends Controller
         $total = @disk_total_space($path);
 
         if (!$free || !$total) {
-            return ['ok' => false, 'detail' => "Aniqlab bo'lmadi"];
+            return ['ok' => false, 'detail' => 'Unable to determine'];
         }
 
         $usedPercent = round((($total - $free) / $total) * 100);
 
-        return ['ok' => $usedPercent < 90, 'detail' => "{$usedPercent}% band"];
+        return ['ok' => $usedPercent < 90, 'detail' => "{$usedPercent}% used"];
     }
 }

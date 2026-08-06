@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Roadmap;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class RoadmapSeeder extends Seeder
 {
@@ -23,17 +23,17 @@ class RoadmapSeeder extends Seeder
                 'estimated_weeks'     => rand(4, 12),
                 'daily_study_minutes' => rand(30, 90),
                 'weekly_plan'         => [
-                    ['week' => 1, 'topic' => 'Algebra asoslarini takrorlash',  'completed' => true],
-                    ['week' => 2, 'topic' => 'Chiziqli tenglamalar amaliyoti', 'completed' => rand(0,1)==1],
-                    ['week' => 3, 'topic' => 'Geometriya — burchaklar',        'completed' => false],
-                    ['week' => 4, 'topic' => 'Mock Exam 1 (To\'liq test)',       'completed' => false],
+                    ['week' => 1, 'topic' => 'Algebra Fundamentals Review', 'completed' => true],
+                    ['week' => 2, 'topic' => 'Linear Equations & Systems Practice', 'completed' => rand(0, 1) === 1],
+                    ['week' => 3, 'topic' => 'Geometry & Special Right Triangles', 'completed' => false],
+                    ['week' => 4, 'topic' => 'Full Length SAT Practice Test 1', 'completed' => false],
                 ],
-                'completion_percent'  => rand(0, 50),
+                'completion_percent'  => rand(10, 50),
                 'status'              => 'active',
                 'generated_at'        => now()->subDays(rand(1, 10)),
             ]);
         }
 
-        $this->command?->info('✓ Roadmaps seeded.');
+        $this->command?->info('✓ Roadmaps seeded in English.');
     }
 }

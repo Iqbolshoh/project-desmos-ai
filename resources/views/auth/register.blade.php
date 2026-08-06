@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Ro\'yxatdan o\'tish · Desmos AI')
+@section('title', 'Sign Up · Desmos AI v2.1')
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-hidden bg-[var(--bg-base)]">
@@ -10,7 +10,7 @@
         <div class="absolute bottom-[-10%] right-[-5%] w-[32rem] h-[32rem] rounded-full blur-[140px]" style="background: rgba(129, 140, 248, 0.05);"></div>
     </div>
 
-    <div class="card relative z-10 w-full max-w-md p-8 sm:p-10 space-y-7 shadow-2xl shadow-black/50 page-enter border border-[var(--border-strong)]">
+    <div class="card relative z-10 w-full max-w-md p-8 sm:p-10 space-y-7 shadow-2xl shadow-black/50 page-enter border border-[var(--border-strong)] rounded-3xl">
 
         <div class="text-center flex flex-col items-center">
             <a href="{{ route('home') }}" class="w-14 h-14 flex items-center justify-center rounded-2xl bg-white/5 border border-[var(--border-strong)] shadow-sm transition-transform duration-300 hover:scale-105 overflow-hidden">
@@ -18,10 +18,10 @@
             </a>
 
             <h2 class="mt-5 text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
-                Hisob yarating
+                Create Account
             </h2>
             <p class="mt-2 text-sm text-[var(--text-secondary)]">
-                Desmos AI bilan SAT Math tayyorgarligini boshlang
+                Start your Digital SAT Math prep with Desmos AI
             </p>
         </div>
 
@@ -30,13 +30,13 @@
 
             <div>
                 <label for="name" class="block text-sm font-semibold text-[var(--text-primary)] mb-1.5">
-                    To'liq ism
+                    Full Name
                 </label>
                 <input id="name" name="name" type="text" required
                     value="{{ old('name') }}"
                     autocomplete="name"
                     class="input @error('name') !border-[var(--accent)] !shadow-[0_0_0_3px_var(--accent-soft)] @enderror"
-                    placeholder="Ism Familiya">
+                    placeholder="John Doe">
 
                 @error('name')
                 <p class="mt-2 text-xs font-medium text-[var(--accent-alt)] flex items-center gap-1.5">
@@ -48,13 +48,13 @@
 
             <div>
                 <label for="email" class="block text-sm font-semibold text-[var(--text-primary)] mb-1.5">
-                    Email manzil
+                    Email Address
                 </label>
                 <input id="email" name="email" type="email" required
                     value="{{ old('email') }}"
                     autocomplete="email"
                     class="input @error('email') !border-[var(--accent)] !shadow-[0_0_0_3px_var(--accent-soft)] @enderror"
-                    placeholder="example@mail.com">
+                    placeholder="student@example.com">
 
                 @error('email')
                 <p class="mt-2 text-xs font-medium text-[var(--accent-alt)] flex items-center gap-1.5">
@@ -66,7 +66,7 @@
 
             <div x-data="{ showPassword: false }">
                 <label for="password" class="block text-sm font-semibold text-[var(--text-primary)] mb-1.5">
-                    Parol
+                    Password
                 </label>
                 <div class="relative">
                     <input id="password" name="password"
@@ -74,7 +74,7 @@
                         required
                         autocomplete="new-password"
                         class="input pr-12 @error('password') !border-[var(--accent)] !shadow-[0_0_0_3px_var(--accent-soft)] @enderror"
-                        placeholder="Kamida 8 ta belgi">
+                        placeholder="Minimum 8 characters">
 
                     <button type="button"
                         @click="showPassword = !showPassword"
@@ -94,23 +94,23 @@
 
             <div>
                 <label for="password_confirmation" class="block text-sm font-semibold text-[var(--text-primary)] mb-1.5">
-                    Parolni tasdiqlang
+                    Confirm Password
                 </label>
                 <input id="password_confirmation" name="password_confirmation" type="password" required
                     autocomplete="new-password"
                     class="input"
-                    placeholder="Parolni qayta kiriting">
+                    placeholder="••••••••">
             </div>
 
             <button type="submit" class="btn-primary w-full py-3 text-base mt-2">
                 <x-lucide-user-plus class="w-5 h-5" />
-                Ro'yxatdan o'tish
+                Create Account
             </button>
         </form>
 
         <p class="text-center text-sm text-[var(--text-secondary)]">
-            Hisobingiz bormi?
-            <a href="{{ route('login') }}" class="font-semibold text-[var(--accent-alt)] hover:underline">Kirish</a>
+            Already have an account?
+            <a href="{{ route('login') }}" class="font-semibold text-[var(--accent-alt)] hover:underline">Sign In</a>
         </p>
     </div>
 </div>

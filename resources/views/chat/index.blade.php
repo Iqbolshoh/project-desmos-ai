@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Chat Tutor')
+@section('title', 'AI Chat Tutor')
 
 @section('content')
 <div class="max-w-4xl mx-auto h-[calc(100vh-8rem)] flex flex-col" x-data="chatTutor()">
@@ -10,34 +10,33 @@
         <div>
             <h1 class="text-2xl font-bold text-white flex items-center gap-2">
                 <x-lucide-messages-square class="w-7 h-7 text-[var(--gold)]" />
-                Chat Tutor
+                AI Chat Tutor
             </h1>
-            <p class="text-[var(--text-muted)] text-xs mt-0.5">SAT Math bo'yicha AI yordamchi</p>
+            <p class="text-[var(--text-muted)] text-xs mt-0.5">Interactive SAT Math Assistant</p>
         </div>
         <div class="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
             <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-            <span class="text-emerald-400 text-xs font-semibold">AI Faol</span>
+            <span class="text-emerald-400 text-xs font-semibold">AI Online</span>
         </div>
     </div>
 
     {{-- Chat Window --}}
     <div class="flex-1 min-h-0 bg-black/40 border border-[var(--border-strong)] rounded-2xl flex flex-col overflow-hidden shadow-2xl relative">
 
-        {{-- Subtle dot grid bg --}}
         <div class="absolute inset-0 opacity-[0.03] pointer-events-none"
              style="background-image: radial-gradient(var(--gold) 1px, transparent 1px); background-size: 24px 24px;"></div>
 
-        {{-- Messages --}}
+        {{-- Messages Container --}}
         <div id="messages-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 relative z-10">
 
-            {{-- Welcome message --}}
+            {{-- Welcome Message --}}
             <div class="flex gap-3">
                 <div class="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center shadow-lg">
                     <x-lucide-bot class="w-5 h-5 text-white" />
                 </div>
                 <div class="flex-1 max-w-[85%]">
                     <div class="bg-[var(--bg-overlay)] border border-[var(--border-subtle)] rounded-2xl rounded-tl-sm p-4 text-[var(--text-primary)] text-sm leading-relaxed shadow-md">
-                        Salom! Men <span class="text-[var(--gold)] font-bold">Desmos AI</span> yordamchisiman. SAT matematika yoki boshqa mavzularda savollaringizni yuboring.
+                        Hello! I am your <span class="text-[var(--gold)] font-bold">Desmos AI</span> assistant. Feel free to ask any questions about SAT Math concepts, formulas, or Desmos graphing calculator techniques.
                     </div>
                     <span class="text-[10px] text-[var(--text-muted)] ml-2 mt-1 block">Desmos AI</span>
                 </div>
@@ -53,7 +52,7 @@
                             <div class="bg-gradient-to-r from-[var(--gold-soft)] to-[var(--bg-raised)] border border-[var(--gold-border)] rounded-2xl rounded-tr-sm p-4 text-white text-sm leading-relaxed shadow-lg">
                                 {!! nl2br(e($msg->message)) !!}
                             </div>
-                            <span class="text-[10px] text-[var(--text-muted)] mr-2 mt-1">Siz</span>
+                            <span class="text-[10px] text-[var(--text-muted)] mr-2 mt-1">You</span>
                         </div>
                     </div>
                 @else
@@ -86,9 +85,9 @@
             </div>
         </div>
 
-        {{-- Quick suggestion chips --}}
+        {{-- Suggestion Chips --}}
         <div class="px-4 pb-2 flex gap-2 flex-wrap relative z-10 border-t border-[var(--border-subtle)] pt-3">
-            @foreach(['Kvadrat tenglama nima?', 'sin(90°) necha?', 'Pitagor teoremasi', 'Statistika asoslari'] as $chip)
+            @foreach(['Quadratic Vertex Formula', 'Pythagorean Theorem', 'System of Equations', 'Desmos Graphing Tips'] as $chip)
             <button @click="newMessage = '{{ $chip }}'; $nextTick(() => sendMessage())"
                     class="text-xs px-3 py-1.5 border border-[var(--border-subtle)] text-[var(--text-secondary)] rounded-full hover:border-[var(--gold-border)] hover:text-[var(--gold)] transition-all duration-200 bg-[var(--bg-overlay)]">
                 {{ $chip }}
@@ -105,7 +104,7 @@
                         @keydown.enter.prevent="sendMessage"
                         rows="1"
                         class="input w-full resize-none py-3 pr-4 rounded-xl bg-black/30 text-sm max-h-32 scroll-area focus:border-[var(--gold)] transition-colors"
-                        placeholder="Xabar yozing... (Enter — jo'natish)"
+                        placeholder="Type a message... (Press Enter to send)"
                         style="min-height:50px;"
                         x-ref="messageInput"
                     ></textarea>
@@ -149,7 +148,7 @@ document.addEventListener('alpine:init', () => {
                 </div>
                 <div class="flex-1 max-w-[85%] flex flex-col items-end">
                     <div class="bg-gradient-to-r from-[var(--gold-soft)] to-[var(--bg-raised)] border border-[var(--gold-border)] rounded-2xl rounded-tr-sm p-4 text-white text-sm leading-relaxed shadow-lg">${text.replace(/\n/g,'<br>')}</div>
-                    <span class="text-[10px] text-[var(--text-muted)] mr-2 mt-1">Siz</span>
+                    <span class="text-[10px] text-[var(--text-muted)] mr-2 mt-1">You</span>
                 </div>
             </div>`;
         },
@@ -195,11 +194,11 @@ document.addEventListener('alpine:init', () => {
                     typingEl.insertAdjacentHTML('beforebegin', this.makeAiBubble(data.reply));
                     if (window.lucide) window.lucide.createIcons();
                 } else {
-                    alert("Xatolik yuz berdi.");
+                    alert("An error occurred while sending message.");
                 }
             } catch (e) {
                 console.error(e);
-                alert("Tarmoq xatosi.");
+                alert("Network error.");
             } finally {
                 this.isTyping = false;
                 this.scrollToBottom();
@@ -209,5 +208,3 @@ document.addEventListener('alpine:init', () => {
 });
 </script>
 @endsection
-
-

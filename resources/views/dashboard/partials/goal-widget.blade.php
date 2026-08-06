@@ -1,37 +1,37 @@
-@php
-    $current = $studentProfile->sat_current_score;
-    $goal = $studentProfile->sat_goal_score;
-    $scoreProgress = ($current && $goal && $goal > $current)
-        ? (int) round((($current - 200) / ($goal - 200)) * 100)
-        : null;
-@endphp
-
-<div class="card p-6 border-[var(--border-strong)] rounded-2xl hover:border-[var(--accent-border)] transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl hover:shadow-[var(--accent-glow)]">
-    <div class="flex items-start justify-between">
-        <div>
-            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)] group-hover:text-[var(--accent-hover)] transition-colors">SAT Maqsad</p>
-            @if ($current && $goal)
-                <p class="mt-2 text-4xl font-extrabold text-white">{{ $current }}<span class="text-lg font-bold text-[var(--text-muted)]">/{{ $goal }}</span></p>
-            @else
-                <p class="mt-2 text-xl font-extrabold text-white">Diagnostika kutilmoqda</p>
-            @endif
-        </div>
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br from-[var(--accent-soft)] to-[var(--accent-soft)] border border-[var(--accent-border)] group-hover:scale-110 transition-transform duration-300">
-            <x-lucide-target class="w-6 h-6 text-[var(--accent)]" />
-        </div>
+<div class="card p-6 border-[var(--border-strong)] rounded-2xl shadow-xl">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-white flex items-center gap-2 text-base">
+            <x-lucide-target class="w-5 h-5 text-[var(--gold)]" />
+            SAT Score Goal
+        </h3>
+        <span class="text-xs text-[var(--text-muted)] font-mono">Target Benchmark</span>
     </div>
 
-    @if (! is_null($scoreProgress))
-    <div class="mt-5">
-        <div class="flex justify-between text-xs font-semibold mb-2">
-            <span class="text-[var(--accent-hover)]">{{ $scoreProgress }}% yakunlandi</span>
-            <span class="text-[var(--text-muted)]">{{ $goal - $current }} ball qoldi</span>
+    <div class="space-y-4">
+        <div class="flex justify-between items-baseline">
+            <div>
+                <span class="text-xs text-[var(--text-muted)] uppercase tracking-wider block font-mono">Current Score</span>
+                <span class="text-2xl font-extrabold text-white font-mono">{{ $studentProfile->sat_current_score ?? 400 }}</span>
+            </div>
+            <div class="text-right">
+                <span class="text-xs text-[var(--text-muted)] uppercase tracking-wider block font-mono">Target Goal</span>
+                <span class="text-2xl font-extrabold text-[var(--gold)] font-mono">{{ $studentProfile->sat_goal_score ?? 800 }}</span>
+            </div>
         </div>
-        <div class="h-2 rounded-full bg-[var(--bg-overlay)] overflow-hidden border border-[var(--border-subtle)]">
-            <div class="h-full rounded-full transition-all duration-1000 ease-out" style="width: {{ max(0, min(100, $scoreProgress)) }}%; background: linear-gradient(90deg, var(--accent), var(--accent-alt)); box-shadow: 0 0 10px var(--accent-glow);"></div>
+
+        @php
+            $current = $studentProfile->sat_current_score ?? 400;
+            $goal = $studentProfile->sat_goal_score ?? 800;
+            $percent = min(100, max(0, round(($current / $goal) * 100)));
+        @endphp
+
+        <div class="w-full bg-black/50 rounded-full h-3 border border-[var(--border-subtle)] overflow-hidden">
+            <div class="bg-gradient-to-r from-[var(--gold-deep)] to-[var(--gold)] h-3 rounded-full transition-all duration-1000"
+                 style="width: {{ $percent }}%"></div>
         </div>
+
+        <p class="text-xs text-[var(--text-secondary)] text-center">
+            {{ max(0, $goal - $current) }} points remaining to reach your SAT target!
+        </p>
     </div>
-    @else
-    <p class="mt-5 text-sm text-[var(--text-muted)]">Boshlang'ich ballingizni bilish uchun <a href="{{ route('diagnostic.start') }}" class="text-[var(--accent-hover)] underline">diagnostikadan o'ting</a>.</p>
-    @endif
 </div>

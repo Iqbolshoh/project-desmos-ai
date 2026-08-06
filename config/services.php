@@ -36,8 +36,9 @@ return [
     ],
 
     'ai_tutor' => [
-        'driver' => env('AI_TUTOR_DRIVER', 'mock'),
+        'driver' => env('AI_TUTOR_DRIVER', 'claude'),
         'desmos_api_key' => env('DESMOS_API_KEY'),
+        'anthropic_key' => env('ANTHROPIC_API_KEY'),
         'openai_api_key' => env('OPENAI_API_KEY'),
     ],
 

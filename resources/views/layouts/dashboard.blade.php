@@ -21,7 +21,7 @@
         })();
     </script>
 
-    <title>@yield('title', 'Dashboard') · Desmos AI</title>
+    <title>@yield('title', 'Dashboard') · Desmos AI v2.1</title>
 
     {{-- Font: Inter — clean professional UI font for education platforms --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -338,7 +338,6 @@
 
         /* ---------- Reduced motion ---------- */
         @media (prefers-reduced-motion: reduce) {
-
             *,
             *::before,
             *::after {
@@ -347,29 +346,11 @@
             }
         }
 
-        /* ---------- Input icon padding fix ----------
-           Tailwind v4 puts utilities in @layer utilities.
-           This unlayered <style> tag has higher cascade priority,
-           so pl-* never wins over .input { padding: … } shorthand.
-           Double-class specificity ensures these rules always apply.
-        ------------------------------------------------------------ */
-        .input.pl-7 {
-            padding-left: 1.75rem;
-        }
+        .input.pl-7 { padding-left: 1.75rem; }
+        .input.pl-9 { padding-left: 2.25rem; }
+        .input.pl-10 { padding-left: 2.5rem; }
+        .input.pl-11 { padding-left: 2.75rem; }
 
-        .input.pl-9 {
-            padding-left: 2.25rem;
-        }
-
-        .input.pl-10 {
-            padding-left: 2.5rem;
-        }
-
-        .input.pl-11 {
-            padding-left: 2.75rem;
-        }
-
-        /* ---------- Cursor: pointer for all interactive elements ---------- */
         button:not([disabled]),
         [role="button"]:not([disabled]),
         summary,
@@ -378,40 +359,25 @@
             cursor: pointer;
         }
 
-        /* ---------- Dynamic viewport height (iOS Safari fix) ----------
-           100vh on iOS includes browser chrome area causing hidden content.
-           100dvh dynamically adjusts as the toolbar appears/disappears.
-        ------------------------------------------------------------ */
         .h-dvh {
             height: 100vh;
             height: 100dvh;
         }
 
-        /* ---------- Mobile: prevent horizontal scroll ---------- */
         @media (max-width: 767px) {
             .sidebar-overlay-open {
                 overflow: hidden;
             }
-
-            /* Compact notifications/profile dropdown to fit narrow screens */
             .dropdown-mobile-safe {
                 max-width: calc(100vw - 1.5rem);
             }
         }
 
-        /* ============================================================
-           LIGHT MODE THEME — COMPREHENSIVE
-           All overrides centralised here so no page template
-           needs changing. Dark mode remains the default.
-        ============================================================ */
-
-        /* 2 ─ Body */
         html.light body {
             background: var(--bg-base);
             color: var(--text-primary);
         }
 
-        /* 3 ─ text-white → dark text (covers every page with one rule) */
         html.light .text-white {
             color: var(--text-primary) !important;
         }
@@ -420,12 +386,10 @@
             color: var(--text-primary) !important;
         }
 
-        /* Restore white text on truly-coloured backgrounds */
         html.light .btn-primary {
             color: #ffffff !important;
         }
 
-        /* accent-coloured confirm/delete/action buttons */
         html.light .bg-\[var\(--accent\)\].text-white,
         html.light .bg-\[var\(--accent\)\] .text-white,
         html.light .bg-\[var\(--accent-hover\)\].text-white,
@@ -433,27 +397,16 @@
             color: #ffffff !important;
         }
 
-        /* avatar initials / logo on inline gradient backgrounds */
         html.light [style*="linear-gradient"] .text-white,
         html.light [style*="linear-gradient"].text-white {
             color: #ffffff !important;
         }
 
-        /* 4 ─ Gray text shades → readable on light backgrounds */
         html.light .text-gray-100,
-        html.light .text-gray-200 {
-            color: #374151 !important;
-        }
+        html.light .text-gray-200 { color: #374151 !important; }
+        html.light .text-gray-300 { color: #4b5563 !important; }
+        html.light .text-gray-400 { color: #6b7280 !important; }
 
-        html.light .text-gray-300 {
-            color: #4b5563 !important;
-        }
-
-        html.light .text-gray-400 {
-            color: #6b7280 !important;
-        }
-
-        /* 5 ─ White-overlay bg classes → subtle dark tint */
         html.light .bg-white\/5,
         html.light .bg-white\/\[0\.03\],
         html.light .bg-white\/\[0\.04\],
@@ -470,185 +423,55 @@
             background-color: rgba(0, 0, 0, 0.05) !important;
         }
 
-        /* 6 ─ Inline-style rgba(255,255,255,*) → dark tint
-                Covers: table header rows, empty-state icon boxes, etc. */
-        html.light [style*="rgba(255,255,255,0.01)"],
-        html.light [style*="rgba(255,255,255,0.02)"],
-        html.light [style*="rgba(255,255,255,0.03)"] {
-            background: rgba(0, 0, 0, 0.02) !important;
-        }
+        html.light .border-white\/5 { border-color: rgba(0, 0, 0, 0.06) !important; }
+        html.light .border-white\/10 { border-color: rgba(0, 0, 0, 0.10) !important; }
+        html.light .border-white\/20 { border-color: rgba(0, 0, 0, 0.15) !important; }
 
-        html.light [style*="rgba(255,255,255,0.04)"],
-        html.light [style*="rgba(255,255,255,0.05)"],
-        html.light [style*="rgba(255,255,255,0.06)"],
-        html.light [style*="rgba(255,255,255,0.08)"] {
-            background: rgba(0, 0, 0, 0.04) !important;
-        }
+        html.light .scroll-area { scrollbar-color: #cbd5e1 transparent; }
+        html.light .scroll-area::-webkit-scrollbar-thumb { background: #cbd5e1; }
+        html.light .scroll-area::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-        /* 7 ─ Border utilities */
-        html.light .border-white\/5 {
-            border-color: rgba(0, 0, 0, 0.06) !important;
-        }
+        html.light .nav-link:hover { background: rgba(0, 0, 0, 0.05); }
+        html.light .nav-link.active { color: var(--accent-deep); }
 
-        html.light .border-white\/10 {
-            border-color: rgba(0, 0, 0, 0.10) !important;
-        }
+        html.light .btn-secondary:hover { background: #e2e8f0; }
+        html.light .btn-ghost:hover { color: var(--text-primary); background: rgba(0, 0, 0, 0.05); }
+        html.light .card-hover:hover { box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.12); }
+        html.light thead tr { background: rgba(0, 0, 0, 0.025) !important; }
 
-        html.light .border-white\/20 {
-            border-color: rgba(0, 0, 0, 0.15) !important;
-        }
-
-        /* 8 ─ Scrollbar */
-        html.light .scroll-area {
-            scrollbar-color: #cbd5e1 transparent;
-        }
-
-        html.light .scroll-area::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-        }
-
-        html.light .scroll-area::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-        }
-
-        /* 9 ─ Navigation */
-        html.light .nav-link:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        html.light .nav-link.active {
-            color: var(--accent-deep);
-        }
-
-        /* 10 ─ Buttons */
-        html.light .btn-secondary:hover {
-            background: #e2e8f0;
-        }
-
-        html.light .btn-ghost:hover {
-            color: var(--text-primary);
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        /* 11 ─ Cards */
-        html.light .card-hover:hover {
-            box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.12);
-        }
-
-        /* 12 ─ Tables */
-        html.light thead tr {
-            background: rgba(0, 0, 0, 0.025) !important;
-        }
-
-        /* 13 ─ Inputs (some pages put text-white on <input> directly) */
         html.light input.text-white,
         html.light select.text-white,
-        html.light textarea.text-white {
-            color: var(--text-primary) !important;
-        }
+        html.light textarea.text-white { color: var(--text-primary) !important; }
 
-        /* 14 ─ Modals: reduce backdrop opacity slightly */
-        html.light .bg-black\/70 {
-            background-color: rgba(0, 0, 0, 0.50) !important;
-        }
+        html.light .bg-black\/70 { background-color: rgba(0, 0, 0, 0.50) !important; }
+        html.light .bg-black\/60 { background-color: rgba(0, 0, 0, 0.40) !important; }
 
-        html.light .bg-black\/60 {
-            background-color: rgba(0, 0, 0, 0.40) !important;
-        }
+        html.light .shadow-2xl { box-shadow: 0 8px 40px rgba(0, 0, 0, 0.10); }
 
-        /* 15 ─ Soften heavy shadows */
-        html.light .shadow-2xl {
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.10);
-        }
-
-        /* 16 ─ Header button hover */
         html.light header button:hover,
-        html.light header a:hover {
-            background-color: rgba(0, 0, 0, 0.05) !important;
-        }
+        html.light header a:hover { background-color: rgba(0, 0, 0, 0.05) !important; }
 
-        /* 17 ─ Background decoration blobs */
-        html.light .bg-deco-purple {
-            background: rgba(124, 58, 237, 0.05);
-        }
+        html.light .bg-deco-purple { background: rgba(124, 58, 237, 0.05); }
+        html.light .bg-deco-blue { background: rgba(37, 99, 235, 0.06); }
 
-        html.light .bg-deco-blue {
-            background: rgba(37, 99, 235, 0.06);
-        }
+        .theme-icon-light { display: none; }
+        html.light .theme-icon-dark { display: none; }
+        html.light .theme-icon-light { display: block; }
 
-        /* 18 ─ Theme toggle icons */
-        .theme-icon-light {
-            display: none;
-        }
-
-        html.light .theme-icon-dark {
-            display: none;
-        }
-
-        html.light .theme-icon-light {
-            display: block;
-        }
-
-        /* ── Collapsible Sidebar (desktop only) ── */
         @media (min-width: 768px) {
-            aside {
-                transition: width 0.3s var(--ease-out);
-            }
-
-            aside.sidebar-collapsed {
-                width: 4rem;
-                overflow: hidden;
-            }
-
-            aside.sidebar-collapsed .sidebar-label {
-                display: none;
-            }
-
-            aside.sidebar-collapsed .nav-heading {
-                display: none;
-            }
-
-            aside.sidebar-collapsed .nav-link {
-                justify-content: center;
-                padding: 0.65rem;
-            }
-
-            aside.sidebar-collapsed .nav-link.active::before {
-                left: 0;
-            }
-
-            aside.sidebar-collapsed .sidebar-logo-container {
-                padding-left: 0;
-                padding-right: 0;
-                justify-content: center;
-            }
-
-            aside.sidebar-collapsed .sidebar-logo-link {
-                gap: 0;
-                justify-content: center;
-            }
-
-            aside.sidebar-collapsed .sidebar-logo-text {
-                display: none;
-            }
-
-            aside.sidebar-collapsed .sidebar-user-info {
-                display: none;
-            }
-
-            aside.sidebar-collapsed .sidebar-logout-btn {
-                display: none;
-            }
-
-            aside.sidebar-collapsed .sidebar-user-card-inner {
-                gap: 0;
-                justify-content: center;
-                padding: 0.5rem;
-            }
-
-            aside.sidebar-collapsed .sidebar-user-section {
-                padding: 0.5rem;
-            }
+            aside { transition: width 0.3s var(--ease-out); }
+            aside.sidebar-collapsed { width: 4rem; overflow: hidden; }
+            aside.sidebar-collapsed .sidebar-label { display: none; }
+            aside.sidebar-collapsed .nav-heading { display: none; }
+            aside.sidebar-collapsed .nav-link { justify-content: center; padding: 0.65rem; }
+            aside.sidebar-collapsed .nav-link.active::before { left: 0; }
+            aside.sidebar-collapsed .sidebar-logo-container { padding-left: 0; padding-right: 0; justify-content: center; }
+            aside.sidebar-collapsed .sidebar-logo-link { gap: 0; justify-content: center; }
+            aside.sidebar-collapsed .sidebar-logo-text { display: none; }
+            aside.sidebar-collapsed .sidebar-user-info { display: none; }
+            aside.sidebar-collapsed .sidebar-logout-btn { display: none; }
+            aside.sidebar-collapsed .sidebar-user-card-inner { gap: 0; justify-content: center; padding: 0.5rem; }
+            aside.sidebar-collapsed .sidebar-user-section { padding: 0.5rem; }
         }
     </style>
 
@@ -671,9 +494,7 @@
         class="flex h-dvh w-full relative"
         @keydown.escape.window="mobileMenuOpen = false; logoutModalOpen = false; notificationsOpen = false; profileOpen = false">
 
-        {{-- ====================================================
-             LOGOUT MODAL
-        ===================================================== --}}
+        {{-- LOGOUT MODAL --}}
         <div x-show="logoutModalOpen" x-cloak class="fixed inset-0 z-[70]" role="dialog" aria-modal="true" aria-labelledby="logout-title" style="display: none;">
             <div x-show="logoutModalOpen"
                 x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -695,21 +516,21 @@
                     </div>
 
                     <div class="mt-5 text-center">
-                        <h3 id="logout-title" class="text-xl font-bold text-white tracking-tight">Chiqishni tasdiqlash</h3>
+                        <h3 id="logout-title" class="text-xl font-bold text-white tracking-tight">Confirm Logout</h3>
                         <p class="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                            Hisobingizdan chiqmoqchimisiz?
+                            Are you sure you want to log out of your Desmos AI account?
                         </p>
                     </div>
 
                     <div class="mt-7 flex flex-col sm:flex-row gap-3">
                         <button type="button" @click="logoutModalOpen = false" class="btn-secondary flex-1 cursor-pointer">
-                            Bekor qilish
+                            Cancel
                         </button>
                         <form action="{{ route('logout') ?? '#' }}" method="POST" class="flex-1">
                             @csrf
                             <button type="submit" class="btn-primary w-full cursor-pointer">
                                 <x-lucide-log-out class="w-4 h-4" />
-                                Ha, chiqish
+                                Yes, Log Out
                             </button>
                         </form>
                     </div>
@@ -717,15 +538,11 @@
             </div>
         </div>
 
-        {{-- ====================================================
-             MOBILE MENU BACKGROUND
-        ===================================================== --}}
+        {{-- MOBILE MENU BACKGROUND --}}
         <div x-show="mobileMenuOpen" x-cloak @click="mobileMenuOpen = false" x-transition.opacity
             class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden cursor-pointer" style="display: none;"></div>
 
-        {{-- ====================================================
-             SIDEBAR
-        ===================================================== --}}
+        {{-- SIDEBAR --}}
         <aside class="w-[var(--sidebar-w)] bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] flex flex-col z-50 fixed inset-y-0 left-0 md:relative md:translate-x-0 transition-transform duration-300 ease-[var(--ease-out)] flex-shrink-0"
             :class="{
                 'translate-x-0 shadow-2xl shadow-black/50': mobileMenuOpen,
@@ -740,7 +557,7 @@
                         <img src="{{ asset('/images/logo.png') }}" alt="Desmos AI Logo" class="w-full h-full object-contain">
                     </div>
                     <span class="sidebar-logo-text font-extrabold text-lg tracking-tight truncate" style="background: linear-gradient(135deg, var(--accent-hover), var(--accent-alt)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
-                        Desmos AI
+                        Desmos AI <span class="text-xs font-mono text-[var(--gold)]">v2.1</span>
                     </span>
                 </a>
                 <button @click="mobileMenuOpen = false" class="md:hidden ml-auto text-[var(--text-muted)] hover:text-white p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer" aria-label="Close menu">
@@ -751,21 +568,21 @@
             {{-- Navigation menu --}}
             <nav class="flex-1 px-4 py-6 space-y-7 overflow-y-auto scroll-area">
 
-                {{-- Dashboard (always visible) --}}
+                {{-- Dashboard --}}
                 <div>
                     <div class="space-y-1">
                         <a href="{{ route('dashboard.index') }}"
-                            title="Boshqaruv paneli"
+                            title="Dashboard"
                             class="nav-link {{ request()->routeIs('dashboard.*') ? 'active' : '' }}">
                             <x-lucide-layout-dashboard class="nav-icon" />
-                            <span class="sidebar-label">Boshqaruv paneli</span>
+                            <span class="sidebar-label">Dashboard</span>
                         </a>
                     </div>
                 </div>
 
-                {{-- O'quvchi bo'limi (AI Tutor & Tarix) --}}
+                {{-- Student Portal --}}
                 <div>
-                    <h3 class="nav-heading">O'quvchi</h3>
+                    <h3 class="nav-heading">Student Portal</h3>
                     <div class="space-y-1">
                         <a href="{{ route('tutor.index') }}"
                             title="AI Tutor"
@@ -774,54 +591,54 @@
                             <span class="sidebar-label">AI Tutor</span>
                         </a>
                         <a href="{{ route('history.index') }}"
-                            title="Tarix"
+                            title="History"
                             class="nav-link {{ request()->routeIs('history.*') ? 'active' : '' }}">
                             <x-lucide-history class="nav-icon" />
-                            <span class="sidebar-label">Tarix</span>
+                            <span class="sidebar-label">History</span>
                         </a>
                         <a href="{{ route('diagnostic.start') }}"
-                            title="Diagnostika"
+                            title="Diagnostic Test"
                             class="nav-link {{ request()->routeIs('diagnostic.*') ? 'active' : '' }}">
                             <x-lucide-target class="nav-icon" />
-                            <span class="sidebar-label">Diagnostika</span>
+                            <span class="sidebar-label">Diagnostic Test</span>
                         </a>
                         <a href="{{ route('roadmap.show') }}"
-                            title="Roadmap"
+                            title="Study Roadmap"
                             class="nav-link {{ request()->routeIs('roadmap.*') ? 'active' : '' }}">
                             <x-lucide-map class="nav-icon" />
-                            <span class="sidebar-label">Roadmap</span>
+                            <span class="sidebar-label">Study Roadmap</span>
                         </a>
                     </div>
                 </div>
 
-                {{-- Amaliyot (Practice & Chat) --}}
+                {{-- Practice & Chat --}}
                 <div>
-                    <h3 class="nav-heading">Amaliyot</h3>
+                    <h3 class="nav-heading">Practice & AI Chat</h3>
                     <div class="space-y-1">
                         <a href="{{ route('practice.index') }}"
-                            title="Mashg'ulotlar"
+                            title="Practice Bank"
                             class="nav-link {{ request()->routeIs('practice.*') ? 'active' : '' }}">
                             <x-lucide-dumbbell class="nav-icon" />
-                            <span class="sidebar-label">Mashg'ulot</span>
+                            <span class="sidebar-label">Practice Bank</span>
                         </a>
                         <a href="{{ route('chat.index') }}"
-                            title="Chat Tutor"
+                            title="AI Chat Tutor"
                             class="nav-link {{ request()->routeIs('chat.*') ? 'active' : '' }}">
                             <x-lucide-messages-square class="nav-icon" />
-                            <span class="sidebar-label">Chat Tutor</span>
+                            <span class="sidebar-label">AI Chat Tutor</span>
                         </a>
                     </div>
                 </div>
 
-                {{-- Reyting (Leaderboard) --}}
+                {{-- Competition --}}
                 <div>
-                    <h3 class="nav-heading">Musobaqa</h3>
+                    <h3 class="nav-heading">Competition</h3>
                     <div class="space-y-1">
                         <a href="{{ route('leaderboard.index') }}"
-                            title="Peshqadamlar"
+                            title="Leaderboard"
                             class="nav-link {{ request()->routeIs('leaderboard.*') ? 'active' : '' }}">
                             <x-lucide-trophy class="nav-icon" />
-                            <span class="sidebar-label">Peshqadamlar</span>
+                            <span class="sidebar-label">Leaderboard</span>
                         </a>
                     </div>
                 </div>
@@ -829,46 +646,46 @@
                 {{-- Administration --}}
                 @canany(['roles.view', 'users.view'])
                 <div>
-                    <h3 class="nav-heading">Boshqaruv</h3>
+                    <h3 class="nav-heading">Administration</h3>
                     <div class="space-y-1">
                         @can('users.view')
                         <a href="{{ route('admin.questions.index') }}"
-                            title="Savollar bazasi"
+                            title="Questions Bank"
                             class="nav-link {{ request()->routeIs('admin.questions.*') ? 'active' : '' }}">
                             <x-lucide-database class="nav-icon" />
-                            <span class="sidebar-label">Savollar</span>
+                            <span class="sidebar-label">Questions</span>
                         </a>
                         <a href="{{ route('admin.reports.index') }}"
-                            title="Hisobotlar"
+                            title="Reports"
                             class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
                             <x-lucide-file-bar-chart class="nav-icon" />
-                            <span class="sidebar-label">Hisobotlar</span>
+                            <span class="sidebar-label">Reports</span>
                         </a>
                         <a href="{{ route('admin.analytics.index') }}"
-                            title="Analitika"
+                            title="Analytics"
                             class="nav-link {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}">
                             <x-lucide-activity class="nav-icon" />
-                            <span class="sidebar-label">Analitika</span>
+                            <span class="sidebar-label">Analytics</span>
                         </a>
                         <a href="{{ route('admin.system-status.index') }}"
-                            title="Tizim holati"
+                            title="System Status"
                             class="nav-link {{ request()->routeIs('admin.system-status.*') ? 'active' : '' }}">
                             <x-lucide-server-cog class="nav-icon" />
-                            <span class="sidebar-label">Tizim holati</span>
+                            <span class="sidebar-label">System Status</span>
                         </a>
                         <a href="{{ route('users.index') }}"
-                            title="Foydalanuvchilar"
+                            title="Users"
                             class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                             <x-lucide-user-cog class="nav-icon" />
-                            <span class="sidebar-label">Foydalanuvchilar</span>
+                            <span class="sidebar-label">Users</span>
                         </a>
                         @endcan
                         @can('roles.view')
                         <a href="{{ route('roles.index') }}"
-                            title="Rollar"
+                            title="Roles"
                             class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                             <x-lucide-shield-check class="nav-icon" />
-                            <span class="sidebar-label">Rollar</span>
+                            <span class="sidebar-label">Roles</span>
                         </a>
                         @endcan
                     </div>
@@ -885,7 +702,7 @@
                     </div>
                     <div class="sidebar-user-info min-w-0 flex-1">
                         <p class="text-sm font-semibold text-white truncate leading-tight">{{ auth()->user()->name ?? 'Admin' }}</p>
-                        <p class="text-xs text-[var(--text-muted)] truncate">{{ auth()->user()->email ?? 'admin@vexa.uz' }}</p>
+                        <p class="text-xs text-[var(--text-muted)] truncate">{{ auth()->user()->email ?? 'admin@desmos.ai' }}</p>
                     </div>
                     <button @click="logoutModalOpen = true" type="button"
                         class="sidebar-logout-btn p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--accent-hover)] hover:bg-[var(--accent-soft)] transition-colors flex-shrink-0 cursor-pointer"
@@ -896,9 +713,7 @@
             </div>
         </aside>
 
-        {{-- ====================================================
-             MAIN CONTENT
-        ===================================================== --}}
+        {{-- MAIN CONTENT --}}
         <div class="flex-1 flex flex-col overflow-hidden relative min-w-0">
 
             {{-- Background decoration blobs --}}
@@ -911,20 +726,17 @@
             <header class="h-[var(--header-h)] flex items-center justify-between gap-4 px-4 sm:px-7 bg-[var(--bg-base)]/80 backdrop-blur-xl border-b border-[var(--border-subtle)] z-30 relative flex-shrink-0">
 
                 <div class="flex items-center gap-3 min-w-0">
-                    {{-- Mobile: open sidebar --}}
                     <button @click="mobileMenuOpen = true" class="md:hidden text-[var(--text-secondary)] hover:text-white p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer" aria-label="Open menu">
                         <x-lucide-menu class="w-5 h-5" />
                     </button>
-                    {{-- Desktop: collapse / expand sidebar --}}
                     <button @click="toggleSidebar()"
                         class="hidden md:flex items-center justify-center p-2 rounded-xl text-[var(--text-secondary)] hover:text-white hover:bg-white/5 border border-transparent hover:border-[var(--border-subtle)] transition-colors cursor-pointer flex-shrink-0"
-                        :title="sidebarOpen ? 'Yopish' : 'Ochish'"
+                        :title="sidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'"
                         aria-label="Toggle sidebar">
                         <x-lucide-menu class="w-5 h-5" />
                     </button>
 
                     <div class="min-w-0 cursor-default">
-                        {{-- Breadcrumb: child page @section('breadcrumb', 'Projects') --}}
                         @hasSection('breadcrumb')
                         <p class="text-[0.68rem] font-semibold uppercase tracking-widest text-[var(--text-muted)] mb-0.5 truncate">
                             @yield('breadcrumb')
@@ -938,7 +750,6 @@
 
                 <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
 
-                    {{-- Page-specific actions: @section('header_actions') --}}
                     <div class="hidden sm:flex items-center gap-3">
                         @yield('header_actions')
                     </div>
@@ -966,8 +777,8 @@
                             style="display: none;">
 
                             <div class="px-4 py-3.5 border-b border-[var(--border-subtle)] flex justify-between items-center">
-                                <h3 class="text-sm font-bold text-white">Bildirishnomalar</h3>
-                                <span class="badge badge-accent cursor-pointer">2 yangi</span>
+                                <h3 class="text-sm font-bold text-white">Notifications</h3>
+                                <span class="badge badge-accent cursor-pointer">2 new</span>
                             </div>
 
                             <div class="max-h-80 overflow-y-auto scroll-area">
@@ -976,9 +787,9 @@
                                         <x-lucide-check-circle class="w-4 h-4 text-emerald-400" />
                                     </div>
                                     <div class="min-w-0">
-                                        <p class="text-sm text-gray-200 font-medium group-hover:text-white transition-colors">Domen muvaffaqiyatli ulandi</p>
-                                        <p class="text-xs text-[var(--text-muted)] mt-1">Yangi domen sozlamalari faollashtirildi.</p>
-                                        <p class="text-[0.68rem] text-[var(--text-muted)] mt-1.5 font-mono">5 daqiqa oldin</p>
+                                        <p class="text-sm text-gray-200 font-medium group-hover:text-white transition-colors">Desmos Engine Updated</p>
+                                        <p class="text-xs text-[var(--text-muted)] mt-1">Live interactive Desmos Graphing API v1.9 active.</p>
+                                        <p class="text-[0.68rem] text-[var(--text-muted)] mt-1.5 font-mono">5 mins ago</p>
                                     </div>
                                 </a>
                                 <a href="#" class="flex items-start gap-3 px-4 py-3.5 hover:bg-white/[0.03] transition-colors group cursor-pointer">
@@ -986,15 +797,15 @@
                                         <x-lucide-info class="w-4 h-4" style="color: var(--accent-alt);" />
                                     </div>
                                     <div class="min-w-0">
-                                        <p class="text-sm text-gray-200 font-medium group-hover:text-white transition-colors">Tizim yangilanishi mavjud</p>
-                                        <p class="text-xs text-[var(--text-muted)] mt-1">Yangi versiya: v1.0 — o'zgarishlarni ko'ring.</p>
-                                        <p class="text-[0.68rem] text-[var(--text-muted)] mt-1.5 font-mono">1 soat oldin</p>
+                                        <p class="text-sm text-gray-200 font-medium group-hover:text-white transition-colors">System Update v2.1</p>
+                                        <p class="text-xs text-[var(--text-muted)] mt-1">New English language & performance enhancements live.</p>
+                                        <p class="text-[0.68rem] text-[var(--text-muted)] mt-1.5 font-mono">1 hour ago</p>
                                     </div>
                                 </a>
                             </div>
 
                             <div class="px-4 py-2.5 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-                                <a href="#" class="text-xs font-semibold text-[var(--accent-hover)] hover:text-[var(--accent-alt)] transition-colors cursor-pointer">Barchasini ko'rish</a>
+                                <a href="#" class="text-xs font-semibold text-[var(--accent-hover)] hover:text-[var(--accent-alt)] transition-colors cursor-pointer">View all</a>
                             </div>
                         </div>
                     </div>
@@ -1032,13 +843,13 @@
 
                             <div class="px-4 py-3 border-b border-[var(--border-subtle)]">
                                 <p class="text-sm font-bold text-white truncate">{{ auth()->user()->name ?? 'Admin' }}</p>
-                                <p class="text-xs text-[var(--text-muted)] truncate mt-0.5">{{ auth()->user()->email ?? 'admin@vexa.uz' }}</p>
+                                <p class="text-xs text-[var(--text-muted)] truncate mt-0.5">{{ auth()->user()->email ?? 'admin@desmos.ai' }}</p>
                             </div>
 
                             <div class="py-1">
                                 <a href="{{ route('profile.show') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-[var(--text-secondary)] hover:bg-white/[0.04] hover:text-white font-medium transition-colors cursor-pointer">
                                     <x-lucide-user class="w-4 h-4" />
-                                    Mening profilim
+                                    My Profile
                                 </a>
                             </div>
 
@@ -1046,7 +857,7 @@
                                 <button @click="logoutModalOpen = true; profileOpen = false" type="button"
                                     class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm font-semibold text-[var(--accent-hover)] hover:bg-[var(--accent-soft)] transition-colors cursor-pointer">
                                     <x-lucide-log-out class="w-4 h-4" />
-                                    Chiqish
+                                    Log Out
                                 </button>
                             </div>
                         </div>
@@ -1054,11 +865,7 @@
                 </div>
             </header>
 
-            {{-- ====================================================
-                 TOAST NOTIFICATIONS
-                 Supports: success | error | warning | info
-                 Auto-dismiss: 5 s  |  Progress bar  |  Close button
-            ===================================================== --}}
+            {{-- TOAST NOTIFICATIONS --}}
             @php
             $toastType = session('success') ? 'success' : (session('error') ? 'error' : (session('warning') ? 'warning' : (session('info') ? 'info' : null)));
             $toastMessage = $toastType ? session($toastType) : null;
@@ -1083,7 +890,6 @@
                     @else border-blue-500/30
                     @endif">
 
-                    {{-- Icon --}}
                     <div class="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center
                         @if($toastType === 'success') bg-emerald-500/10
                         @elseif($toastType === 'error') bg-[var(--accent-soft)]
@@ -1101,26 +907,23 @@
                         @endif
                     </div>
 
-                    {{-- Body --}}
                     <div class="flex-1 min-w-0 pt-0.5">
                         <p class="text-sm font-bold text-white tracking-tight">
-                            @if($toastType === 'success') Muvaffaqiyat
-                            @elseif($toastType === 'error') Xatolik
-                            @elseif($toastType === 'warning') Ogohlantirish
-                            @else Ma'lumot
+                            @if($toastType === 'success') Success
+                            @elseif($toastType === 'error') Error
+                            @elseif($toastType === 'warning') Warning
+                            @else Notice
                             @endif
                         </p>
                         <p class="text-xs text-[var(--text-secondary)] mt-0.5 leading-relaxed">{{ $toastMessage }}</p>
                     </div>
 
-                    {{-- Close --}}
                     <button @click="show = false" type="button"
                         class="flex-shrink-0 p-1.5 -mr-1 -mt-0.5 rounded-lg text-[var(--text-muted)] hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
                         aria-label="Dismiss notification">
                         <x-lucide-x class="w-4 h-4" />
                     </button>
 
-                    {{-- Progress bar --}}
                     <div class="absolute bottom-0 left-0 h-[3px]
                         @if($toastType === 'success') bg-emerald-500
                         @elseif($toastType === 'error') bg-[var(--accent-hover)]
@@ -1141,8 +944,8 @@
 
                 <footer class="px-4 sm:px-8 pb-6 pt-2">
                     <div class="max-w-[100rem] mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[var(--text-muted)] border-t border-[var(--border-subtle)] pt-4 cursor-default">
-                        <p>© {{ date('Y') }} Desmos AI — Barcha huquqlar himoyalangan.</p>
-                        <p class="font-mono">v1.0</p>
+                        <p>© {{ date('Y') }} Desmos AI — All rights reserved.</p>
+                        <p class="font-mono">v2.1</p>
                     </div>
                 </footer>
             </main>

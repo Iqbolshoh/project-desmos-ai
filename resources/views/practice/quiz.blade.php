@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Mashq')
+@section('title', 'Practice Quiz')
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6" x-data="quizForm()">
 
-    {{-- Quiz header --}}
+    {{-- Quiz Header --}}
     <div class="flex items-center justify-between gap-4">
         <div class="flex items-center gap-3">
             <a href="{{ route('practice.topic', $topic->slug) }}" class="w-9 h-9 rounded-xl border border-[var(--border-strong)] bg-[var(--bg-overlay)] flex items-center justify-center hover:border-[var(--accent-border)] hover:bg-[var(--accent-soft)] transition-all">
@@ -15,11 +15,11 @@
                 <div class="flex items-center gap-2">
                     <x-dynamic-component :component="'lucide-' . $topic->icon" class="w-5 h-5 text-[var(--accent)]" />
                     <h1 class="text-lg font-bold text-white">{{ $topic->name }}</h1>
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold capitalize
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold capitalize font-mono
                         {{ $difficulty === 'easy' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25' :
                            ($difficulty === 'hard' ? 'bg-red-500/15 text-red-400 border border-red-500/25' :
                            'bg-amber-500/15 text-amber-400 border border-amber-500/25') }}">
-                        {{ $difficulty === 'easy' ? 'Oson' : ($difficulty === 'hard' ? 'Qiyin' : "O'rtacha") }}
+                        {{ $difficulty === 'easy' ? 'Easy' : ($difficulty === 'hard' ? 'Hard' : 'Medium') }}
                     </span>
                 </div>
             </div>
@@ -32,13 +32,13 @@
     </div>
 
     {{-- Question Card --}}
-    <div class="card p-7 border border-[var(--border-strong)] rounded-2xl">
+    <div class="card p-7 border border-[var(--border-strong)] rounded-2xl shadow-xl">
         <p class="text-white text-base font-medium leading-relaxed mb-6">
             {!! nl2br(e($question->prompt)) !!}
         </p>
 
         @if($question->desmos_expressions)
-            @php $exprs = json_decode($question->desmos_expressions, true) ?? []; @endphp
+            @php $exprs = is_array($question->desmos_expressions) ? $question->desmos_expressions : (json_decode($question->desmos_expressions, true) ?? []); @endphp
             <div class="mb-6 border border-[var(--border-subtle)] rounded-xl overflow-hidden shadow-lg bg-black">
                 <x-desmos-calculator id="quiz-graph" height="250px" :expression="implode(',', $exprs)" />
             </div>
@@ -46,7 +46,7 @@
 
         <div class="space-y-4">
             @if($question->type === 'mcq' && $question->options)
-                @php $options = json_decode($question->options, true) ?? []; @endphp
+                @php $options = is_array($question->options) ? $question->options : (json_decode($question->options, true) ?? []); @endphp
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     @foreach($options as $letter => $text)
                     <label
@@ -69,7 +69,7 @@
                             <x-lucide-check class="w-3 h-3 text-white" x-show="selectedAnswer === '{{ $letter }}' || (submitted && resultData.correct_answer === '{{ $letter }}')" />
                         </div>
                         <span class="text-white text-sm font-medium flex-1">
-                            <span class="font-bold text-[var(--text-muted)] mr-1.5">{{ $letter }})</span>{!! $text !!}
+                            <span class="font-bold text-[var(--gold)] mr-1.5">{{ $letter }})</span>{!! $text !!}
                         </span>
                         <x-lucide-check-circle x-show="submitted && resultData.correct_answer === '{{ $letter }}'" class="w-5 h-5 text-emerald-500 ml-auto shrink-0" style="display:none" />
                         <x-lucide-x-circle x-show="submitted && selectedAnswer === '{{ $letter }}' && !resultData.is_correct" class="w-5 h-5 text-red-500 ml-auto shrink-0" style="display:none" />
@@ -82,15 +82,15 @@
                         type="text"
                         x-model="selectedAnswer"
                         :disabled="submitted"
-                        class="input w-full md:w-1/2 focus:border-[var(--accent)] transition-colors"
-                        placeholder="Javobni kiriting..."
+                        class="input w-full md:w-1/2 focus:border-[var(--accent)] transition-colors bg-black/30"
+                        placeholder="Type your answer..."
                         :class="{
                             'border-emerald-500 text-emerald-400': submitted && resultData.is_correct,
                             'border-red-500 text-red-400': submitted && !resultData.is_correct
                         }"
                     >
                     <div x-show="submitted && !resultData.is_correct" class="text-emerald-400 font-bold mt-2 text-sm" style="display:none">
-                        ✓ To'g'ri javob: <span x-text="resultData.correct_answer"></span>
+                        ✓ Correct Answer: <span x-text="resultData.correct_answer"></span>
                     </div>
                 </div>
             @endif
@@ -112,15 +112,15 @@
                 </div>
             </div>
             <div class="flex-1">
-                <h3 class="text-lg font-bold text-white mb-2" x-text="resultData.is_correct ? '🎉 Barakalla! To\'g\'ri javob.' : '❌ Noto\'g\'ri. Yechimni o\'rganing:'"></h3>
+                <h3 class="text-lg font-bold text-white mb-2" x-text="resultData.is_correct ? '🎉 Excellent! Correct Answer.' : '❌ Incorrect. Review explanation below:'"></h3>
                 <p class="text-[var(--text-secondary)] leading-relaxed" x-text="resultData.explanation"></p>
 
                 <div class="mt-6 flex gap-3 flex-wrap">
                     <a href="{{ route('practice.topic', $topic->slug) }}" class="btn-secondary text-sm">
-                        <x-lucide-arrow-left class="w-4 h-4" /> Mavzuga qaytish
+                        <x-lucide-arrow-left class="w-4 h-4" /> Return to Topic
                     </a>
                     <button @click="location.reload()" class="btn-primary text-sm">
-                        Keyingi savol <x-lucide-arrow-right class="w-4 h-4" />
+                        Next Question <x-lucide-arrow-right class="w-4 h-4" />
                     </button>
                 </div>
             </div>
@@ -128,16 +128,16 @@
     </div>
 
     {{-- Submit Button --}}
-    <div x-show="!submitted" class="flex justify-end" style="">
+    <div x-show="!submitted" class="flex justify-end">
         <button
             @click="submitAnswer"
             :disabled="isSubmitting || !selectedAnswer"
             class="inline-flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-alt)] hover:from-[var(--accent-hover)] text-white font-bold rounded-xl shadow-lg shadow-[var(--accent-glow)] disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5">
             <span x-show="!isSubmitting">
-                <span class="flex items-center gap-2"><x-lucide-check class="w-5 h-5" /> Javobni tasdiqlash</span>
+                <span class="flex items-center gap-2"><x-lucide-check class="w-5 h-5" /> Confirm Answer</span>
             </span>
             <span x-show="isSubmitting" class="flex items-center gap-2">
-                <x-lucide-loader-2 class="w-4 h-4 animate-spin" /> Tekshirilmoqda...
+                <x-lucide-loader-2 class="w-4 h-4 animate-spin" /> Checking...
             </span>
         </button>
     </div>
@@ -185,12 +185,12 @@ document.addEventListener('alpine:init', () => {
                     this.resultData = await response.json();
                     this.submitted = true;
                 } else {
-                    alert("Xatolik yuz berdi. Qaytadan urinib ko'ring.");
+                    alert("An error occurred. Please try again.");
                     this.timer = setInterval(() => { this.timeSpent++; }, 1000);
                 }
             } catch (e) {
                 console.error(e);
-                alert("Tarmoq xatosi.");
+                alert("Network error.");
             } finally {
                 this.isSubmitting = false;
             }

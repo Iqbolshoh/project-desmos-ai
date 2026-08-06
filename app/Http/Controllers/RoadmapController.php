@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Roadmap;
 use App\Services\Roadmap\RoadmapService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class RoadmapController extends Controller
 {
-    public function show()
+    /**
+     * Display the active study roadmap for the authenticated student.
+     */
+    public function show(): View
     {
         $roadmap = Roadmap::where('user_id', auth()->id())
             ->where('status', 'active')
@@ -18,38 +23,54 @@ class RoadmapController extends Controller
         return view('roadmap.show', compact('roadmap'));
     }
 
-    public function generate(RoadmapService $roadmapService)
+    /**
+     * Generate a new study roadmap for the student.
+     */
+    public function generate(RoadmapService $roadmapService): RedirectResponse
     {
-        $roadmapService->generateForUser(auth()->user());
-        return redirect()->route('roadmap.show')->with('success', 'Yangi reja tuzildi!');
+        $user = auth()->user();
+        if ($user) {
+            $roadmapService->generateForUser($user);
+        }
+
+        return redirect()->route('roadmap.show')->with('success', 'New study roadmap generated successfully!');
     }
 
-    public function toggleTask(Request $request, Roadmap $roadmap)
+    /**
+     * Toggle completion status of a task within the roadmap.
+     */
+    public function toggleTask(Request $request, Roadmap $roadmap): RedirectResponse
     {
         if ($roadmap->user_id !== auth()->id()) {
             abort(403);
         }
 
         $taskId = $request->input('task_id');
-        $weeks = $roadmap->weekly_plan;
+        $weeks = $roadmap->weekly_plan ?? [];
 
         foreach ($weeks as &$week) {
-            foreach ($week['tasks'] as &$task) {
-                if ($task['id'] === $taskId) {
-                    $task['completed'] = !$task['completed'];
+            if (isset($week['tasks']) && is_array($week['tasks'])) {
+                foreach ($week['tasks'] as &$task) {
+                    if (isset($task['id']) && $task['id'] === $taskId) {
+                        $task['completed'] = !($task['completed'] ?? false);
+                    }
                 }
             }
         }
 
         $roadmap->weekly_plan = $weeks;
 
-        // Recalculate progress
+        // Recalculate completion percentage
         $total = 0;
         $completed = 0;
         foreach ($weeks as $week) {
-            foreach ($week['tasks'] as $task) {
-                $total++;
-                if ($task['completed']) $completed++;
+            if (isset($week['tasks']) && is_array($week['tasks'])) {
+                foreach ($week['tasks'] as $task) {
+                    $total++;
+                    if (!empty($task['completed'])) {
+                        $completed++;
+                    }
+                }
             }
         }
 

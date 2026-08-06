@@ -2,38 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\AiTutorSession;
 use App\Models\SavedGraph;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class HistoryController extends Controller
 {
-    public function index()
+    /**
+     * Display a paginated listing of AI sessions and saved graphs.
+     */
+    public function index(): View
     {
-        $sessions = AiTutorSession::where('user_id', auth()->id())
+        $userId = auth()->id();
+
+        $sessions = AiTutorSession::where('user_id', $userId)
             ->orderByDesc('created_at')
-            ->paginate(15);
-            
-        $savedGraphs = SavedGraph::where('user_id', auth()->id())
+            ->paginate(10, ['*'], 'sessions_page');
+
+        $savedGraphs = SavedGraph::where('user_id', $userId)
             ->orderByDesc('created_at')
-            ->paginate(15);
+            ->paginate(10, ['*'], 'graphs_page');
 
         return view('history.index', compact('sessions', 'savedGraphs'));
     }
 
-    public function saveGraph(Request $request)
+    /**
+     * Save a Desmos graph expression to history.
+     */
+    public function saveGraph(Request $request): RedirectResponse
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'expression' => 'required|string',
         ]);
-        
+
         SavedGraph::create([
             'user_id' => auth()->id(),
-            'title' => $request->title,
-            'desmos_state' => ['expression' => $request->expression],
+            'title' => $request->input('title'),
+            'desmos_state' => ['expression' => $request->input('expression')],
         ]);
-        
-        return redirect()->back()->with('success', 'Grafik saqlandi!');
+
+        return redirect()->back()->with('success', 'Graph saved successfully!');
     }
 }

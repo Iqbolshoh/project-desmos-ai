@@ -1,6 +1,7 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
     "name": "desmos-ai",
+    "version": "2.1.0",
     "private": true,
     "type": "module",
     "scripts": {

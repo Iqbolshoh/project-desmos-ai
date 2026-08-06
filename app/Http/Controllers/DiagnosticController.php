@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Services\Diagnostic\DiagnosticService;
-use App\Services\Roadmap\RoadmapService;
-use App\Services\Gamification\GamificationService;
-use App\Services\Gamification\AchievementService;
 use App\Models\DiagnosticResult;
+use App\Services\Diagnostic\DiagnosticService;
+use App\Services\Gamification\AchievementService;
+use App\Services\Gamification\GamificationService;
+use App\Services\Roadmap\RoadmapService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class DiagnosticController extends Controller
 {
@@ -28,40 +30,55 @@ class DiagnosticController extends Controller
         $this->achievementService = $achievementService;
     }
 
-    public function start()
+    /**
+     * Display diagnostic test start introduction.
+     */
+    public function start(): View
     {
         return view('diagnostic.start');
     }
 
-    public function show()
+    /**
+     * Render the diagnostic test questions.
+     */
+    public function show(): View|RedirectResponse
     {
         $questions = $this->diagnosticService->generateTest();
         if ($questions->isEmpty()) {
-            return redirect()->route('dashboard.index')->with('error', 'Diagnostik test savollari topilmadi. Adminstrator bilan bog\'laning.');
+            return redirect()
+                ->route('dashboard.index')
+                ->with('error', 'No diagnostic test questions found. Please contact the administrator.');
         }
 
         return view('diagnostic.show', compact('questions'));
     }
 
-    public function submit(Request $request)
+    /**
+     * Submit diagnostic test answers and generate results.
+     */
+    public function submit(Request $request): RedirectResponse
     {
         $answers = $request->input('answers', []);
-        
-        $result = $this->diagnosticService->processResults(auth()->user(), $answers);
-        
-        // Gamification
-        $this->gamificationService->addXp(auth()->user(), config('gamification.xp.diagnostic_complete'), 'Diagnostic Completed');
-        $this->gamificationService->updateStreak(auth()->user());
+        $user = auth()->user();
 
-        // Generate Roadmap based on results
-        $this->roadmapService->generateForUser(auth()->user());
+        $result = $this->diagnosticService->processResults($user, $answers);
 
-        $this->achievementService->checkAndAward(auth()->user());
+        // Award Gamification XP & Streak
+        $this->gamificationService->addXp($user, (int) config('gamification.xp.diagnostic_complete', 50), 'Diagnostic Completed');
+        $this->gamificationService->updateStreak($user);
+
+        // Generate Personalized Roadmap
+        $this->roadmapService->generateForUser($user);
+
+        $this->achievementService->checkAndAward($user);
 
         return redirect()->route('diagnostic.results', $result->id);
     }
 
-    public function results(DiagnosticResult $result)
+    /**
+     * Display diagnostic test result analysis.
+     */
+    public function results(DiagnosticResult $result): View
     {
         if ($result->user_id !== auth()->id()) {
             abort(403);

@@ -1,12 +1,12 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Peshqadamlar')
+@section('title', 'Student Leaderboard')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-8">
 
     {{-- Hero --}}
-    <div class="relative overflow-hidden card border-[var(--gold-border)] bg-gradient-to-br from-[var(--bg-raised)] to-black rounded-3xl py-12 text-center">
+    <div class="relative overflow-hidden card border-[var(--gold-border)] bg-gradient-to-br from-[var(--bg-raised)] to-black rounded-3xl py-12 text-center shadow-2xl">
         <div class="absolute inset-0 bg-gradient-to-br from-[var(--gold-soft)] to-transparent pointer-events-none"></div>
         <div class="absolute -top-10 -right-10 opacity-5 rotate-12">
             <x-lucide-trophy class="w-72 h-72 text-[var(--gold)]" />
@@ -16,13 +16,13 @@
                 <x-lucide-crown class="w-10 h-10 text-[var(--gold)]" />
             </div>
             <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-[var(--gold-alt)] to-[var(--gold)] mb-2">
-                Peshqadamlar Jadvali
+                Student Leaderboard
             </h1>
-            <p class="text-[var(--text-secondary)]">Eng ko'p tajriba ball (XP) yig'gan Top 10 talaba.</p>
+            <p class="text-[var(--text-secondary)]">Top performing students ranked by total earned Experience Points (XP).</p>
         </div>
     </div>
 
-    {{-- Top 3 podium --}}
+    {{-- Top 3 Podium --}}
     @if($topUsers->count() >= 3)
     <div class="grid grid-cols-3 gap-4 items-end">
         {{-- 2nd place --}}
@@ -65,16 +65,15 @@
     @endif
 
     {{-- Full list --}}
-    <div class="card p-2 border-[var(--border-strong)] bg-[var(--bg-overlay)] rounded-2xl">
+    <div class="card p-4 border-[var(--border-strong)] bg-[var(--bg-overlay)] rounded-2xl shadow-xl space-y-4">
         @if($topUsers->isEmpty())
-            <div class="text-center py-10 text-[var(--text-muted)]">Hozircha peshqadamlar yo'q. Birinchilardan bo'ling!</div>
+            <div class="text-center py-10 text-[var(--text-muted)]">No leaderboard rankings yet. Be the first to earn XP!</div>
         @else
             <div class="flex flex-col divide-y divide-[var(--border-subtle)]">
                 @foreach($topUsers as $index => $user)
                     <div class="flex items-center justify-between p-4 rounded-xl {{ auth()->id() === $user->id ? 'bg-[var(--gold-soft)] border border-[var(--gold-border)]' : 'hover:bg-white/5' }} transition-colors group">
 
                         <div class="flex items-center gap-4">
-                            {{-- Rank badge --}}
                             <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold font-mono text-sm shrink-0 shadow
                                 @if($index === 0) bg-gradient-to-br from-yellow-400 to-yellow-600 text-black
                                 @elseif($index === 1) bg-gradient-to-br from-slate-300 to-slate-500 text-black
@@ -84,7 +83,6 @@
                                 @if($index < 3) {{ ['🥇','🥈','🥉'][$index] }} @else {{ $index + 1 }} @endif
                             </div>
 
-                            {{-- Avatar --}}
                             <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center text-white font-bold text-lg shrink-0 shadow-md">
                                 {{ strtoupper(substr($user->name, 0, 1)) }}
                             </div>
@@ -93,21 +91,20 @@
                                 <div class="text-white font-bold flex items-center gap-2">
                                     {{ $user->name }}
                                     @if(auth()->id() === $user->id)
-                                        <span class="text-[10px] px-2 py-0.5 bg-[var(--gold)] text-black font-bold rounded-full">Siz</span>
+                                        <span class="text-[10px] px-2 py-0.5 bg-[var(--gold)] text-black font-bold rounded-full">You</span>
                                     @endif
                                 </div>
                                 <div class="text-[var(--text-secondary)] text-xs flex gap-3 mt-0.5">
                                     <span class="flex items-center gap-1">
-                                        <x-lucide-star class="w-3 h-3 text-[var(--gold)]" /> {{ $user->level }} daraja
+                                        <x-lucide-star class="w-3 h-3 text-[var(--gold)]" /> Level {{ $user->level }}
                                     </span>
                                     <span class="flex items-center gap-1">
-                                        <x-lucide-flame class="w-3 h-3 text-orange-400" /> {{ $user->streak }} kun
+                                        <x-lucide-flame class="w-3 h-3 text-orange-400" /> {{ $user->streak }} day streak
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- XP --}}
                         <div class="text-right">
                             <div class="text-[var(--gold)] font-black text-xl font-mono tabular-nums drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]">
                                 {{ number_format($user->xp) }}
@@ -117,8 +114,11 @@
                     </div>
                 @endforeach
             </div>
+
+            <div class="mt-4 pt-2 border-t border-[var(--border-subtle)]">
+                {{ $topUsers->links() }}
+            </div>
         @endif
     </div>
 </div>
 @endsection
-

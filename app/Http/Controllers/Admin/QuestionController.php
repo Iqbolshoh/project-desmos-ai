@@ -3,57 +3,83 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Topic;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class QuestionController extends Controller
 {
-    public function index()
+    /**
+     * Display a paginated list of SAT questions.
+     */
+    public function index(): View
     {
-        $questions = Question::with('topic')->paginate(15);
+        $questions = Question::with('topic')
+            ->orderByDesc('created_at')
+            ->paginate(15);
+
         return view('admin.questions.index', compact('questions'));
     }
 
-    public function create()
+    /**
+     * Show form for creating a new question.
+     */
+    public function create(): View
     {
-        $topics = Topic::all();
+        $topics = Topic::orderBy('sort_order')->get();
+
         return view('admin.questions.create', compact('topics'));
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created question in database.
+     */
+    public function store(Request $request): RedirectResponse
     {
-        $validated = $this->validated($request);
+        $validated = $this->validatedData($request);
         $validated['is_diagnostic'] = $request->has('is_diagnostic');
 
         Question::create($validated);
 
-        return redirect()->route('admin.questions.index')->with('success', 'Savol muvaffaqiyatli qo\'shildi!');
+        return redirect()->route('admin.questions.index')->with('success', 'Question created successfully!');
     }
 
-    public function edit(Question $question)
+    /**
+     * Show form for editing an existing question.
+     */
+    public function edit(Question $question): View
     {
-        $topics = Topic::all();
+        $topics = Topic::orderBy('sort_order')->get();
+
         return view('admin.questions.edit', compact('question', 'topics'));
     }
 
-    public function update(Request $request, Question $question)
+    /**
+     * Update the specified question in database.
+     */
+    public function update(Request $request, Question $question): RedirectResponse
     {
-        $validated = $this->validated($request);
+        $validated = $this->validatedData($request);
         $validated['is_diagnostic'] = $request->has('is_diagnostic');
 
         $question->update($validated);
 
-        return redirect()->route('admin.questions.index')->with('success', 'Savol yangilandi!');
+        return redirect()->route('admin.questions.index')->with('success', 'Question updated successfully!');
     }
 
-    public function destroy(Question $question)
+    /**
+     * Remove the specified question from database.
+     */
+    public function destroy(Question $question): RedirectResponse
     {
         $question->delete();
-        return redirect()->route('admin.questions.index')->with('success', 'Savol o\'chirildi!');
+
+        return redirect()->route('admin.questions.index')->with('success', 'Question deleted successfully!');
     }
 
-    private function validated(Request $request): array
+    private function validatedData(Request $request): array
     {
         return $request->validate([
             'topic_id' => 'required|exists:topics,id',

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Achievement;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Models\Achievement;
 
 class AchievementSeeder extends Seeder
 {
@@ -12,26 +12,26 @@ class AchievementSeeder extends Seeder
     {
         $achievements = [
             [
-                'name' => 'Ilk Qadam',
-                'description' => 'Diagnostika testidan o\'tdingiz.',
+                'name' => 'First Step',
+                'description' => 'Completed the diagnostic placement test.',
                 'icon' => 'target',
                 'xp_reward' => 50,
             ],
             [
-                'name' => 'Olovdek Issiq',
-                'description' => '3 kunlik Streak (qatorasiga kirish).',
+                'name' => 'On Fire',
+                'description' => 'Maintained a 3-day activity streak.',
                 'icon' => 'flame',
                 'xp_reward' => 150,
             ],
             [
-                'name' => 'Algebra Ustasi',
-                'description' => 'Heart of Algebra yo\'nalishida 10 ta savol yechildi.',
+                'name' => 'Algebra Master',
+                'description' => 'Solved 10 questions in Heart of Algebra.',
                 'icon' => 'sigma',
                 'xp_reward' => 300,
             ],
             [
-                'name' => 'Chempion',
-                'description' => '1000 XP to\'pladingiz.',
+                'name' => 'Champion',
+                'description' => 'Earned a total of 1,000 XP.',
                 'icon' => 'award',
                 'xp_reward' => 1000,
             ],
@@ -45,6 +45,6 @@ class AchievementSeeder extends Seeder
             );
         }
 
-        $this->command?->info('✓ Achievements seeded.');
+        $this->command?->info('✓ Achievements seeded in English.');
     }
 }

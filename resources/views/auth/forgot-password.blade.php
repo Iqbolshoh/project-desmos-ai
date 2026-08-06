@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Parolni tiklash · Desmos AI')
+@section('title', 'Reset Password · Desmos AI v2.1')
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-hidden bg-[var(--bg-base)]">
@@ -10,7 +10,7 @@
         <div class="absolute bottom-[-10%] right-[-5%] w-[32rem] h-[32rem] rounded-full blur-[140px]" style="background: rgba(129, 140, 248, 0.05);"></div>
     </div>
 
-    <div class="card relative z-10 w-full max-w-md p-8 sm:p-10 space-y-7 shadow-2xl shadow-black/50 page-enter border border-[var(--border-strong)]">
+    <div class="card relative z-10 w-full max-w-md p-8 sm:p-10 space-y-7 shadow-2xl shadow-black/50 page-enter border border-[var(--border-strong)] rounded-3xl">
 
         <div class="text-center flex flex-col items-center">
             <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-white/5 border border-[var(--border-strong)] shadow-sm">
@@ -18,10 +18,10 @@
             </div>
 
             <h2 class="mt-5 text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
-                Parolni unutdingizmi?
+                Forgot Password?
             </h2>
             <p class="mt-2 text-sm text-[var(--text-secondary)] text-center">
-                Email manzilingizni kiriting — parolni tiklash havolasini yuboramiz.
+                Enter your email address and we'll send you a password reset link.
             </p>
         </div>
 
@@ -36,13 +36,13 @@
 
             <div>
                 <label for="email" class="block text-sm font-semibold text-[var(--text-primary)] mb-1.5">
-                    Email manzil
+                    Email Address
                 </label>
                 <input id="email" name="email" type="email" required
                     value="{{ old('email') }}"
                     autocomplete="email"
                     class="input @error('email') !border-[var(--accent)] !shadow-[0_0_0_3px_var(--accent-soft)] @enderror"
-                    placeholder="example@mail.com">
+                    placeholder="student@example.com">
 
                 @error('email')
                 <p class="mt-2 text-xs font-medium text-[var(--accent-alt)] flex items-center gap-1.5">
@@ -54,12 +54,12 @@
 
             <button type="submit" class="btn-primary w-full py-3 text-base mt-2">
                 <x-lucide-mail class="w-5 h-5" />
-                Havola yuborish
+                Send Reset Link
             </button>
         </form>
 
         <p class="text-center text-sm text-[var(--text-secondary)]">
-            <a href="{{ route('login') }}" class="font-semibold text-[var(--accent-alt)] hover:underline">← Kirish sahifasiga qaytish</a>
+            <a href="{{ route('login') }}" class="font-semibold text-[var(--accent-alt)] hover:underline">← Return to Sign In</a>
         </p>
     </div>
 </div>

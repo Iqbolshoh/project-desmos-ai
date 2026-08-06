@@ -1,8 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "desmos-ai/desmos-ai",
+    "version": "2.1.0",
     "type": "project",
-    "description": "Desmos AI application.",
+    "description": "Desmos AI — SAT Math Student Platform v2.1",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {

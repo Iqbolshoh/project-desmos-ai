@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Topic;
 use App\Models\Question;
 use App\Models\QuestionAttempt;
-use App\Services\Gamification\GamificationService;
+use App\Models\Topic;
 use App\Services\Gamification\AchievementService;
+use App\Services\Gamification\GamificationService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class PracticeController extends Controller
 {
@@ -20,50 +23,66 @@ class PracticeController extends Controller
         $this->achievements = $achievements;
     }
 
-    public function index()
+    /**
+     * Display all practice topics.
+     */
+    public function index(): View
     {
         $topics = Topic::orderBy('sort_order')->get();
+
         return view('practice.index', compact('topics'));
     }
 
-    public function topic(Topic $topic)
+    /**
+     * Display topic details and question counts.
+     */
+    public function topic(Topic $topic): View
     {
         $stats = [
             'easy' => Question::where('topic_id', $topic->id)->where('difficulty', 'easy')->count(),
             'medium' => Question::where('topic_id', $topic->id)->where('difficulty', 'medium')->count(),
             'hard' => Question::where('topic_id', $topic->id)->where('difficulty', 'hard')->count(),
         ];
-        
+
         return view('practice.topic', compact('topic', 'stats'));
     }
 
-    public function quiz(Request $request, Topic $topic)
+    /**
+     * Render quiz view for a selected topic and difficulty.
+     */
+    public function quiz(Request $request, Topic $topic): View|RedirectResponse
     {
         $difficulty = $request->query('difficulty', 'medium');
-        
-        // Find a random question the user hasn't correctly answered recently, 
-        // or just a random question for simplicity in MVP.
-        $question = Question::where('topic_id', $topic->id)
+
+        $question = Question::with('topic')
+            ->where('topic_id', $topic->id)
             ->where('difficulty', $difficulty)
             ->inRandomOrder()
             ->first();
 
         if (!$question) {
-            // Fallback to any difficulty if chosen one has no questions
-            $question = Question::where('topic_id', $topic->id)->inRandomOrder()->first();
+            $question = Question::with('topic')
+                ->where('topic_id', $topic->id)
+                ->inRandomOrder()
+                ->first();
         }
 
         if (!$question) {
-            return redirect()->route('practice.topic', $topic->slug)->with('error', 'Hozircha bu mavzuda savollar mavjud emas.');
+            return redirect()
+                ->route('practice.topic', $topic->slug)
+                ->with('error', 'No practice questions are available for this topic yet.');
         }
 
         return view('practice.quiz', compact('topic', 'question', 'difficulty'));
     }
 
-    public function submit(Request $request, Question $question)
+    /**
+     * Process quiz answer submission and award XP.
+     */
+    public function submit(Request $request, Question $question): JsonResponse
     {
         $request->validate([
-            'answer' => 'required|string'
+            'answer' => 'required|string',
         ]);
 
         $userAnswer = $request->input('answer');
@@ -76,21 +95,24 @@ class PracticeController extends Controller
             'context' => 'practice',
             'selected_answer' => $userAnswer,
             'is_correct' => $isCorrect,
-            'time_spent_seconds' => $request->input('time_spent', 0),
+            'time_spent_seconds' => (int) $request->input('time_spent', 0),
             'xp_earned' => $xpAmount,
         ]);
 
         if ($isCorrect) {
-            $this->gamification->addXp(auth()->user(), $xpAmount, 'Correct Answer');
-            $this->gamification->updateStreak(auth()->user());
-            $this->achievements->checkAndAward(auth()->user());
+            $user = auth()->user();
+            if ($user) {
+                $this->gamification->addXp($user, $xpAmount, 'Correct Answer');
+                $this->gamification->updateStreak($user);
+                $this->achievements->checkAndAward($user);
+            }
         }
 
         return response()->json([
             'is_correct' => $isCorrect,
             'correct_answer' => $question->correct_answer,
             'explanation' => $question->explanation,
-            'desmos_expressions' => $question->desmos_expressions
+            'desmos_expressions' => $question->desmos_expressions,
         ]);
     }
 }

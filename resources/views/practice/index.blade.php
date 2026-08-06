@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', "Mashg'ulot")
+@section('title', 'SAT Math Practice Bank')
 
 @section('content')
 <div class="max-w-6xl mx-auto space-y-8">
@@ -12,13 +12,13 @@
                 <div class="w-10 h-10 rounded-xl bg-[var(--accent-soft)] flex items-center justify-center border border-[var(--accent-border)]">
                     <x-lucide-dumbbell class="w-6 h-6 text-[var(--accent)]" />
                 </div>
-                Mashg'ulotlar
+                Practice Bank
             </h1>
-            <p class="text-[var(--text-secondary)] mt-2 ml-13">O'zingizni sinab ko'rish uchun mavzuni tanlang.</p>
+            <p class="text-[var(--text-secondary)] mt-2">Choose a SAT Math topic to practice targeted questions and sharpen your skills.</p>
         </div>
-        <div class="hidden md:flex items-center gap-2 text-sm text-[var(--text-muted)]">
+        <div class="hidden md:flex items-center gap-2 text-sm text-[var(--text-muted)] font-mono">
             <x-lucide-layers class="w-4 h-4" />
-            {{ $topics->count() }} ta mavzu
+            {{ $topics->count() }} Topics
         </div>
     </div>
 
@@ -38,12 +38,10 @@
         @foreach($topics as $i => $topic)
             @php $c = $accentColors[$i % count($accentColors)]; @endphp
             <a href="{{ route('practice.topic', $topic->slug) }}"
-               class="card p-6 group block relative overflow-hidden h-[180px] flex flex-col justify-between hover:border-white/10 hover:-translate-y-1 transition-all duration-300 rounded-2xl">
+               class="card p-6 group block relative overflow-hidden h-[180px] flex flex-col justify-between hover:border-white/20 hover:-translate-y-1 transition-all duration-300 rounded-2xl shadow-xl">
 
-                {{-- Ambient glow background --}}
                 <div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent group-hover:from-white/[0.05] transition-all duration-300"></div>
 
-                {{-- Large bg icon --}}
                 <div class="absolute -bottom-4 -right-4 opacity-[0.07] group-hover:opacity-[0.12] group-hover:scale-110 transition-all duration-500">
                     <x-dynamic-component :component="'lucide-' . $topic->icon" class="w-28 h-28" />
                 </div>
@@ -53,12 +51,12 @@
                         <x-dynamic-component :component="'lucide-' . $topic->icon" class="w-6 h-6 {{ $c['text'] }}" />
                     </div>
                     <h3 class="font-bold text-white text-lg">{{ $topic->name }}</h3>
-                    <p class="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-widest mt-1">{{ $topic->domain }}</p>
+                    <p class="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-widest mt-1 font-mono">{{ $topic->domain }}</p>
                 </div>
 
                 <div class="relative z-10 flex items-center justify-between">
-                    <span class="text-xs text-[var(--text-muted)] flex items-center gap-1">
-                        <x-lucide-book-open class="w-3 h-3" /> Boshlash
+                    <span class="text-xs text-[var(--text-muted)] flex items-center gap-1 font-medium">
+                        <x-lucide-book-open class="w-3.5 h-3.5 text-[var(--gold)]" /> Start Practice
                     </span>
                     <div class="w-8 h-8 rounded-lg {{ $c['bg'] }} {{ $c['border'] }} border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 translate-x-2 group-hover:translate-x-0">
                         <x-lucide-arrow-right class="w-4 h-4 {{ $c['text'] }}" />
@@ -69,4 +67,3 @@
     </div>
 </div>
 @endsection
-

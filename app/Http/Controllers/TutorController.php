@@ -24,8 +24,8 @@ class TutorController extends Controller
     public function solve(Request $request)
     {
         $request->validate([
-            'query' => 'required|string',
-            'image' => 'nullable|image|max:5120',
+            'query' => 'nullable|string|required_without:image',
+            'image' => 'nullable|image|max:5120|required_without:query',
         ]);
 
         $imagePath = null;
@@ -33,7 +33,8 @@ class TutorController extends Controller
             $imagePath = $request->file('image')->store('tutor_images', 'public');
         }
 
-        $dto = new SolveRequestDTO($request->input('query'), $imagePath);
+        $queryText = $request->input('query') ?: 'Rasmda berilgan masalani aniqla va yech.';
+        $dto = new SolveRequestDTO($queryText, $imagePath);
         $response = $this->tutorService->solve($dto);
 
         $session = AiTutorSession::create([

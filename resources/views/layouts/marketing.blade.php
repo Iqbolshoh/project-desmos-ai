@@ -139,7 +139,6 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-
             *,
             *::before,
             *::after {
@@ -160,21 +159,21 @@
                 <div class="w-10 h-10 flex items-center justify-center rounded-xl overflow-hidden border border-[var(--gold-border)] bg-white/5 p-1 transition-transform duration-300 group-hover:scale-105">
                     <img src="{{ asset('/images/logo.png') }}" alt="Desmos AI Logo" class="w-full h-full object-contain">
                 </div>
-                <span class="font-extrabold text-lg tracking-tight gold-text">Desmos AI</span>
+                <span class="font-extrabold text-lg tracking-tight gold-text">Desmos AI v2.1</span>
             </a>
 
             <div class="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--text-secondary)]">
-                <a href="#features" class="hover:text-[var(--text-primary)] transition-colors">Imkoniyatlar</a>
-                <a href="#stats" class="hover:text-[var(--text-primary)] transition-colors">Natijalar</a>
-                <a href="#pricing" class="hover:text-[var(--text-primary)] transition-colors">Narxlar</a>
-                <a href="#faq" class="hover:text-[var(--text-primary)] transition-colors">Savollar</a>
+                <a href="#features" class="hover:text-[var(--text-primary)] transition-colors">Features</a>
+                <a href="#stats" class="hover:text-[var(--text-primary)] transition-colors">Performance</a>
+                <a href="#pricing" class="hover:text-[var(--text-primary)] transition-colors">Plans</a>
+                <a href="#faq" class="hover:text-[var(--text-primary)] transition-colors">FAQ</a>
             </div>
 
             <div class="flex items-center gap-3">
-                <a href="{{ route('login') }}" class="btn-ghost hidden sm:inline-flex">Kirish</a>
+                <a href="{{ route('login') }}" class="btn-ghost hidden sm:inline-flex">Sign In</a>
                 <a href="{{ route('register') }}" class="btn-gold">
                     <x-lucide-sparkles class="w-4 h-4" />
-                    Bepul boshlash
+                    Get Started Free
                 </a>
             </div>
         </nav>
@@ -186,8 +185,8 @@
 
     <footer class="border-t border-[var(--border-subtle)] mt-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--text-muted)]">
-            <p>© {{ date('Y') }} Desmos AI — Barcha huquqlar himoyalangan.</p>
-            <p class="font-mono">SAT Math 800/800 uchun AI platforma</p>
+            <p>© {{ date('Y') }} Desmos AI — All rights reserved.</p>
+            <p class="font-mono">AI platform for Digital SAT Math 800/800 mastery</p>
         </div>
     </footer>
 

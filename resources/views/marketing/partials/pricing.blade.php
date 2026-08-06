@@ -1,47 +1,47 @@
 @php
 $plans = [
     [
-        'name' => "Bepul",
-        'price' => "0",
-        'period' => "har doim",
+        'name' => "Starter",
+        'price' => "$0",
+        'period' => "forever free",
         'featured' => false,
-        'features' => ["Diagnostika testi", "Kuniga 3 ta AI yechim", "Practice bo'limi (cheklangan)", "Asosiy dashboard"],
+        'features' => ["Diagnostic placement test", "3 AI tutor solutions daily", "Limited practice bank access", "Basic student dashboard"],
     ],
     [
-        'name' => "Premium",
-        'price' => "149,000",
-        'period' => "oyiga, so'm",
+        'name' => "Pro Scholar",
+        'price' => "$19",
+        'period' => "per month",
         'featured' => true,
-        'features' => ["Cheksiz AI Tutor", "To'liq Practice bank", "Shaxsiy Roadmap", "AI Chat Tutor", "Tarix va saqlangan grafiklar", "Gamifikatsiya va yutuqlar"],
+        'features' => ["Unlimited AI tutor solutions", "Full SAT practice question bank", "Personalized study roadmap", "24/7 AI Chat Tutor", "Saved graphs & session history", "Gamification & achievement badges"],
     ],
     [
-        'name' => "Maktab",
-        'price' => "Kelishilgan",
-        'period' => "guruhlar uchun",
+        'name' => "Institutional",
+        'price' => "Custom",
+        'period' => "per school / group",
         'featured' => false,
-        'features' => ["Premium'ning barcha imkoniyatlari", "O'qituvchi/Admin panel", "Hisobotlar va analitika", "Ko'p talabali boshqaruv"],
+        'features' => ["All Pro Scholar features", "Teacher & Admin dashboard", "Classroom analytics & reports", "Multi-student management & roles"],
     ],
 ];
 @endphp
 
 <section id="pricing" class="max-w-7xl mx-auto px-4 sm:px-8 py-20 sm:py-28">
     <div class="text-center max-w-2xl mx-auto">
-        <span class="badge badge-gold">Narxlar</span>
-        <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Sizga mos rejani tanlang</h2>
-        <p class="mt-4 text-[var(--text-secondary)]">Demo versiyada barcha rejalar namoyish uchun ko'rsatilgan.</p>
+        <span class="badge badge-gold font-mono">Simple Pricing</span>
+        <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Choose the Plan for Your Goal</h2>
+        <p class="mt-4 text-[var(--text-secondary)]">Start free and upgrade anytime as you progress toward your target score.</p>
     </div>
 
     <div class="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         @foreach ($plans as $plan)
-        <div class="card p-8 {{ $plan['featured'] ? 'border-2 border-[var(--gold)] relative lg:-translate-y-3 shadow-2xl shadow-black/40' : '' }}">
+        <div class="card p-8 rounded-2xl {{ $plan['featured'] ? 'border-2 border-[var(--gold)] relative lg:-translate-y-3 shadow-2xl shadow-[var(--gold-glow)]' : 'shadow-xl' }}">
             @if ($plan['featured'])
-            <span class="badge badge-gold absolute -top-3 left-1/2 -translate-x-1/2">Eng mashhur</span>
+            <span class="badge badge-gold absolute -top-3 left-1/2 -translate-x-1/2 font-mono">Most Popular</span>
             @endif
 
             <h3 class="text-lg font-bold text-[var(--text-primary)]">{{ $plan['name'] }}</h3>
             <p class="mt-4">
-                <span class="text-3xl font-extrabold {{ $plan['featured'] ? 'gold-text' : '' }}">{{ $plan['price'] }}</span>
-                <span class="text-sm text-[var(--text-muted)]"> / {{ $plan['period'] }}</span>
+                <span class="text-3xl font-extrabold font-mono {{ $plan['featured'] ? 'gold-text' : '' }}">{{ $plan['price'] }}</span>
+                <span class="text-xs text-[var(--text-muted)] font-mono"> / {{ $plan['period'] }}</span>
             </p>
 
             <ul class="mt-6 space-y-3">
@@ -54,7 +54,7 @@ $plans = [
             </ul>
 
             <a href="{{ route('register') }}" class="mt-8 w-full {{ $plan['featured'] ? 'btn-gold' : 'btn-secondary' }}">
-                Boshlash
+                Get Started
             </a>
         </div>
         @endforeach

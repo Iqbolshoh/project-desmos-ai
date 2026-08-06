@@ -1,34 +1,34 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tizim Analitikasi')
+@section('title', 'Platform Analytics')
 
 @section('content')
 <div class="max-w-5xl mx-auto space-y-6">
     <h1 class="text-2xl font-bold text-white flex items-center gap-2">
         <x-lucide-activity class="w-7 h-7 text-[var(--accent)]" />
-        Analitika
+        Performance & User Analytics
     </h1>
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="card p-5">
-            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Faol (7 kun)</p>
-            <p class="mt-2 text-3xl font-extrabold text-white">{{ $activeUsersWeek }}</p>
+        <div class="card p-5 border-[var(--border-strong)] bg-[var(--bg-overlay)] rounded-2xl shadow-xl">
+            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)] font-mono">Active Users (7 Days)</p>
+            <p class="mt-2 text-3xl font-extrabold text-white font-mono">{{ $activeUsersWeek }}</p>
         </div>
-        <div class="card p-5">
-            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Practice urinishlar</p>
-            <p class="mt-2 text-3xl font-extrabold text-white">{{ $practiceAttempts }}</p>
+        <div class="card p-5 border-[var(--border-strong)] bg-[var(--bg-overlay)] rounded-2xl shadow-xl">
+            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)] font-mono">Total Practice Attempts</p>
+            <p class="mt-2 text-3xl font-extrabold text-white font-mono">{{ $practiceAttempts }}</p>
         </div>
-        <div class="card p-5">
-            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Practice aniqligi</p>
-            <p class="mt-2 text-3xl font-extrabold text-white">{{ $practiceAccuracy !== null ? $practiceAccuracy . '%' : '—' }}</p>
+        <div class="card p-5 border-[var(--border-strong)] bg-[var(--bg-overlay)] rounded-2xl shadow-xl">
+            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)] font-mono">Overall Practice Accuracy</p>
+            <p class="mt-2 text-3xl font-extrabold text-[var(--gold)] font-mono">{{ $practiceAccuracy !== null ? $practiceAccuracy . '%' : '—' }}</p>
         </div>
     </div>
 
     <div class="grid md:grid-cols-2 gap-6">
-        <div class="card p-6">
-            <h3 class="text-sm font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4">Daraja bo'yicha taqsimot</h3>
+        <div class="card p-6 border-[var(--border-strong)] bg-[var(--bg-overlay)] rounded-2xl shadow-xl">
+            <h3 class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4 font-mono">Level Distribution</h3>
             @if($levelDistribution->isEmpty())
-                <p class="text-sm text-[var(--text-muted)]">Ma'lumot yo'q.</p>
+                <p class="text-sm text-[var(--text-muted)]">No distribution data recorded.</p>
             @else
                 <div class="space-y-2">
                     @php $maxTotal = $levelDistribution->max('total') ?: 1; @endphp
@@ -45,16 +45,16 @@
             @endif
         </div>
 
-        <div class="card p-6">
-            <h3 class="text-sm font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4">Top-10 (XP)</h3>
+        <div class="card p-6 border-[var(--border-strong)] bg-[var(--bg-overlay)] rounded-2xl shadow-xl">
+            <h3 class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4 font-mono">Top XP Earners</h3>
             @if($topUsers->isEmpty())
-                <p class="text-sm text-[var(--text-muted)]">Ma'lumot yo'q.</p>
+                <p class="text-sm text-[var(--text-muted)]">No rankings available.</p>
             @else
                 <ol class="space-y-2">
                     @foreach($topUsers as $i => $u)
-                    <li class="flex items-center justify-between text-sm">
+                    <li class="flex items-center justify-between text-sm py-1 border-b border-[var(--border-subtle)] last:border-0">
                         <span class="text-[var(--text-secondary)]"><span class="font-mono text-[var(--text-muted)] mr-2">#{{ $i + 1 }}</span>{{ $u->name }}</span>
-                        <span class="font-mono text-white">{{ $u->xp }} XP</span>
+                        <span class="font-mono text-[var(--gold)] font-bold">{{ number_format($u->xp) }} XP</span>
                     </li>
                     @endforeach
                 </ol>

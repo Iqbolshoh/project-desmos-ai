@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class LeaderboardController extends Controller
 {
-    public function index()
+    /**
+     * Display paginated top students leaderboard ordered by XP.
+     */
+    public function index(): View
     {
-        // Get users ordered by XP descending
-        // Join student_profiles to get XP
-        $topUsers = User::whereHas('studentProfile')
+        $topUsers = User::with('studentProfile')
+            ->whereHas('studentProfile')
             ->join('student_profiles', 'users.id', '=', 'student_profiles.user_id')
-            ->orderBy('student_profiles.xp', 'desc')
+            ->orderByDesc('student_profiles.xp')
             ->select('users.*', 'student_profiles.xp', 'student_profiles.level', 'student_profiles.streak_current as streak')
-            ->limit(10)
-            ->get();
+            ->paginate(15);
 
         return view('leaderboard.index', compact('topUsers'));
     }

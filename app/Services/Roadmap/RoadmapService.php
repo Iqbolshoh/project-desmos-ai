@@ -8,6 +8,9 @@ use App\Models\User;
 
 class RoadmapService
 {
+    /**
+     * Generate a personalized SAT study roadmap for a user.
+     */
     public function generateForUser(User $user): Roadmap
     {
         $profile = $user->studentProfile;
@@ -15,7 +18,7 @@ class RoadmapService
 
         $currentScore = $latestDiagnostic
             ? $latestDiagnostic->overall_score_estimate
-            : ($profile->sat_current_score ?? 400);
+            : ($profile?->sat_current_score ?? 400);
 
         $targetScore = $profile?->sat_goal_score ?? 800;
         if ($targetScore <= $currentScore) {
@@ -27,7 +30,7 @@ class RoadmapService
         $weakDomains = $this->rankWeakDomains($latestDiagnostic?->breakdown ?? []);
         $topicsByDomain = Topic::orderBy('sort_order')->get()->groupBy('domain');
 
-        // Order topics: weakest domains first, then the rest.
+        // Order topics: weakest domains first, then the remaining
         $orderedTopics = collect();
         foreach ($weakDomains as $domain) {
             $orderedTopics = $orderedTopics->merge($topicsByDomain->get($domain, collect()));
@@ -79,8 +82,6 @@ class RoadmapService
 
     private function buildWeeklyPlan($orderedTopics, int $estimatedWeeks): array
     {
-        // Show a concrete plan for the first stretch of weeks; the rest of the
-        // program repeats the same rotation until the exam-readiness weeks.
         $focusWeeks = min($estimatedWeeks, 6);
         $topics = $orderedTopics->values();
 
@@ -93,9 +94,9 @@ class RoadmapService
                 'week' => $week,
                 'focus' => $topicName,
                 'tasks' => [
-                    ['id' => "w{$week}t1", 'title' => "{$topicName}: nazariya va formulalarni takrorlash", 'completed' => false],
-                    ['id' => "w{$week}t2", 'title' => "{$topicName} bo'yicha mashqlar (Practice) yechish", 'completed' => false],
-                    ['id' => "w{$week}t3", 'title' => "{$topicName}: xato qilingan savollarni AI Tutor bilan qayta ko'rib chiqish", 'completed' => false],
+                    ['id' => "w{$week}t1", 'title' => "{$topicName}: Theory and key formulas review", 'completed' => false],
+                    ['id' => "w{$week}t2", 'title' => "{$topicName}: Targeted practice problem set", 'completed' => false],
+                    ['id' => "w{$week}t3", 'title' => "{$topicName}: Review mistakes using Desmos AI Tutor", 'completed' => false],
                 ],
             ];
         }
@@ -104,11 +105,11 @@ class RoadmapService
             $lastWeek = $focusWeeks + 1;
             $weeks[] = [
                 'week' => $lastWeek,
-                'focus' => 'Imtihonga tayyorgarlik',
+                'focus' => 'Exam Readiness & Full Mock Prep',
                 'tasks' => [
-                    ['id' => "w{$lastWeek}t1", 'title' => "To'liq diagnostika testini qayta yechish", 'completed' => false],
-                    ['id' => "w{$lastWeek}t2", 'title' => "Vaqtni to'g'ri taqsimlashni mashq qilish", 'completed' => false],
-                    ['id' => "w{$lastWeek}t3", 'title' => "Qolgan {$estimatedWeeks} haftalik davrda barcha mavzularni aylanma tartibda takrorlash", 'completed' => false],
+                    ['id' => "w{$lastWeek}t1", 'title' => 'Retake diagnostic test to benchmark progress', 'completed' => false],
+                    ['id' => "w{$lastWeek}t2", 'title' => 'Practice time management and Desmos speed tricks', 'completed' => false],
+                    ['id' => "w{$lastWeek}t3", 'title' => "Rotational review across all topics for {$estimatedWeeks} weeks", 'completed' => false],
                 ],
             ];
         }
@@ -131,8 +132,8 @@ class RoadmapService
             $plan[] = [
                 'month' => $month,
                 'goal' => $month === $months
-                    ? "Yakuniy takrorlash va to'liq mock testlar"
-                    : "{$topicName} va bog'liq mavzularni chuqur o'zlashtirish",
+                    ? 'Final comprehensive review and full mock practice tests'
+                    : "Deep dive into {$topicName} and core skills",
                 'target_score' => min(800, $milestoneScore),
             ];
         }

@@ -7,6 +7,7 @@ use App\Models\QuestionAttempt;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\UserAchievement;
+use Illuminate\Support\Collection;
 
 class AchievementService
 {
@@ -15,9 +16,11 @@ class AchievementService
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, Achievement> newly earned achievements
+     * Check candidate achievements for a user and award newly unlocked badges.
+     *
+     * @return Collection<int, Achievement>
      */
-    public function checkAndAward(User $user)
+    public function checkAndAward(User $user): Collection
     {
         $profile = $user->studentProfile;
         if (!$profile) {
@@ -38,7 +41,7 @@ class AchievementService
                 ]);
 
                 if ($achievement->xp_reward > 0) {
-                    $this->gamification->addXp($user, $achievement->xp_reward, "Yutuq: {$achievement->name}");
+                    $this->gamification->addXp($user, $achievement->xp_reward, "Achievement: {$achievement->name}");
                 }
 
                 $newlyAwarded->push($achievement);
@@ -51,10 +54,10 @@ class AchievementService
     private function isEarned(string $slug, User $user, $profile): bool
     {
         return match ($slug) {
-            'ilk-qadam' => $user->diagnosticResults()->exists(),
-            'olovdek-issiq' => $profile->streak_current >= 3,
-            'algebra-ustasi' => $this->correctPracticeCount($user, 'heart-of-algebra') >= 10,
-            'chempion' => $profile->xp >= 1000,
+            'first-step', 'ilk-qadam' => $user->diagnosticResults()->exists(),
+            'on-fire', 'olovdek-issiq' => $profile->streak_current >= 3,
+            'algebra-master', 'algebra-ustasi' => $this->correctPracticeCount($user, 'heart-of-algebra') >= 10,
+            'champion', 'chempion' => $profile->xp >= 1000,
             default => false,
         };
     }
@@ -68,7 +71,7 @@ class AchievementService
 
         return QuestionAttempt::where('user_id', $user->id)
             ->where('is_correct', true)
-            ->whereHas('question', fn ($q) => $q->where('topic_id', $topicId))
+            ->whereHas('question', fn($q) => $q->where('topic_id', $topicId))
             ->count();
     }
 }

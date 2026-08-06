@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Services\AiTutor\Contracts\AiTutorServiceInterface;
+use App\Services\AiTutor\ClaudeAiTutorService;
 use App\Services\AiTutor\MockAiTutorService;
 
 class AiTutorServiceProvider extends ServiceProvider
@@ -14,14 +15,13 @@ class AiTutorServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(AiTutorServiceInterface::class, function ($app) {
-            $driver = config('services.ai_tutor.driver', 'mock');
+            $driver = config('services.ai_tutor.driver', 'claude');
             
             if ($driver === 'mock') {
                 return new MockAiTutorService();
             }
             
-            // In the future: return new OpenAiTutorService(...);
-            return new MockAiTutorService();
+            return new ClaudeAiTutorService();
         });
     }
 

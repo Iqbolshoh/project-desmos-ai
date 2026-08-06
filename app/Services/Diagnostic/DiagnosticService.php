@@ -2,26 +2,35 @@
 
 namespace App\Services\Diagnostic;
 
-use App\Models\User;
-use App\Models\Question;
 use App\Models\DiagnosticResult;
+use App\Models\Question;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class DiagnosticService
 {
-    public function generateTest()
+    /**
+     * Generate diagnostic test questions set.
+     */
+    public function generateTest(): Collection
     {
-        // Fetch diagnostic questions. For a real app, you might want 5 per domain.
-        // Currently we fetch all diagnostic questions seeded.
-        return Question::where('is_diagnostic', true)
+        return Question::with('topic')
+            ->where('is_diagnostic', true)
             ->inRandomOrder()
             ->limit(20)
             ->get();
     }
 
-    public function processResults(User $user, array $answers)
+    /**
+     * Process diagnostic submission, calculate estimated score and weakness breakdown.
+     */
+    public function processResults(User $user, array $answers): DiagnosticResult
     {
-        $questions = Question::whereIn('id', array_keys($answers))->get()->keyBy('id');
-        
+        $questions = Question::with('topic')
+            ->whereIn('id', array_keys($answers))
+            ->get()
+            ->keyBy('id');
+
         $correctCount = 0;
         $totalQuestions = count($answers);
         $domainScores = [
@@ -33,26 +42,27 @@ class DiagnosticService
 
         foreach ($answers as $qId => $userAnswer) {
             $question = $questions->get($qId);
-            if (!$question) continue;
+            if (!$question) {
+                continue;
+            }
 
             $domain = $question->topic->domain ?? 'algebra';
             if (!isset($domainScores[$domain])) {
                 $domainScores[$domain] = ['correct' => 0, 'total' => 0];
             }
-            
+
             $domainScores[$domain]['total']++;
 
-            if (strtolower(trim($question->correct_answer)) === strtolower(trim($userAnswer))) {
+            if (strtolower(trim((string) $question->correct_answer)) === strtolower(trim((string) $userAnswer))) {
                 $correctCount++;
                 $domainScores[$domain]['correct']++;
             }
         }
 
-        // Estimate score (very naive mapping 20 questions -> 800 scale)
-        // Base 400 + (correct/total) * 400
-        $scoreEstimate = 400 + ($totalQuestions > 0 ? round(($correctCount / $totalQuestions) * 400) : 0);
+        // Estimate score (Base 400 + (correct/total) * 400)
+        $scoreEstimate = 400 + ($totalQuestions > 0 ? (int) round(($correctCount / $totalQuestions) * 400) : 0);
 
-        // Find weakest domain
+        // Identify primary area of weakness
         $weakness = 'algebra';
         $minPercent = 100;
         foreach ($domainScores as $dom => $stats) {
@@ -71,11 +81,11 @@ class DiagnosticService
             'correct_count' => $correctCount,
             'overall_score_estimate' => $scoreEstimate,
             'breakdown' => $domainScores,
-            'weakness_summary' => "Sizning eng zaif nuqtangiz - " . ucfirst($weakness) . ". Shu yo'nalishda ko'proq mashq qilishingiz tavsiya etiladi.",
+            'weakness_summary' => 'Your primary area for improvement is ' . ucfirst($weakness) . '. Dedicated practice in this domain is recommended.',
             'completed_at' => now(),
         ]);
 
-        // Update Student Profile
+        // Update Student Profile current score
         $profile = $user->studentProfile;
         if ($profile) {
             $profile->sat_current_score = $scoreEstimate;
