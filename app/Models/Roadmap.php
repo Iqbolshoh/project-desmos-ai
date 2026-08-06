@@ -26,7 +26,7 @@ class Roadmap extends Model
     protected function casts(): array
     {
         return [
-            'weekly_plan'  => 'array',
+            'weekly_plan' => 'array',
             'monthly_plan' => 'array',
             'generated_at' => 'datetime',
         ];

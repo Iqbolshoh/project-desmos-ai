@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Question;
 use App\Models\Topic;
+use Illuminate\Database\Seeder;
 
 class PracticeQuestionSeeder extends Seeder
 {
@@ -13,6 +13,7 @@ class PracticeQuestionSeeder extends Seeder
         $topics = Topic::all()->keyBy('slug');
         if ($topics->isEmpty()) {
             $this->command?->warn('Topics not found. Run TopicSeeder first.');
+
             return;
         }
 
@@ -205,7 +206,7 @@ class PracticeQuestionSeeder extends Seeder
 
         foreach ($questions as $q) {
             $topic = $topics->get($q['topic_slug']);
-            if (!$topic) {
+            if (! $topic) {
                 continue;
             }
 

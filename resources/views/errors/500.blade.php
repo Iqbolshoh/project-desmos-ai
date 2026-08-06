@@ -17,18 +17,18 @@
             500
         </h1>
 
-        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Server xatosi</h2>
+        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Server error</h2>
 
         <p class="text-base mb-8 font-medium" style="color: var(--text-secondary);">
-            Serverda kutilmagan xatolik yuz berdi. Iltimos, keyinroq qayta urinib ko'ring.
+            An unexpected server error occurred. Please try again later.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
             <button onclick="window.location.reload()" class="btn-primary w-full sm:w-auto">
-                <x-lucide-refresh-cw class="w-5 h-5" /> Sahifani yangilash
+                <x-lucide-refresh-cw class="w-5 h-5" /> Refresh page
             </button>
             <a href="{{ route('home') }}" class="btn-secondary w-full sm:w-auto">
-                <x-lucide-home class="w-5 h-5" /> Bosh sahifa
+                <x-lucide-home class="w-5 h-5" /> Home
             </a>
         </div>
 

@@ -54,7 +54,7 @@
                     @foreach($topUsers as $i => $u)
                     <li class="flex items-center justify-between text-sm py-1 border-b border-[var(--border-subtle)] last:border-0">
                         <span class="text-[var(--text-secondary)]"><span class="font-mono text-[var(--text-muted)] mr-2">#{{ $i + 1 }}</span>{{ $u->name }}</span>
-                        <span class="font-mono text-[var(--gold)] font-bold">{{ number_format($u->xp) }} XP</span>
+                        <span class="font-mono text-[var(--gold)] font-bold">{{ number_format($u->xp, 0, '.', ' ') }} XP</span>
                     </li>
                     @endforeach
                 </ol>

@@ -28,9 +28,9 @@ class Question extends Model
     protected function casts(): array
     {
         return [
-            'is_diagnostic'       => 'boolean',
-            'options'             => 'array',
-            'desmos_expressions'  => 'array',
+            'is_diagnostic' => 'boolean',
+            'options' => 'array',
+            'desmos_expressions' => 'array',
         ];
     }
 

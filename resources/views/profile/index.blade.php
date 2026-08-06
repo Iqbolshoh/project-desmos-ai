@@ -45,7 +45,7 @@ $roles = $user->getRoleNames();
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
                 <div class="text-xs text-[var(--text-muted)] font-mono">XP Total</div>
-                <div class="text-xl font-extrabold text-[var(--gold)] font-mono mt-1">{{ number_format($studentProfile->xp) }}</div>
+                <div class="text-xl font-extrabold text-[var(--gold)] font-mono mt-1">{{ number_format($studentProfile->xp, 0, '.', ' ') }}</div>
             </div>
             <div>
                 <div class="text-xs text-[var(--text-muted)] font-mono">Level</div>

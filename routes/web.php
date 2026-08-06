@@ -29,14 +29,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Home — landing page for guests, dashboard for authenticated users
-Route::get('/', function () {
+Route::middleware('throttle:60,1')->get('/', function () {
     return Auth::check()
         ? redirect()->route('dashboard.index')
         : app(MarketingController::class)->landing();
 })->name('home');
 
 // Guest-only routes with rate limiting
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', 'throttle:60,1'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 

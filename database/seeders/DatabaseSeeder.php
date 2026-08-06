@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             QuestionSeeder::class,
             PracticeQuestionSeeder::class,
             AchievementSeeder::class,
-            
+
             DiagnosticResultSeeder::class,
             QuestionAttemptSeeder::class,
             AiTutorSessionSeeder::class,

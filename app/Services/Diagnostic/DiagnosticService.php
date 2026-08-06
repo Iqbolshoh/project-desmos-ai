@@ -42,12 +42,12 @@ class DiagnosticService
 
         foreach ($answers as $qId => $userAnswer) {
             $question = $questions->get($qId);
-            if (!$question) {
+            if (! $question) {
                 continue;
             }
 
             $domain = $question->topic->domain ?? 'algebra';
-            if (!isset($domainScores[$domain])) {
+            if (! isset($domainScores[$domain])) {
                 $domainScores[$domain] = ['correct' => 0, 'total' => 0];
             }
 
@@ -81,7 +81,7 @@ class DiagnosticService
             'correct_count' => $correctCount,
             'overall_score_estimate' => $scoreEstimate,
             'breakdown' => $domainScores,
-            'weakness_summary' => 'Your primary area for improvement is ' . ucfirst($weakness) . '. Dedicated practice in this domain is recommended.',
+            'weakness_summary' => 'Your primary area for improvement is '.ucfirst($weakness).'. Dedicated practice in this domain is recommended.',
             'completed_at' => now(),
         ]);
 

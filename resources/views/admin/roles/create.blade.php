@@ -1,8 +1,8 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Yangi rol')
-@section('breadcrumb', 'Rollar')
-@section('header_title', 'Yangi rol')
+@section('title', 'New Role')
+@section('breadcrumb', 'Roles')
+@section('header_title', 'New Role')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -10,13 +10,13 @@
     <a href="{{ route('roles.index') }}"
        class="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--text-muted)] hover:text-white transition-colors mb-6">
         <x-lucide-arrow-left class="w-4 h-4" />
-        Rollarga qaytish
+        Back to roles
     </a>
 
     <div class="card p-6 sm:p-8">
         <div class="mb-8 pb-6 border-b border-[var(--border-subtle)]">
-            <h2 class="text-xl font-bold text-white tracking-tight">Yangi rol yaratish</h2>
-            <p class="text-sm text-[var(--text-muted)] mt-1">Rol nomi va ruxsatlarni belgilang</p>
+            <h2 class="text-xl font-bold text-white tracking-tight">Create new role</h2>
+            <p class="text-sm text-[var(--text-muted)] mt-1">Set the role name and permissions</p>
         </div>
 
         <form action="{{ route('roles.store') }}" method="POST" novalidate>
@@ -24,14 +24,14 @@
 
             <div class="mb-8">
                 <label for="name" class="block text-sm font-semibold text-[var(--text-secondary)] mb-2">
-                    Rol nomi <span class="text-[var(--accent)]">*</span>
+                    Role name <span class="text-[var(--accent)]">*</span>
                 </label>
                 <input type="text"
                        id="name"
                        name="name"
                        value="{{ old('name') }}"
                        class="input @error('name') border-[var(--accent)] @enderror"
-                       placeholder="masalan: Muharrir, Qo'llab-quvvatlash"
+                       placeholder="e.g. Editor, Support"
                        pattern="[A-Za-z0-9_\-]+"
                        maxlength="64"
                        required
@@ -43,7 +43,7 @@
                     </p>
                 @else
                     <p class="text-[var(--text-muted)] text-xs mt-2">
-                        Faqat harflar, raqamlar, pastki chiziq va tire. Masalan: Editor, Support_Agent
+                        Only letters, numbers, underscores and hyphens. e.g. Editor, Support_Agent
                     </p>
                 @enderror
             </div>
@@ -51,11 +51,11 @@
             <div class="mb-8" x-data="permissionsManager()">
                 <div class="flex items-center justify-between mb-4">
                     <label class="block text-sm font-semibold text-[var(--text-secondary)]">
-                        Ruxsatlar <span class="text-[var(--accent)]">*</span>
+                        Permissions <span class="text-[var(--accent)]">*</span>
                     </label>
                     <button type="button" @click="toggleAll"
                             class="btn-ghost !text-xs !py-1.5 !px-3">
-                        <span x-text="allSelected() ? 'Barchasini olib tashlash' : 'Barchasini tanlash'"></span>
+                        <span x-text="allSelected() ? 'Deselect all' : 'Select all'"></span>
                     </button>
                 </div>
 
@@ -78,7 +78,7 @@
                                 <input type="checkbox"
                                        class="group-checkbox h-3.5 w-3.5 rounded cursor-pointer appearance-none border border-[#3a4055] bg-[var(--bg-raised)] checked:bg-blue-500 checked:border-blue-500 transition-colors"
                                        @change="toggleGroup($event, '{{ $groupName }}')">
-                                <span class="text-[0.68rem] font-medium text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors">Hammasi</span>
+                                <span class="text-[0.68rem] font-medium text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors">All</span>
                             </label>
                         </div>
 
@@ -109,11 +109,11 @@
 
             <div class="flex items-center justify-end gap-3 pt-6 border-t border-[var(--border-subtle)]">
                 <a href="{{ route('roles.index') }}" class="btn-secondary">
-                    Bekor qilish
+                    Cancel
                 </a>
                 <button type="submit" class="btn-primary">
                     <x-lucide-save class="w-4 h-4" />
-                    Rol yaratish
+                    Create role
                 </button>
             </div>
         </form>

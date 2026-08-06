@@ -26,6 +26,6 @@ final class TopicSeeder extends Seeder
             );
         }
 
-        $this->command?->info('✓ ' . count(self::TOPICS) . ' SAT topics seeded.');
+        $this->command?->info('✓ '.count(self::TOPICS).' SAT topics seeded.');
     }
 }

@@ -15,6 +15,7 @@ use Illuminate\View\View;
 class PracticeController extends Controller
 {
     protected GamificationService $gamification;
+
     protected AchievementService $achievements;
 
     public function __construct(GamificationService $gamification, AchievementService $achievements)
@@ -60,14 +61,14 @@ class PracticeController extends Controller
             ->inRandomOrder()
             ->first();
 
-        if (!$question) {
+        if (! $question) {
             $question = Question::with('topic')
                 ->where('topic_id', $topic->id)
                 ->inRandomOrder()
                 ->first();
         }
 
-        if (!$question) {
+        if (! $question) {
             return redirect()
                 ->route('practice.topic', $topic->slug)
                 ->with('error', 'No practice questions are available for this topic yet.');

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\DiagnosticResult;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class DiagnosticResultSeeder extends Seeder
 {
@@ -18,7 +18,7 @@ class DiagnosticResultSeeder extends Seeder
 
             for ($i = 0; $i < $attempts; $i++) {
                 $scoreEstimate = rand(400, $user->studentProfile->sat_current_score ?? 600);
-                
+
                 DiagnosticResult::create([
                     'user_id' => $user->id,
                     'total_questions' => 20,

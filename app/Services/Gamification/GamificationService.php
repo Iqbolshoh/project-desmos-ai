@@ -13,7 +13,7 @@ class GamificationService
     public function addXp(User $user, int $amount, string $reason = ''): void
     {
         $profile = $user->studentProfile;
-        if (!$profile) {
+        if (! $profile) {
             return;
         }
 
@@ -38,20 +38,20 @@ class GamificationService
     public function updateStreak(User $user): int
     {
         $profile = $user->studentProfile;
-        if (!$profile) {
+        if (! $profile) {
             return 0;
         }
 
         $today = Carbon::today();
         $lastActive = $profile->last_activity_date ? Carbon::parse($profile->last_activity_date)->startOfDay() : null;
 
-        $wasFirstActivityToday = !$lastActive || !$lastActive->isToday();
+        $wasFirstActivityToday = ! $lastActive || ! $lastActive->isToday();
 
-        if (!$lastActive) {
+        if (! $lastActive) {
             $profile->streak_current = 1;
         } elseif ($lastActive->isYesterday()) {
             $profile->streak_current += 1;
-        } elseif (!$lastActive->isToday()) {
+        } elseif (! $lastActive->isToday()) {
             $profile->streak_current = 1;
         }
 

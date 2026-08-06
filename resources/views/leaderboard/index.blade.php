@@ -31,7 +31,7 @@
                 {{ strtoupper(substr($topUsers[1]->name, 0, 1)) }}
             </div>
             <div class="text-white font-bold text-sm truncate">{{ $topUsers[1]->name }}</div>
-            <div class="text-[var(--text-muted)] text-xs">{{ number_format($topUsers[1]->xp) }} XP</div>
+            <div class="text-[var(--text-muted)] text-xs">{{ number_format($topUsers[1]->xp, 0, '.', ' ') }} XP</div>
             <div class="mt-3 h-20 bg-gradient-to-t from-slate-600/30 to-slate-400/10 border border-slate-400/20 rounded-t-xl flex items-end justify-center pb-2">
                 <span class="text-slate-300 font-black text-2xl">2</span>
             </div>
@@ -45,7 +45,7 @@
                 <div class="absolute -top-4 left-1/2 -translate-x-1/2 text-2xl">👑</div>
             </div>
             <div class="text-[var(--gold)] font-bold truncate">{{ $topUsers[0]->name }}</div>
-            <div class="text-[var(--text-muted)] text-xs">{{ number_format($topUsers[0]->xp) }} XP</div>
+            <div class="text-[var(--text-muted)] text-xs">{{ number_format($topUsers[0]->xp, 0, '.', ' ') }} XP</div>
             <div class="mt-3 h-32 bg-gradient-to-t from-[var(--gold-soft)] to-transparent border border-[var(--gold-border)] rounded-t-xl flex items-end justify-center pb-2">
                 <span class="text-[var(--gold)] font-black text-3xl">1</span>
             </div>
@@ -56,7 +56,7 @@
                 {{ strtoupper(substr($topUsers[2]->name, 0, 1)) }}
             </div>
             <div class="text-white font-bold text-sm truncate">{{ $topUsers[2]->name }}</div>
-            <div class="text-[var(--text-muted)] text-xs">{{ number_format($topUsers[2]->xp) }} XP</div>
+            <div class="text-[var(--text-muted)] text-xs">{{ number_format($topUsers[2]->xp, 0, '.', ' ') }} XP</div>
             <div class="mt-3 h-14 bg-gradient-to-t from-amber-900/30 to-amber-700/10 border border-amber-700/20 rounded-t-xl flex items-end justify-center pb-2">
                 <span class="text-amber-600 font-black text-2xl">3</span>
             </div>
@@ -107,7 +107,7 @@
 
                         <div class="text-right">
                             <div class="text-[var(--gold)] font-black text-xl font-mono tabular-nums drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]">
-                                {{ number_format($user->xp) }}
+                                {{ number_format($user->xp, 0, '.', ' ') }}
                             </div>
                             <div class="text-[10px] text-[var(--text-muted)] uppercase tracking-widest">XP</div>
                         </div>

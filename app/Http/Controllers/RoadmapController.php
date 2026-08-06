@@ -52,7 +52,7 @@ class RoadmapController extends Controller
             if (isset($week['tasks']) && is_array($week['tasks'])) {
                 foreach ($week['tasks'] as &$task) {
                     if (isset($task['id']) && $task['id'] === $taskId) {
-                        $task['completed'] = !($task['completed'] ?? false);
+                        $task['completed'] = ! ($task['completed'] ?? false);
                     }
                 }
             }
@@ -67,7 +67,7 @@ class RoadmapController extends Controller
             if (isset($week['tasks']) && is_array($week['tasks'])) {
                 foreach ($week['tasks'] as $task) {
                     $total++;
-                    if (!empty($task['completed'])) {
+                    if (! empty($task['completed'])) {
                         $completed++;
                     }
                 }

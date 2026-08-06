@@ -17,12 +17,12 @@ class UserController extends Controller
         $authUser = Auth::user();
         abort_unless($authUser->hasPermissionTo('users.view'), 403);
 
-        $search    = $request->input('search');
-        $sort      = in_array($request->input('sort'), ['id', 'name', 'email']) ? $request->input('sort') : 'id';
+        $search = $request->input('search');
+        $sort = in_array($request->input('sort'), ['id', 'name', 'email']) ? $request->input('sort') : 'id';
         $direction = $request->input('direction') === 'desc' ? 'desc' : 'asc';
 
         $users = User::with('roles')
-            ->when($search, fn($q) => $q->where(fn($q) => $q
+            ->when($search, fn ($q) => $q->where(fn ($q) => $q
                 ->where('name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
             ))
@@ -51,25 +51,25 @@ class UserController extends Controller
         abort_unless($authUser->hasPermissionTo('users.create'), 403);
 
         $data = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role'     => ['required', 'string', 'exists:roles,name'],
+            'role' => ['required', 'string', 'exists:roles,name'],
         ], [
-            'name.required'      => 'Full name is required.',
-            'email.required'     => 'Email address is required.',
-            'email.email'        => 'Please enter a valid email address.',
-            'email.unique'       => 'This email address is already registered.',
-            'password.required'  => 'Password is required.',
-            'password.min'       => 'Password must be at least 8 characters.',
+            'name.required' => 'Full name is required.',
+            'email.required' => 'Email address is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.unique' => 'This email address is already registered.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
             'password.confirmed' => 'Password confirmation does not match.',
-            'role.required'      => 'Please assign a role to this user.',
-            'role.exists'        => 'The selected role does not exist.',
+            'role.required' => 'Please assign a role to this user.',
+            'role.exists' => 'The selected role does not exist.',
         ]);
 
         $newUser = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
+            'name' => $data['name'],
+            'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
 
@@ -90,7 +90,7 @@ class UserController extends Controller
                 ->with('error', 'The Super Admin account cannot be modified.');
         }
 
-        $roles    = Role::orderBy('name')->get();
+        $roles = Role::orderBy('name')->get();
         $userRole = $user->roles->first()?->name;
 
         return view('admin.users.edit', compact('user', 'roles', 'userRole'));
@@ -108,14 +108,14 @@ class UserController extends Controller
         }
 
         $data = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-            'role'     => ['required', 'string', 'exists:roles,name'],
+            'role' => ['required', 'string', 'exists:roles,name'],
         ]);
 
         $updates = [
-            'name'  => $data['name'],
+            'name' => $data['name'],
             'email' => $data['email'],
         ];
 

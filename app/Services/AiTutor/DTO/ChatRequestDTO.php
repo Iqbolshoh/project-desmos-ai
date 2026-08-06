@@ -8,6 +8,5 @@ class ChatRequestDTO
         public readonly string $message,
         public readonly int $sessionId,
         public readonly ?array $history = []
-    ) {
-    }
+    ) {}
 }

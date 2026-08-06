@@ -17,14 +17,14 @@
             401
         </h1>
 
-        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Kirish taqiqlangan</h2>
+        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Access denied</h2>
 
         <p class="text-base mb-8 font-medium" style="color: var(--text-secondary);">
-            Bu sahifaga kirish uchun avval tizimga kirishingiz kerak.
+            You need to sign in before accessing this page.
         </p>
 
         <a href="{{ route('login') }}" class="btn-primary px-8">
-            <x-lucide-log-in class="w-5 h-5" /> Tizimga kirish
+            <x-lucide-log-in class="w-5 h-5" /> Sign in
         </a>
 
     </div>

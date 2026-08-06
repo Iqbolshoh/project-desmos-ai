@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\UserAchievement;
 use App\Models\Achievement;
 use App\Models\User;
+use App\Models\UserAchievement;
+use Illuminate\Database\Seeder;
 
 class UserAchievementSeeder extends Seeder
 {

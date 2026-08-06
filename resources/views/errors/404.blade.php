@@ -17,18 +17,18 @@
             404
         </h1>
 
-        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Sahifa topilmadi</h2>
+        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Page not found</h2>
 
         <p class="text-base mb-8 font-medium" style="color: var(--text-secondary);">
-            Siz qidirayotgan sahifa mavjud emas yoki o'chirilgan.
+            The page you're looking for doesn't exist or has been removed.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
             <button onclick="history.back()" class="btn-secondary w-full sm:w-auto">
-                <x-lucide-arrow-left class="w-5 h-5" /> Orqaga
+                <x-lucide-arrow-left class="w-5 h-5" /> Back
             </button>
             <a href="{{ route('home') }}" class="btn-primary w-full sm:w-auto">
-                <x-lucide-home class="w-5 h-5" /> Bosh sahifa
+                <x-lucide-home class="w-5 h-5" /> Home
             </a>
         </div>
 

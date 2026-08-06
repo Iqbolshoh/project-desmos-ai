@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Question;
 use App\Models\QuestionAttempt;
 use App\Models\User;
-use App\Models\Question;
+use Illuminate\Database\Seeder;
 
 class QuestionAttemptSeeder extends Seeder
 {
@@ -14,7 +14,9 @@ class QuestionAttemptSeeder extends Seeder
         $users = User::role('student')->get();
         $questions = Question::where('is_diagnostic', false)->get();
 
-        if ($questions->isEmpty()) return;
+        if ($questions->isEmpty()) {
+            return;
+        }
 
         foreach ($users as $user) {
             $attemptCount = rand(5, 15);

@@ -17,18 +17,18 @@
             419
         </h1>
 
-        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Sahifa muddati tugagan</h2>
+        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Page expired</h2>
 
         <p class="text-base mb-8 font-medium" style="color: var(--text-secondary);">
-            Sessiya muddati tugadi. Sahifani yangilang va qayta urinib ko'ring.
+            Your session has expired. Refresh the page and try again.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
             <button onclick="window.location.reload()" class="btn-primary w-full sm:w-auto">
-                <x-lucide-refresh-cw class="w-5 h-5" /> Sahifani yangilash
+                <x-lucide-refresh-cw class="w-5 h-5" /> Refresh page
             </button>
             <a href="{{ route('home') }}" class="btn-secondary w-full sm:w-auto">
-                <x-lucide-home class="w-5 h-5" /> Bosh sahifa
+                <x-lucide-home class="w-5 h-5" /> Home
             </a>
         </div>
 

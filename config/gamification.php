@@ -9,7 +9,7 @@ return [
         'streak_bonus' => 5, // daily bonus per streak day (up to a cap)
         'streak_bonus_cap' => 50,
     ],
-    
+
     'levels' => [
         1 => 0,
         2 => 100,

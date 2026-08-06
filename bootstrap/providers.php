@@ -1,8 +1,9 @@
 <?php
 
+use App\Providers\AiTutorServiceProvider;
 use App\Providers\AppServiceProvider;
 
 return [
     AppServiceProvider::class,
-    App\Providers\AiTutorServiceProvider::class,
+    AiTutorServiceProvider::class,
 ];

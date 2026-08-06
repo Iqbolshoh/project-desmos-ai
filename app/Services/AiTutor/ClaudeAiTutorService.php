@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
+use Throwable;
 
 class ClaudeAiTutorService implements AiTutorServiceInterface
 {
     protected string $apiKey;
+
     protected string $model;
 
     public function __construct(?string $apiKey = null, string $model = 'claude-3-5-sonnet-20241022')
@@ -26,14 +28,15 @@ class ClaudeAiTutorService implements AiTutorServiceInterface
     public function solve(SolveRequestDTO $request): TutorResponseDTO
     {
         if (empty($this->apiKey)) {
-            // Fallback to Mock if API key is not configured
-            $mock = new MockAiTutorService();
+            // Fall back to the mock service if no API key is configured
+            $mock = new MockAiTutorService;
+
             return $mock->solve($request);
         }
 
         $content = [];
-        
-        // Process image if provided
+
+        // Attach the image, if one was provided
         if ($request->imagePath) {
             $imageContent = $this->getImageBase64($request->imagePath);
             if ($imageContent) {
@@ -42,34 +45,34 @@ class ClaudeAiTutorService implements AiTutorServiceInterface
                     'source' => [
                         'type' => 'base64',
                         'media_type' => $imageContent['media_type'],
-                        'data' => $imageContent['data']
-                    ]
+                        'data' => $imageContent['data'],
+                    ],
                 ];
             }
         }
 
-        $prompt = $this->buildPrompt($request->query, !empty($request->imagePath));
+        $prompt = $this->buildPrompt($request->query, ! empty($request->imagePath));
         $content[] = [
             'type' => 'text',
-            'text' => $prompt
+            'text' => $prompt,
         ];
 
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'x-api-key' => $this->apiKey,
-                'anthropic-version' => '2023-06-01'
+                'anthropic-version' => '2023-06-01',
             ])->timeout(30)->post('https://api.anthropic.com/v1/messages', [
                 'model' => $this->model,
                 'max_tokens' => 1500,
                 'messages' => [
-                    ['role' => 'user', 'content' => $content]
-                ]
+                    ['role' => 'user', 'content' => $content],
+                ],
             ]);
 
-            if (!$response->successful()) {
-                Log::error('Claude API Error: ' . $response->body());
-                throw new RuntimeException("Claude API so'rovi xatoga uchradi: " . $response->status());
+            if (! $response->successful()) {
+                Log::error('Claude API Error: '.$response->body());
+                throw new RuntimeException('Claude API request failed: '.$response->status());
             }
 
             $responseData = $response->json();
@@ -79,10 +82,11 @@ class ClaudeAiTutorService implements AiTutorServiceInterface
                 ->implode("\n");
 
             return $this->parseResponse($rawText);
-        } catch (\Throwable $e) {
-            Log::error("ClaudeAiTutorService Exception: " . $e->getMessage());
+        } catch (Throwable $e) {
+            Log::error('ClaudeAiTutorService Exception: '.$e->getMessage());
             // Fallback to mock on error
-            $mock = new MockAiTutorService();
+            $mock = new MockAiTutorService;
+
             return $mock->solve($request);
         }
     }
@@ -90,43 +94,45 @@ class ClaudeAiTutorService implements AiTutorServiceInterface
     public function chatReply(ChatRequestDTO $request): string
     {
         if (empty($this->apiKey)) {
-            $mock = new MockAiTutorService();
+            $mock = new MockAiTutorService;
+
             return $mock->chatReply($request);
         }
 
         $messages = [];
-        
-        if (!empty($request->history)) {
+
+        if (! empty($request->history)) {
             foreach ($request->history as $msg) {
                 $messages[] = [
                     'role' => $msg['role'] ?? 'user',
-                    'content' => $msg['content'] ?? ''
+                    'content' => $msg['content'] ?? '',
                 ];
             }
         }
 
         $messages[] = [
             'role' => 'user',
-            'content' => "Sen SAT Math bo'yicha yordamchi o'qituvchisan. O'quvchining savoliga qisqa, tushunarli va o'zbek tilida javob ber: " . $request->message
+            'content' => "Sen SAT Math bo'yicha yordamchi o'qituvchisan. O'quvchining savoliga qisqa, tushunarli va o'zbek tilida javob ber: ".$request->message,
         ];
 
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'x-api-key' => $this->apiKey,
-                'anthropic-version' => '2023-06-01'
+                'anthropic-version' => '2023-06-01',
             ])->timeout(20)->post('https://api.anthropic.com/v1/messages', [
                 'model' => $this->model,
                 'max_tokens' => 800,
-                'messages' => $messages
+                'messages' => $messages,
             ]);
 
             if ($response->successful()) {
                 $data = $response->json();
+
                 return collect($data['content'] ?? [])->where('type', 'text')->pluck('text')->implode("\n");
             }
-        } catch (\Throwable $e) {
-            Log::error("Claude Chat Error: " . $e->getMessage());
+        } catch (Throwable $e) {
+            Log::error('Claude Chat Error: '.$e->getMessage());
         }
 
         return "Kechirasiz, xatolik yuz berdi. Qayta urinib ko'ring.";
@@ -135,22 +141,22 @@ class ClaudeAiTutorService implements AiTutorServiceInterface
     protected function buildPrompt(string $text, bool $hasImage): string
     {
         $base = $hasImage
-            ? "Rasmda berilgan matematik masalani aniqla va yech."
+            ? 'Rasmda berilgan matematik masalani aniqla va yech.'
             : "Quyidagi masalani yech: \"{$text}\"";
 
         return <<<PROMPT
 Sen SAT Math bo'yicha tajribali o'qituvchi va Desmos grafik kalkulyatori bo'yicha mutaxassissan. {$base}
 Faqat quyidagi JSON formatida javob ber, hech qanday qo'shimcha matn yoki markdown belgilarisiz:
 {
-  "masala": "aniqlangan masala matni",
-  "ifodalar": [
-    {"matn": "Desmosga aynan shu ko'rinishda yoziladigan ifoda (masalan: y = 2x + 3 yoki (x-2)^2 + (y+1)^2 = 16)", "izoh": "bu ifoda nimani anglatishi haqidagi qisqa izoh"}
+  "problem": "aniqlangan masala matni",
+  "expressions": [
+    {"text": "Desmosga aynan shu ko'rinishda yoziladigan ifoda (masalan: y = 2x + 3 yoki (x-2)^2 + (y+1)^2 = 16)", "note": "bu ifoda nimani anglatishi haqidagi qisqa izoh"}
   ],
-  "qadamlar": [
-    {"sarlavha": "1-qadam nomi", "matn": "qadam tushuntirishi", "formula": "formula yoki math expression"}
+  "steps": [
+    {"title": "1-qadam nomi", "text": "qadam tushuntirishi", "formula": "formula yoki math expression"}
   ],
-  "javob": "yakuniy qisqa javob",
-  "maslahat": "Desmosdan SAT paytida foydalanish bo'yicha bitta qisqa maslahat"
+  "answer": "yakuniy qisqa javob",
+  "tip": "Desmosdan SAT paytida foydalanish bo'yicha bitta qisqa maslahat"
 }
 Ifodalarda albatta Desmos sintaksisidan foydalan (daraja uchun ^, ildiz uchun sqrt(), kasr uchun /). Qadamlar 2 tadan 4 tagacha, qisqa va aniq bo'lsin. Faqat to'g'ridan-to'g'ri JSON qaytar.
 PROMPT;
@@ -164,7 +170,7 @@ PROMPT;
 
         $json = json_decode($cleaned, true);
 
-        if (!$json || !is_array($json)) {
+        if (! $json || ! is_array($json)) {
             return new TutorResponseDTO(
                 finalAnswer: 'Yechimni o\'qib bo\'lmadi',
                 explanation: $rawText,
@@ -174,27 +180,27 @@ PROMPT;
         }
 
         $steps = [];
-        if (isset($json['qadamlar']) && is_array($json['qadamlar'])) {
-            foreach ($json['qadamlar'] as $idx => $step) {
+        if (isset($json['steps']) && is_array($json['steps'])) {
+            foreach ($json['steps'] as $idx => $step) {
                 $steps[] = new TutorStepDTO(
                     stepNumber: $idx + 1,
-                    title: $step['sarlavha'] ?? ("Qadam " . ($idx + 1)),
-                    explanation: $step['matn'] ?? '',
+                    title: $step['title'] ?? ('Qadam '.($idx + 1)),
+                    explanation: $step['text'] ?? '',
                     mathExpression: $step['formula'] ?? null
                 );
             }
         }
 
         $graphExpr = null;
-        if (!empty($json['ifodalar']) && is_array($json['ifodalar'])) {
-            $firstExpr = $json['ifodalar'][0];
-            $graphExpr = is_array($firstExpr) ? ($firstExpr['matn'] ?? null) : $firstExpr;
+        if (! empty($json['expressions']) && is_array($json['expressions'])) {
+            $firstExpr = $json['expressions'][0];
+            $graphExpr = is_array($firstExpr) ? ($firstExpr['text'] ?? null) : $firstExpr;
         }
 
-        $explanation = ($json['masala'] ?? '') . "\n\n" . ($json['maslahat'] ? "💡 Maslahat: " . $json['maslahat'] : '');
+        $explanation = ($json['problem'] ?? '')."\n\n".($json['tip'] ? '💡 Maslahat: '.$json['tip'] : '');
 
         return new TutorResponseDTO(
-            finalAnswer: $json['javob'] ?? 'Noma\'lum',
+            finalAnswer: $json['answer'] ?? 'Noma\'lum',
             explanation: $explanation,
             steps: $steps,
             graphExpression: $graphExpr
@@ -208,7 +214,7 @@ PROMPT;
                 ? Storage::disk('public')->path($path)
                 : $path;
 
-            if (!file_exists($fullPath)) {
+            if (! file_exists($fullPath)) {
                 return null;
             }
 
@@ -217,10 +223,11 @@ PROMPT;
 
             return [
                 'media_type' => $mime,
-                'data' => $data
+                'data' => $data,
             ];
-        } catch (\Throwable $e) {
-            Log::error("Image base64 conversion failed: " . $e->getMessage());
+        } catch (Throwable $e) {
+            Log::error('Image base64 conversion failed: '.$e->getMessage());
+
             return null;
         }
     }

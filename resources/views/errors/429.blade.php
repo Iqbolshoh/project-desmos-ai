@@ -17,18 +17,18 @@
             429
         </h1>
 
-        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Juda ko'p so'rovlar</h2>
+        <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight" style="color: var(--text-primary);">Too many requests</h2>
 
         <p class="text-base mb-8 font-medium" style="color: var(--text-secondary);">
-            Siz juda ko'p so'rov yubordingiz. Bir oz kuting va qayta urinib ko'ring.
+            You've sent too many requests. Please wait a moment and try again.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
             <button onclick="history.back()" class="btn-secondary w-full sm:w-auto">
-                <x-lucide-arrow-left class="w-5 h-5" /> Orqaga
+                <x-lucide-arrow-left class="w-5 h-5" /> Back
             </button>
             <a href="{{ route('home') }}" class="btn-primary w-full sm:w-auto">
-                <x-lucide-home class="w-5 h-5" /> Bosh sahifa
+                <x-lucide-home class="w-5 h-5" /> Home
             </a>
         </div>
 

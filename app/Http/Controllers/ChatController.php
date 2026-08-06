@@ -62,7 +62,7 @@ class ChatController extends Controller
             ->orderBy('created_at')
             ->limit(10)
             ->get()
-            ->map(fn($msg) => ['role' => $msg->role, 'content' => $msg->message])
+            ->map(fn ($msg) => ['role' => $msg->role, 'content' => $msg->message])
             ->toArray();
 
         // Query AI Service

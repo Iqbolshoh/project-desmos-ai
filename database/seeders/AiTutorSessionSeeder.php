@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\AiTutorSession;
 use App\Models\SavedGraph;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class AiTutorSessionSeeder extends Seeder
 {
@@ -26,15 +26,15 @@ class AiTutorSessionSeeder extends Seeder
                             'stepNumber' => 1,
                             'title' => 'Tenglamani standart ko\'rinishga keltirish',
                             'explanation' => '4 ni o\'ng tomonga o\'tkazamiz.',
-                            'mathExpression' => 'x^2 = 4'
+                            'mathExpression' => 'x^2 = 4',
                         ],
                         [
                             'stepNumber' => 2,
                             'title' => 'Ildiz olish',
                             'explanation' => 'Ikkala tomondan kvadrat ildiz olamiz.',
-                            'mathExpression' => 'x = \pm 2'
-                        ]
-                    ]
+                            'mathExpression' => 'x = \pm 2',
+                        ],
+                    ],
                 ],
                 'desmos_state' => ['expression' => 'y=x^2-4'],
                 'driver' => 'mock',

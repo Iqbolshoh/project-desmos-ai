@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\AiTutorSession;
 use App\Services\AiTutor\Contracts\AiTutorServiceInterface;
 use App\Services\AiTutor\DTO\SolveRequestDTO;
-use App\Models\AiTutorSession;
+use Illuminate\Http\Request;
 
 class TutorController extends Controller
 {
@@ -45,11 +45,11 @@ class TutorController extends Controller
             'ai_response' => [
                 'finalAnswer' => $response->finalAnswer,
                 'explanation' => $response->explanation,
-                'steps' => array_map(fn($step) => [
+                'steps' => array_map(fn ($step) => [
                     'stepNumber' => $step->stepNumber,
                     'title' => $step->title,
                     'explanation' => $step->explanation,
-                    'mathExpression' => $step->mathExpression
+                    'mathExpression' => $step->mathExpression,
                 ], $response->steps),
             ],
             'desmos_state' => ['expression' => $response->graphExpression],

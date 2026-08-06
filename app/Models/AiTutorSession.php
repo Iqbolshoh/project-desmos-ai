@@ -25,7 +25,7 @@ class AiTutorSession extends Model
     protected function casts(): array
     {
         return [
-            'ai_response'  => 'array',
+            'ai_response' => 'array',
             'desmos_state' => 'array',
         ];
     }

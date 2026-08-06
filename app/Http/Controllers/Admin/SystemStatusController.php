@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Throwable;
 
 class SystemStatusController extends Controller
 {
@@ -37,7 +38,7 @@ class SystemStatusController extends Controller
             DB::connection()->getPdo();
 
             return ['ok' => true, 'detail' => (string) config('database.default')];
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return ['ok' => false, 'detail' => $e->getMessage()];
         }
     }
@@ -48,7 +49,7 @@ class SystemStatusController extends Controller
             Cache::put('system-status-check', true, 5);
 
             return ['ok' => Cache::get('system-status-check') === true, 'detail' => (string) config('cache.default')];
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return ['ok' => false, 'detail' => $e->getMessage()];
         }
     }
@@ -59,7 +60,7 @@ class SystemStatusController extends Controller
         $free = @disk_free_space($path);
         $total = @disk_total_space($path);
 
-        if (!$free || !$total) {
+        if (! $free || ! $total) {
             return ['ok' => false, 'detail' => 'Unable to determine'];
         }
 

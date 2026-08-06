@@ -28,7 +28,7 @@ class StudentProfile extends Model
     {
         return [
             'last_activity_date' => 'date',
-            'onboarded_at'       => 'datetime',
+            'onboarded_at' => 'datetime',
         ];
     }
 

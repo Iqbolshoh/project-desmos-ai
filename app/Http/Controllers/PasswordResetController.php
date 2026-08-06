@@ -48,14 +48,14 @@ class PasswordResetController extends Controller
     public function reset(Request $request)
     {
         $data = $request->validate([
-            'token'    => ['required'],
-            'email'    => ['required', 'email'],
+            'token' => ['required'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         $status = Password::reset($data, function ($user) use ($data) {
             $user->forceFill([
-                'password'       => Hash::make($data['password']),
+                'password' => Hash::make($data['password']),
                 'remember_token' => Str::random(60),
             ])->save();
         });

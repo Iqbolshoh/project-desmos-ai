@@ -19,8 +19,8 @@ class ProfileController extends Controller
             ->get();
 
         return view('profile.index', [
-            'user'               => $user,
-            'studentProfile'     => $user->studentProfile,
+            'user' => $user,
+            'studentProfile' => $user->studentProfile,
             'earnedAchievements' => $earnedAchievements,
         ]);
     }
@@ -30,8 +30,8 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $data = $request->validate([
-            'name'   => 'required|string|max:100',
-            'email'  => 'required|email|max:100|unique:users,email,' . $user->id,
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:100|unique:users,email,'.$user->id,
             'avatar' => 'nullable|image|max:2048',
         ]);
 
@@ -53,7 +53,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'current_password' => 'required',
-            'password'         => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = Auth::user();

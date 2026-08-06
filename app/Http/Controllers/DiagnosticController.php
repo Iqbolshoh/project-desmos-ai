@@ -14,8 +14,11 @@ use Illuminate\View\View;
 class DiagnosticController extends Controller
 {
     protected DiagnosticService $diagnosticService;
+
     protected RoadmapService $roadmapService;
+
     protected GamificationService $gamificationService;
+
     protected AchievementService $achievementService;
 
     public function __construct(

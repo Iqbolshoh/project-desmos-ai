@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
 use App\Models\StudentProfile;
-use Spatie\Permission\Models\Role;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -13,7 +12,7 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $password = Hash::make('B7654321');
+        $password = Hash::make('i2345678');
 
         for ($i = 1; $i <= 20; $i++) {
             $user = User::withoutGlobalScopes()->create([

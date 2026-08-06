@@ -24,7 +24,7 @@ class DiagnosticResult extends Model
     protected function casts(): array
     {
         return [
-            'breakdown'    => 'array',
+            'breakdown' => 'array',
             'completed_at' => 'datetime',
         ];
     }

@@ -11,9 +11,7 @@ use Illuminate\Support\Collection;
 
 class AchievementService
 {
-    public function __construct(private GamificationService $gamification)
-    {
-    }
+    public function __construct(private GamificationService $gamification) {}
 
     /**
      * Check candidate achievements for a user and award newly unlocked badges.
@@ -23,7 +21,7 @@ class AchievementService
     public function checkAndAward(User $user): Collection
     {
         $profile = $user->studentProfile;
-        if (!$profile) {
+        if (! $profile) {
             return collect();
         }
 
@@ -65,13 +63,13 @@ class AchievementService
     private function correctPracticeCount(User $user, string $topicSlug): int
     {
         $topicId = Topic::where('slug', $topicSlug)->value('id');
-        if (!$topicId) {
+        if (! $topicId) {
             return 0;
         }
 
         return QuestionAttempt::where('user_id', $user->id)
             ->where('is_correct', true)
-            ->whereHas('question', fn($q) => $q->where('topic_id', $topicId))
+            ->whereHas('question', fn ($q) => $q->where('topic_id', $topicId))
             ->count();
     }
 }

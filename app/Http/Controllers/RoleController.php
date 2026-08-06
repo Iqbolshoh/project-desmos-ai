@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -12,16 +13,16 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         abort_unless($user->hasPermissionTo('roles.view'), 403);
 
-        $search    = $request->input('search');
-        $sort      = in_array($request->input('sort'), ['id', 'name']) ? $request->input('sort') : 'id';
+        $search = $request->input('search');
+        $sort = in_array($request->input('sort'), ['id', 'name']) ? $request->input('sort') : 'id';
         $direction = $request->input('direction') === 'desc' ? 'desc' : 'asc';
 
         $roles = Role::with('permissions')
-            ->when($search, fn($q) => $q->where('name', 'like', "%{$search}%"))
+            ->when($search, fn ($q) => $q->where('name', 'like', "%{$search}%"))
             ->orderBy($sort, $direction)
             ->paginate(10)
             ->withQueryString();
@@ -31,34 +32,34 @@ class RoleController extends Controller
 
     public function create()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         abort_unless($user->hasPermissionTo('roles.create'), 403);
 
         $groupedPermissions = Permission::orderBy('name')->get()
-            ->reject(fn(Permission $p) => str_contains($p->name, 'manage.all'))
-            ->groupBy(fn(Permission $p) => explode('.', $p->name)[0]);
+            ->reject(fn (Permission $p) => str_contains($p->name, 'manage.all'))
+            ->groupBy(fn (Permission $p) => explode('.', $p->name)[0]);
 
         return view('admin.roles.create', compact('groupedPermissions'));
     }
 
     public function store(Request $request)
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         abort_unless($user->hasPermissionTo('roles.create'), 403);
 
         $data = $request->validate([
-            'name'          => ['required', 'string', 'max:64', 'regex:/^[A-Za-z0-9_-]+$/', Rule::unique('roles', 'name')],
-            'permissions'   => ['required', 'array', 'min:1'],
+            'name' => ['required', 'string', 'max:64', 'regex:/^[A-Za-z0-9_-]+$/', Rule::unique('roles', 'name')],
+            'permissions' => ['required', 'array', 'min:1'],
             'permissions.*' => ['string', 'exists:permissions,name'],
         ], [
-            'name.required'        => 'Role name is required.',
-            'name.max'             => 'Role name must not exceed 64 characters.',
-            'name.regex'           => 'Role name may only contain letters, numbers, underscores, and dashes.',
-            'name.unique'          => 'A role with this name already exists.',
+            'name.required' => 'Role name is required.',
+            'name.max' => 'Role name must not exceed 64 characters.',
+            'name.regex' => 'Role name may only contain letters, numbers, underscores, and dashes.',
+            'name.unique' => 'A role with this name already exists.',
             'permissions.required' => 'Please assign at least one permission.',
-            'permissions.min'      => 'Please assign at least one permission.',
+            'permissions.min' => 'Please assign at least one permission.',
         ]);
 
         if ($this->isProtectedRoleName($data['name'])) {
@@ -66,7 +67,7 @@ class RoleController extends Controller
         }
 
         $role = Role::create([
-            'name'       => $data['name'],
+            'name' => $data['name'],
             'guard_name' => 'web',
         ]);
         $role->syncPermissions($data['permissions']);
@@ -77,7 +78,7 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         abort_unless($user->hasPermissionTo('roles.edit'), 403);
 
@@ -87,8 +88,8 @@ class RoleController extends Controller
         }
 
         $groupedPermissions = Permission::orderBy('name')->get()
-            ->reject(fn(Permission $p) => str_contains($p->name, 'manage.all'))
-            ->groupBy(fn(Permission $p) => explode('.', $p->name)[0]);
+            ->reject(fn (Permission $p) => str_contains($p->name, 'manage.all'))
+            ->groupBy(fn (Permission $p) => explode('.', $p->name)[0]);
 
         $rolePermissions = $role->permissions->pluck('name')->toArray();
 
@@ -97,7 +98,7 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         abort_unless($user->hasPermissionTo('roles.edit'), 403);
 
@@ -107,12 +108,12 @@ class RoleController extends Controller
         }
 
         $data = $request->validate([
-            'name'          => ['required', 'string', 'max:64', 'regex:/^[A-Za-z0-9_-]+$/', Rule::unique('roles', 'name')->ignore($role)],
-            'permissions'   => ['required', 'array', 'min:1'],
+            'name' => ['required', 'string', 'max:64', 'regex:/^[A-Za-z0-9_-]+$/', Rule::unique('roles', 'name')->ignore($role)],
+            'permissions' => ['required', 'array', 'min:1'],
             'permissions.*' => ['string', 'exists:permissions,name'],
         ], [
-            'name.required'        => 'Role name is required.',
-            'name.unique'          => 'A role with this name already exists.',
+            'name.required' => 'Role name is required.',
+            'name.unique' => 'A role with this name already exists.',
             'permissions.required' => 'Please assign at least one permission.',
         ]);
 
@@ -131,7 +132,7 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         abort_unless($user->hasPermissionTo('roles.delete'), 403);
 

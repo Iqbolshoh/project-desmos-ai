@@ -15,7 +15,7 @@
                 </div>
                 <div>
                     <h1 class="text-3xl font-extrabold text-white tracking-tight">AI Desmos Tutor</h1>
-                    <p class="text-[var(--text-secondary)] text-sm mt-0.5">SAT Math masalasini yozing yoki suratini yuklang — AI uni Desmos tilida yechib beradi</p>
+                    <p class="text-[var(--text-secondary)] text-sm mt-0.5">Type your SAT Math problem or upload a photo of it — AI will solve it in Desmos syntax</p>
                 </div>
             </div>
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-[var(--gold-border)] text-xs font-mono text-[var(--gold)]">
@@ -31,24 +31,24 @@
 
             <div>
                 <div class="flex justify-between items-center mb-2">
-                    <label for="query" class="block text-sm font-semibold text-white">Masala sharti</label>
-                    <span class="text-xs text-[var(--text-muted)] font-mono">Formula yoki matn</span>
+                    <label for="query" class="block text-sm font-semibold text-white">Problem statement</label>
+                    <span class="text-xs text-[var(--text-muted)] font-mono">Formula or text</span>
                 </div>
                 <textarea
                     name="query"
                     id="query"
                     rows="5"
                     class="input bg-black/30 w-full resize-none font-mono text-white placeholder:text-[var(--text-muted)] focus:border-[var(--teal)] transition-all rounded-xl p-4 text-base"
-                    placeholder="Masalan: 2x + 5 = 17 tenglamani yeching&#10;yoki: y = x^2 - 4x + 3 parabolasining cho'qqisini toping"
+                    placeholder="e.g.: Solve 2x + 5 = 17&#10;or: Find the vertex of the parabola y = x^2 - 4x + 3"
                 ></textarea>
                 @error('query')
                     <p class="text-red-400 text-sm mt-1.5">{{ $message }}</p>
-                @errorEnd
+                @enderror
             </div>
 
             {{-- Sample Question Chips --}}
             <div class="space-y-2">
-                <span class="text-xs font-mono text-[var(--text-muted)]">Namuna masalalar (bitta bosing):</span>
+                <span class="text-xs font-mono text-[var(--text-muted)]">Sample problems (click one):</span>
                 <div class="flex flex-wrap gap-2">
                     <button type="button" class="sample-chip text-xs bg-black/40 border border-[var(--border-strong)] hover:border-[var(--teal)] hover:text-[var(--teal)] text-[var(--text-secondary)] px-3 py-1.5 rounded-xl transition-all" data-prompt="2x + 5 = 17 tenglamani yeching">
                         2x + 5 = 17
@@ -57,7 +57,7 @@
                         y = x² - 4x + 3
                     </button>
                     <button type="button" class="sample-chip text-xs bg-black/40 border border-[var(--border-strong)] hover:border-[var(--teal)] hover:text-[var(--teal)] text-[var(--text-secondary)] px-3 py-1.5 rounded-xl transition-all" data-prompt="2x + y = 7 va x - y = 2 tenglamalar sistemasini yeching">
-                        Tenglamalar sistemasi
+                        System of equations
                     </button>
                     <button type="button" class="sample-chip text-xs bg-black/40 border border-[var(--border-strong)] hover:border-[var(--teal)] hover:text-[var(--teal)] text-[var(--text-secondary)] px-3 py-1.5 rounded-xl transition-all" data-prompt="y = 2^x + 1 ko'rsatkichli funksiyaning grafigini aniqlang">
                         y = 2ˣ + 1
@@ -68,18 +68,18 @@
             {{-- Image Upload & Preview Container --}}
             <div>
                 <label class="block text-sm font-semibold text-white mb-2">
-                    Yoki rasmini yuklang <span class="text-[var(--text-muted)] font-normal">(PNG, JPG — max 5MB)</span>
+                    Or upload a photo <span class="text-[var(--text-muted)] font-normal">(PNG, JPG — max 5MB)</span>
                 </label>
 
                 <div class="flex items-center gap-4 flex-wrap">
                     <label class="inline-flex items-center gap-2 cursor-pointer bg-black/30 border border-[var(--border-strong)] hover:border-[var(--teal)] text-[var(--text-secondary)] hover:text-white px-5 py-3 rounded-xl transition-all">
                         <x-lucide-camera class="w-5 h-5 text-[var(--teal)]" />
-                        <span class="text-sm font-medium">📷 Rasm tanlash</span>
+                        <span class="text-sm font-medium">📷 Choose image</span>
                         <input type="file" name="image" id="imageInput" accept="image/*" class="hidden">
                     </label>
 
                     <div id="imagePreviewWrapper" class="hidden items-center gap-3 bg-black/40 border border-[var(--teal)] px-3 py-1.5 rounded-xl">
-                        <img id="imagePreviewThumb" src="" alt="Prevyu" class="w-9 h-9 object-cover rounded-lg">
+                        <img id="imagePreviewThumb" src="" alt="Preview" class="w-9 h-9 object-cover rounded-lg">
                         <span id="imageFileName" class="text-xs font-mono text-white max-w-[160px] truncate"></span>
                         <button type="button" id="removeImgBtn" class="text-red-400 hover:text-red-300 font-bold px-1 text-base">&times;</button>
                     </div>
@@ -91,10 +91,10 @@
 
             <div class="flex items-center justify-between pt-4 border-t border-[var(--border-subtle)]">
                 <span class="text-xs text-[var(--text-muted)] flex items-center gap-1.5">
-                    <x-lucide-zap class="w-4 h-4 text-[var(--gold)]" /> Desmos JS Engine bilan integratsiyalangan
+                    <x-lucide-zap class="w-4 h-4 text-[var(--gold)]" /> Integrated with the Desmos JS Engine
                 </span>
                 <button type="submit" id="solveBtn" class="inline-flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-hover)] text-black font-extrabold rounded-xl shadow-lg shadow-[var(--gold-glow)] hover:brightness-110 transition-all">
-                    <x-lucide-sparkles class="w-5 h-5" /> Yechish
+                    <x-lucide-sparkles class="w-5 h-5" /> Solve
                 </button>
             </div>
         </form>
@@ -104,8 +104,8 @@
     <div class="bg-[var(--bg-overlay)] rounded-2xl p-6 border border-[var(--border-subtle)] text-sm text-[var(--text-muted)] flex gap-4 items-start shadow-md">
         <x-lucide-info class="w-6 h-6 text-[var(--teal)] flex-shrink-0 mt-0.5" />
         <div class="space-y-1">
-            <p class="text-white font-bold">Desmos AI qanday yordam beradi?</p>
-            <p class="leading-relaxed">SAT Math imtihonida Desmos grafik kalkulyatoridan to'g'ri foydalanish vaqtni 2-3 barobar tejaydi. Platformamiz masalangizni Desmos sintaksisiga o'giradi, grafik ko'rinishini chiqaradi va tezkor yechim yo'llarini o'rgatadi.</p>
+            <p class="text-white font-bold">How does Desmos AI help?</p>
+            <p class="leading-relaxed">Using the Desmos graphing calculator correctly on the SAT Math test saves 2-3x the time. Our platform converts your problem into Desmos syntax, renders the graph, and teaches you fast solving techniques.</p>
         </div>
     </div>
 </div>

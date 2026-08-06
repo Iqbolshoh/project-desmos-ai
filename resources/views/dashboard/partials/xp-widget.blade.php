@@ -9,7 +9,7 @@
 
     <div class="flex items-baseline gap-2 my-2">
         <span class="text-4xl font-black text-[var(--gold)] font-mono drop-shadow-[0_0_12px_rgba(242,169,59,0.4)]">
-            {{ number_format($studentProfile->xp ?? 0) }}
+            {{ number_format($studentProfile->xp ?? 0, 0, '.', ' ') }}
         </span>
         <span class="text-xs text-[var(--text-muted)] font-mono uppercase tracking-widest">XP Total</span>
     </div>
