@@ -25,3 +25,10 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# local server env dirs (not project files)
+.cache/
+.config/
+.local/
+.npm/
+.ssh/
