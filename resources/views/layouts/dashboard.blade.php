@@ -18,6 +18,13 @@
                     if (m) m.content = '#f0f2f7';
                 });
             }
+            // Pre-collapse the sidebar before first paint, for the same
+            // reason as the theme above: Alpine only reads this after its
+            // deferred script loads, so the sidebar would render expanded
+            // and then visibly snap shut on every page load.
+            if (localStorage.getItem('desmos_ai_sidebar') === 'closed') {
+                document.documentElement.classList.add('sidebar-pre-init');
+            }
         })();
     </script>
 
@@ -290,17 +297,74 @@
         @keyframes page-enter {
             from {
                 opacity: 0;
-                transform: translateY(8px);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
         .page-enter {
-            animation: page-enter .45s var(--ease-out) both;
+            /* Opacity only, and short. A translateY here slid the whole content
+               column on every single navigation, which is what people report as
+               the page jumping; a long fade reads as a flash for the same reason. */
+            animation: page-enter .18s var(--ease-out) both;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .page-enter {
+                animation: none;
+            }
+        }
+
+        /* Sidebar state applied before first paint. Alpine reads localStorage only
+           after its deferred script loads, so without this the sidebar renders
+           expanded and then snaps shut on every page load. x-init removes the
+           class once Alpine has mounted and taken over. */
+        @media (min-width: 768px) {
+            html.sidebar-pre-init aside {
+                width: 4rem;
+                overflow: hidden;
+                transition: none !important;
+            }
+
+            html.sidebar-pre-init aside .sidebar-label,
+            html.sidebar-pre-init aside .nav-heading,
+            html.sidebar-pre-init aside .sidebar-logo-text,
+            html.sidebar-pre-init aside .sidebar-user-info,
+            html.sidebar-pre-init aside .sidebar-logout-btn {
+                display: none;
+            }
+
+            html.sidebar-pre-init aside .nav-link {
+                justify-content: center;
+                padding: 0.65rem;
+            }
+
+            html.sidebar-pre-init aside .nav-link.active::before {
+                left: 0;
+            }
+
+            html.sidebar-pre-init aside .sidebar-logo-container {
+                padding-left: 0;
+                padding-right: 0;
+                justify-content: center;
+            }
+
+            html.sidebar-pre-init aside .sidebar-logo-link {
+                gap: 0;
+                justify-content: center;
+            }
+
+            html.sidebar-pre-init aside .sidebar-user-card-inner {
+                gap: 0;
+                justify-content: center;
+                padding: 0.5rem;
+            }
+
+            html.sidebar-pre-init aside .sidebar-user-section {
+                padding: 0.5rem;
+            }
         }
 
         @keyframes toast-in {
@@ -491,6 +555,7 @@
                 localStorage.setItem('desmos_ai_sidebar', this.sidebarOpen ? 'open' : 'closed');
             }
         }"
+        x-init="$nextTick(() => document.documentElement.classList.remove('sidebar-pre-init'))"
         class="flex h-dvh w-full relative"
         @keydown.escape.window="mobileMenuOpen = false; logoutModalOpen = false; notificationsOpen = false; profileOpen = false">
 
