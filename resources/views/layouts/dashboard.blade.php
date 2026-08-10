@@ -21,7 +21,7 @@
         })();
     </script>
 
-    <title>@yield('title', 'Dashboard') · Desmos AI v2.1</title>
+    <title>@yield('title', 'Dashboard') · {{ config('app.name') }}</title>
 
     {{-- Font: Inter — clean professional UI font for education platforms --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -518,7 +518,7 @@
                     <div class="mt-5 text-center">
                         <h3 id="logout-title" class="text-xl font-bold text-white tracking-tight">Confirm Logout</h3>
                         <p class="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                            Are you sure you want to log out of your Desmos AI account?
+                            Are you sure you want to log out of your {{ config('app.name') }} account?
                         </p>
                     </div>
 
@@ -554,10 +554,10 @@
             <div class="sidebar-logo-container h-[var(--header-h)] flex items-center px-5 border-b border-[var(--border-subtle)] flex-shrink-0 transition-all duration-300">
                 <a href="{{ route('dashboard.index') }}" class="sidebar-logo-link flex items-center gap-3 group min-w-0 cursor-pointer transition-all duration-300">
                     <div class="w-9 h-9 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 overflow-hidden flex-shrink-0 border border-[var(--border-strong)] rounded-xl bg-white/5 p-0.5 shadow-sm">
-                        <img src="{{ asset('/images/logo.png') }}" alt="Desmos AI Logo" class="w-full h-full object-contain">
+                        <img src="{{ asset('/images/logo.png') }}" alt="{{ config('app.name') }}" class="w-full h-full object-contain">
                     </div>
                     <span class="sidebar-logo-text font-extrabold text-lg tracking-tight truncate" style="background: linear-gradient(135deg, var(--accent-hover), var(--accent-alt)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
-                        Desmos AI <span class="text-xs font-mono text-[var(--gold)]">v2.1</span>
+                        {{ config('app.name') }} <span class="text-xs font-mono text-[var(--gold)]">v2.1</span>
                     </span>
                 </a>
                 <button @click="mobileMenuOpen = false" class="md:hidden ml-auto text-[var(--text-muted)] hover:text-white p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer" aria-label="Close menu">
@@ -944,7 +944,7 @@
 
                 <footer class="px-4 sm:px-8 pb-6 pt-2">
                     <div class="max-w-[100rem] mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[var(--text-muted)] border-t border-[var(--border-subtle)] pt-4 cursor-default">
-                        <p>© {{ date('Y') }} Desmos AI — All rights reserved.</p>
+                        <p>© {{ date('Y') }} {{ config('app.name') }} — All rights reserved.</p>
                         <p class="font-mono">v2.1</p>
                     </div>
                 </footer>
