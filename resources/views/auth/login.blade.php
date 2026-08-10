@@ -70,7 +70,7 @@
 
             <div class="flex items-center justify-between text-sm pt-1">
                 <label class="flex items-center gap-2.5 cursor-pointer group">
-                    <input type="checkbox" name="remember"
+                    <input type="checkbox" name="remember" checked
                         class="w-4 h-4 rounded border-[var(--border-strong)] bg-[var(--bg-surface)] text-[var(--accent)] focus:ring-[var(--accent)] cursor-pointer transition-colors">
                     <span class="text-[var(--text-secondary)] group-hover:text-white transition-colors">
                         Remember me
