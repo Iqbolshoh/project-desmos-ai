@@ -150,10 +150,16 @@
             padding: 0 0.875rem;
             margin-bottom: 0.625rem;
             font-size: 0.65rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--text-muted);
+            color: var(--accent-hover);
+        }
+
+        /* Light mode needs the deeper shade: --accent-hover is tuned for a dark
+           sidebar and washes out against a pale one. */
+        html.light .nav-heading {
+            color: var(--accent-deep);
         }
 
         /* ---------- Reusable components ---------- */
