@@ -32,38 +32,59 @@ class ProfileController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|max:100|unique:users,email,'.$user->id,
-            'avatar' => 'nullable|image|max:2048',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:2048',
+        ], [
+            'avatar.image' => 'The avatar must be an image file.',
+            'avatar.mimes' => 'The avatar must be a JPG, PNG, WEBP or GIF file.',
+            'avatar.max' => 'The avatar may not be larger than 2 MB.',
         ]);
 
         $user->update(['name' => $data['name'], 'email' => $data['email']]);
 
-        if ($request->hasFile('avatar') && $user->studentProfile) {
-            if ($user->studentProfile->avatar_path) {
-                Storage::disk('public')->delete($user->studentProfile->avatar_path);
-            }
+        if ($request->hasFile('avatar')) {
+            // Admin and Google accounts may not have a profile row yet; without
+            // this the upload used to be validated and then silently dropped.
+            $profile = $user->studentProfile()->firstOrCreate([]);
 
             $path = $request->file('avatar')->store('avatars', 'public');
-            $user->studentProfile->update(['avatar_path' => $path]);
+
+            if ($path === false) {
+                return back()->withErrors(['avatar' => 'The avatar could not be saved. Please try again.']);
+            }
+
+            $previous = $profile->avatar_path;
+            $profile->update(['avatar_path' => $path]);
+
+            // Only drop the old file once the new one is safely recorded.
+            if ($previous && $previous !== $path) {
+                Storage::disk('public')->delete($previous);
+            }
         }
 
-        return back()->with('success', 'Profil muvaffaqiyatli yangilandi.');
+        return back()->with('success', 'Profile updated successfully.');
     }
 
     public function updatePassword(Request $request)
     {
-        $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
         $user = Auth::user();
 
-        if (! Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Joriy parol noto\'g\'ri.'])->withInput();
+        // Google-only accounts have no password yet, so there is nothing to
+        // confirm — they are setting one for the first time.
+        $hasPassword = filled($user->password);
+
+        $request->validate([
+            'current_password' => $hasPassword ? 'required' : 'nullable',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($hasPassword && ! Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'The current password is incorrect.'])->withInput();
         }
 
         $user->update(['password' => Hash::make($request->password)]);
 
-        return back()->with('success', 'Parol muvaffaqiyatli o\'zgartirildi.');
+        return back()->with('success', $hasPassword
+            ? 'Password changed successfully.'
+            : 'Password set successfully. You can now sign in with your email too.');
     }
 }

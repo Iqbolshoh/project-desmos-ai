@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
@@ -28,20 +30,27 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        // Self sign-up always produces a student on the free plan; elevated
+        // roles are only ever granted from the admin panel.
+        $user = DB::transaction(function () use ($data) {
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'plan_id' => Plan::default()?->id,
+            ]);
 
-        $user->assignRole('student');
-        $user->studentProfile()->create([]);
+            $user->assignRole('student');
+            $user->studentProfile()->create([]);
+
+            return $user;
+        });
 
         Auth::login($user);
         $request->session()->regenerate();
 
         return redirect()
             ->route('dashboard.index')
-            ->with('success', 'Xush kelibsiz! Ro\'yxatdan muvaffaqiyatli o\'tdingiz.');
+            ->with('success', 'Welcome! Your account has been created.');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -92,8 +93,9 @@ class UserController extends Controller
 
         $roles = Role::orderBy('name')->get();
         $userRole = $user->roles->first()?->name;
+        $plans = Plan::orderBy('sort_order')->orderBy('price')->get();
 
-        return view('admin.users.edit', compact('user', 'roles', 'userRole'));
+        return view('admin.users.edit', compact('user', 'roles', 'userRole', 'plans'));
     }
 
     public function update(Request $request, User $user)
@@ -112,11 +114,16 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', 'exists:roles,name'],
+            'plan_id' => ['nullable', 'integer', 'exists:plans,id'],
+            'plan_expires_at' => ['nullable', 'date'],
         ]);
 
         $updates = [
             'name' => $data['name'],
             'email' => $data['email'],
+            'plan_id' => $data['plan_id'] ?? null,
+            // An expiry date is meaningless without a subscribed plan.
+            'plan_expires_at' => ($data['plan_id'] ?? null) ? ($data['plan_expires_at'] ?? null) : null,
         ];
 
         if ($request->filled('password')) {

@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\PlanController as AdminPlanController;
 use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SystemStatusController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiagnosticController;
@@ -47,6 +50,12 @@ Route::middleware(['guest', 'throttle:60,1'])->group(function () {
     Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->middleware('throttle:5,1')->name('password.email');
     Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:5,1')->name('password.update');
+
+    // Google Sign-In — registers first-time visitors, signs in returning ones
+    Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])
+        ->middleware('throttle:10,1')->name('auth.google.redirect');
+    Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
+        ->middleware('throttle:10,1')->name('auth.google.callback');
 });
 
 // Authenticated routes with general rate limiting
@@ -60,9 +69,13 @@ Route::middleware(['auth', 'throttle:60,1'])->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
-    // AI Tutor & Solver
+    // Subscription & plans
+    Route::get('/billing', [BillingController::class, 'index'])->name('billing.index');
+
+    // AI Tutor & Solver — solving is metered against the user's plan
     Route::get('/tutor', [TutorController::class, 'index'])->name('tutor.index');
-    Route::post('/tutor/solve', [TutorController::class, 'solve'])->middleware('throttle:15,1')->name('tutor.solve');
+    Route::post('/tutor/solve', [TutorController::class, 'solve'])
+        ->middleware(['throttle:15,1', 'ai.quota'])->name('tutor.solve');
     Route::get('/tutor/{session}', [TutorController::class, 'show'])->name('tutor.show');
 
     // History
@@ -88,7 +101,8 @@ Route::middleware(['auth', 'throttle:60,1'])->group(function () {
 
     // AI Chat Tutor
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::post('/chat/{thread}/send', [ChatController::class, 'send'])->middleware('throttle:20,1')->name('chat.send');
+    Route::post('/chat/{thread}/send', [ChatController::class, 'send'])
+        ->middleware(['throttle:20,1', 'ai.quota'])->name('chat.send');
 
     // Leaderboard
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
@@ -105,6 +119,14 @@ Route::middleware(['auth', 'throttle:60,1'])->group(function () {
         Route::get('/questions/{question}/edit', [AdminQuestionController::class, 'edit'])->name('questions.edit');
         Route::put('/questions/{question}', [AdminQuestionController::class, 'update'])->name('questions.update');
         Route::delete('/questions/{question}', [AdminQuestionController::class, 'destroy'])->name('questions.destroy');
+
+        // Subscription plans — prices and AI limits are edited here
+        Route::get('/plans', [AdminPlanController::class, 'index'])->name('plans.index');
+        Route::get('/plans/create', [AdminPlanController::class, 'create'])->name('plans.create');
+        Route::post('/plans', [AdminPlanController::class, 'store'])->name('plans.store');
+        Route::get('/plans/{plan}/edit', [AdminPlanController::class, 'edit'])->name('plans.edit');
+        Route::put('/plans/{plan}', [AdminPlanController::class, 'update'])->name('plans.update');
+        Route::delete('/plans/{plan}', [AdminPlanController::class, 'destroy'])->name('plans.destroy');
 
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');

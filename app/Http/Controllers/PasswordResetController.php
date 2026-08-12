@@ -61,7 +61,7 @@ class PasswordResetController extends Controller
         });
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('success', 'Parolingiz muvaffaqiyatli yangilandi. Endi kirishingiz mumkin.')
+            ? redirect()->route('login')->with('success', 'Your password has been reset. You can now sign in.')
             : back()->withErrors(['email' => __($status)]);
     }
 }

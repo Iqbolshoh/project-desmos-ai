@@ -15,6 +15,7 @@ final class RolePermissionSeeder extends Seeder
         'roles' => ['view', 'create', 'edit', 'delete', 'assign'],
         'users' => ['view', 'create', 'edit', 'delete'],
         'questions' => ['view', 'create', 'edit', 'delete'],
+        'plans' => ['view', 'create', 'edit', 'delete'],
         'reports' => ['view'],
         'analytics' => ['view'],
     ];

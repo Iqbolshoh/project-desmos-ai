@@ -119,6 +119,43 @@
                 @enderror
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div>
+                    <label for="plan_id" class="block text-sm font-semibold text-[var(--text-secondary)] mb-2">
+                        Subscription plan
+                    </label>
+                    <select name="plan_id" id="plan_id"
+                            class="input cursor-pointer @error('plan_id') border-[var(--accent)] @enderror">
+                        <option value="">— Default (Free) —</option>
+                        @foreach($plans as $planOption)
+                        <option value="{{ $planOption->id }}"
+                                {{ (string) old('plan_id', $user->plan_id) === (string) $planOption->id ? 'selected' : '' }}>
+                            {{ $planOption->name }} ({{ $planOption->formattedPrice() }}/{{ $planOption->period }})
+                        </option>
+                        @endforeach
+                    </select>
+                    @error('plan_id')
+                        <p class="text-[var(--accent)] text-xs mt-2 flex items-center gap-1">
+                            <x-lucide-alert-circle class="w-3.5 h-3.5 flex-shrink-0" />{{ $message }}
+                        </p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="plan_expires_at" class="block text-sm font-semibold text-[var(--text-secondary)] mb-2">
+                        Plan valid until <span class="text-[var(--text-muted)] font-normal">(blank = no expiry)</span>
+                    </label>
+                    <input type="date" id="plan_expires_at" name="plan_expires_at"
+                           value="{{ old('plan_expires_at', $user->plan_expires_at?->format('Y-m-d')) }}"
+                           class="input @error('plan_expires_at') border-[var(--accent)] @enderror">
+                    @error('plan_expires_at')
+                        <p class="text-[var(--accent)] text-xs mt-2 flex items-center gap-1">
+                            <x-lucide-alert-circle class="w-3.5 h-3.5 flex-shrink-0" />{{ $message }}
+                        </p>
+                    @enderror
+                </div>
+            </div>
+
             <div class="flex items-center justify-end gap-3 pt-6 border-t border-[var(--border-subtle)]">
                 <a href="{{ route('users.index') }}" class="btn-secondary">Cancel</a>
                 <button type="submit" class="btn-primary">

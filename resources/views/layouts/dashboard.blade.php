@@ -711,6 +711,12 @@
                             <x-lucide-trophy class="nav-icon" />
                             <span class="sidebar-label">Leaderboard</span>
                         </a>
+                        <a href="{{ route('billing.index') }}"
+                            title="My Plan"
+                            class="nav-link {{ request()->routeIs('billing.*') ? 'active' : '' }}">
+                            <x-lucide-crown class="nav-icon" />
+                            <span class="sidebar-label">My Plan</span>
+                        </a>
                     </div>
                 </div>
 
@@ -725,6 +731,12 @@
                             class="nav-link {{ request()->routeIs('admin.questions.*') ? 'active' : '' }}">
                             <x-lucide-database class="nav-icon" />
                             <span class="sidebar-label">Questions</span>
+                        </a>
+                        <a href="{{ route('admin.plans.index') }}"
+                            title="Subscription Plans"
+                            class="nav-link {{ request()->routeIs('admin.plans.*') ? 'active' : '' }}">
+                            <x-lucide-crown class="nav-icon" />
+                            <span class="sidebar-label">Plans</span>
                         </a>
                         <a href="{{ route('admin.reports.index') }}"
                             title="Reports"

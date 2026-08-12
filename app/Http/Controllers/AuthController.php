@@ -61,6 +61,6 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         // Redirect with translated logout message
-        return redirect('/')->with('success', 'Tizimdan muvaffaqiyatli chiqdingiz.');
+        return redirect('/')->with('success', 'You have been signed out.');
     }
 }

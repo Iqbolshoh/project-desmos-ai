@@ -35,6 +35,14 @@ return [
         ],
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        // Must match a redirect URI registered in the Google Cloud console.
+        // Left empty it falls back to route('auth.google.callback').
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
+    ],
+
     'ai_tutor' => [
         'driver' => env('AI_TUTOR_DRIVER', 'claude'),
         'desmos_api_key' => env('DESMOS_API_KEY'),
